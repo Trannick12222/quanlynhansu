@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(timeout:*)",
+      "Bash(chcp:*)",
+      "Bash(PYTHONIOENCODING=utf-8 python simple_analyze.py)",
+      "Bash(curl:*)",
+      "Bash(grep:*)",
+      "Bash(findstr:*)",
+      "Bash(rm:*)",
+      "Bash(find:*)",
+      "Bash(mysql:*)",
+      "Bash(powershell \"Get-Process python -ErrorAction SilentlyContinue | Stop-Process -Force\")"
     ],
     "deny": []
   }

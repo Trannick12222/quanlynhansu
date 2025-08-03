@@ -91,8 +91,8 @@ def sync_records():
                     make_epa_all = 'yes' if nhom == 'admin' else 'no'
                     
                     cursor.execute("""
-                        INSERT INTO thoigianmoepa (ten_tk, start_day, close_day, remark, make_epa_gv, make_epa_tgv, make_epa_all)
-                        VALUES (%s, 20, 25, '', %s, %s, %s)
+                        INSERT INTO thoigianmoepa (ten_tk, start_day, close_day, month, year, remark, make_epa_gv, make_epa_tgv, make_epa_all)
+                        VALUES (%s, 20, 25, MONTH(CURDATE()), YEAR(CURDATE()), '', %s, %s, %s)
                     """, (ten_tk, make_epa_gv, make_epa_tgv, make_epa_all))
                     count += 1
                     
@@ -111,7 +111,7 @@ def sync_records():
 # ✅ Route save_record
 @thoigianmoepa_bp.route('/save_record', methods=['POST'])
 def save_record():
-    """Lưu cài đặt thời gian EPA cho một tài khoản"""
+    """Lưu cài đặt thời gian EPA cho một tài khoản - HỖ TRỢ 3 GIAI ĐOẠN"""
     if not session.get('user'):
         return redirect('/')
     
@@ -121,28 +121,60 @@ def save_record():
     # Lấy dữ liệu từ form
     ten_tk = request.form.get('ten_tk')
     record_id = request.form.get('id')  # Có thể None nếu là record mới
-    start_day = request.form.get('start_day', type=int)
-    close_day = request.form.get('close_day', type=int)
     remark = request.form.get('remark', '').strip()
     make_epa_gv = request.form.get('make_epa_gv', 'no')
     make_epa_tgv = request.form.get('make_epa_tgv', 'no') 
     make_epa_all = request.form.get('make_epa_all', 'no')
+    
+    # Lấy dữ liệu 3 giai đoạn
+    phase1_start = request.form.get('phase1_start', type=int)
+    phase1_end = request.form.get('phase1_end', type=int)
+    phase2_start = request.form.get('phase2_start', type=int)
+    phase2_end = request.form.get('phase2_end', type=int)
+    phase3_start = request.form.get('phase3_start', type=int)
+    phase3_end = request.form.get('phase3_end', type=int)
+    
+    # Backward compatibility: nếu không có dữ liệu 3 giai đoạn, dùng start_day/close_day cũ
+    if not phase1_start and request.form.get('start_day'):
+        start_day = request.form.get('start_day', type=int)
+        close_day = request.form.get('close_day', type=int)
+        # Convert sang 3 giai đoạn mặc định
+        phase1_start, phase1_end = 20, 25
+        phase2_start, phase2_end = 26, 27
+        phase3_start, phase3_end = 28, 30
     
     # Validation
     if not ten_tk:
         flash("❌ Thiếu tên tài khoản", "danger")
         return redirect(url_for('thoigianmoepa.index'))
     
-    if not start_day or not close_day:
-        flash("❌ Vui lòng nhập ngày bắt đầu và kết thúc", "danger")
-        return redirect(url_for('thoigianmoepa.index'))
+    # Validate 3 phases
+    phases = [
+        ("Giai đoạn 1", phase1_start, phase1_end),
+        ("Giai đoạn 2", phase2_start, phase2_end),
+        ("Giai đoạn 3", phase3_start, phase3_end)
+    ]
     
-    if start_day >= close_day:
-        flash("❌ Ngày bắt đầu phải nhỏ hơn ngày kết thúc", "danger")
-        return redirect(url_for('thoigianmoepa.index'))
+    for phase_name, start, end in phases:
+        if not start or not end:
+            flash(f"❌ {phase_name}: Vui lòng nhập ngày bắt đầu và kết thúc", "danger")
+            return redirect(url_for('thoigianmoepa.index'))
+        
+        if start >= end:
+            flash(f"❌ {phase_name}: Ngày bắt đầu phải nhỏ hơn ngày kết thúc", "danger")
+            return redirect(url_for('thoigianmoepa.index'))
+        
+        if not (1 <= start <= 31) or not (1 <= end <= 31):
+            flash(f"❌ {phase_name}: Ngày phải trong khoảng 1-31", "danger")
+            return redirect(url_for('thoigianmoepa.index'))
     
-    if not (1 <= start_day <= 31) or not (1 <= close_day <= 31):
-        flash("❌ Ngày phải trong khoảng 1-31", "danger")
+    # Validate sequential order
+    if phase1_end >= phase2_start:
+        flash("❌ Giai đoạn 2 phải bắt đầu sau khi giai đoạn 1 kết thúc", "danger")
+        return redirect(url_for('thoigianmoepa.index'))
+        
+    if phase2_end >= phase3_start:
+        flash("❌ Giai đoạn 3 phải bắt đầu sau khi giai đoạn 2 kết thúc", "danger")
         return redirect(url_for('thoigianmoepa.index'))
 
     conn = get_conn()
@@ -158,27 +190,40 @@ def save_record():
                 # Cập nhật record hiện có
                 cursor.execute("""
                     UPDATE thoigianmoepa 
-                    SET start_day = %s, close_day = %s, remark = %s,
-                        make_epa_gv = %s, make_epa_tgv = %s, make_epa_all = %s
+                    SET phase1_start = %s, phase1_end = %s, 
+                        phase2_start = %s, phase2_end = %s,
+                        phase3_start = %s, phase3_end = %s,
+                        remark = %s, make_epa_gv = %s, make_epa_tgv = %s, make_epa_all = %s,
+                        start_day = %s, close_day = %s
                     WHERE id = %s AND ten_tk = %s
-                """, (start_day, close_day, remark, make_epa_gv, make_epa_tgv, make_epa_all, record_id, ten_tk))
+                """, (phase1_start, phase1_end, phase2_start, phase2_end, phase3_start, phase3_end,
+                      remark, make_epa_gv, make_epa_tgv, make_epa_all, phase1_start, phase1_end, record_id, ten_tk))
             else:
                 # Thêm mới hoặc cập nhật nếu đã tồn tại
                 cursor.execute("""
-                    INSERT INTO thoigianmoepa (ten_tk, start_day, close_day, remark, make_epa_gv, make_epa_tgv, make_epa_all)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    INSERT INTO thoigianmoepa (ten_tk, phase1_start, phase1_end, phase2_start, phase2_end, 
+                                             phase3_start, phase3_end, remark, make_epa_gv, make_epa_tgv, make_epa_all,
+                                             start_day, close_day, month, year)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, MONTH(CURDATE()), YEAR(CURDATE()))
                     ON DUPLICATE KEY UPDATE
-                        start_day = VALUES(start_day),
-                        close_day = VALUES(close_day),
+                        phase1_start = VALUES(phase1_start),
+                        phase1_end = VALUES(phase1_end),
+                        phase2_start = VALUES(phase2_start),
+                        phase2_end = VALUES(phase2_end),
+                        phase3_start = VALUES(phase3_start),
+                        phase3_end = VALUES(phase3_end),
                         remark = VALUES(remark),
                         make_epa_gv = VALUES(make_epa_gv),
                         make_epa_tgv = VALUES(make_epa_tgv),
-                        make_epa_all = VALUES(make_epa_all)
-                """, (ten_tk, start_day, close_day, remark, make_epa_gv, make_epa_tgv, make_epa_all))
+                        make_epa_all = VALUES(make_epa_all),
+                        start_day = VALUES(start_day),
+                        close_day = VALUES(close_day)
+                """, (ten_tk, phase1_start, phase1_end, phase2_start, phase2_end, phase3_start, phase3_end,
+                      remark, make_epa_gv, make_epa_tgv, make_epa_all, phase1_start, phase1_end))
 
             
             conn.commit()
-            flash(f"✅ Đã lưu cài đặt cho tài khoản {ten_tk}", "success")
+            flash(f"✅ Đã lưu cài đặt 3 giai đoạn cho tài khoản {ten_tk}", "success")
             
     except Exception as e:
         print(f"❌ Lỗi lưu dữ liệu: {e}")
@@ -195,7 +240,7 @@ def save_record():
 
 @thoigianmoepa_bp.route('/api/assessment-period')
 def get_assessment_period():
-    """API kiểm tra thời gian đánh giá EPA cho user hiện tại"""
+    """API kiểm tra thời gian đánh giá EPA cho user hiện tại - HỖ TRỢ 3 GIAI ĐOẠN"""
     if not session.get('user'):
         return jsonify({"error": "Not logged in"}), 401
     
@@ -210,7 +255,9 @@ def get_assessment_period():
     try:
         with conn.cursor() as cursor:
             cursor.execute("""
-                SELECT start_day, close_day, make_epa_gv, make_epa_tgv, make_epa_all
+                SELECT phase1_start, phase1_end, phase2_start, phase2_end, phase3_start, phase3_end,
+                       make_epa_gv, make_epa_tgv, make_epa_all,
+                       start_day, close_day
                 FROM thoigianmoepa 
                 WHERE ten_tk = %s
             """, (user,))
@@ -218,44 +265,91 @@ def get_assessment_period():
             record = cursor.fetchone()
             
             if not record:
-                # Nếu không có cài đặt, dùng mặc định
-                start_day = 20
-                close_day = 25
+                # Nếu không có cài đặt, dùng mặc định 3 giai đoạn
+                phase1_start, phase1_end = 20, 25
+                phase2_start, phase2_end = 26, 27
+                phase3_start, phase3_end = 28, 30
                 make_epa_gv = "yes"
                 make_epa_tgv = "no"
                 make_epa_all = "no"
             else:
-                start_day = record['start_day']
-                close_day = record['close_day']
+                phase1_start = record['phase1_start'] or 20
+                phase1_end = record['phase1_end'] or 25
+                phase2_start = record['phase2_start'] or 26
+                phase2_end = record['phase2_end'] or 27
+                phase3_start = record['phase3_start'] or 28
+                phase3_end = record['phase3_end'] or 30
                 make_epa_gv = record['make_epa_gv']
                 make_epa_tgv = record['make_epa_tgv']
                 make_epa_all = record['make_epa_all']
             
-            # Kiểm tra quyền đánh giá
+            # Xác định giai đoạn hiện tại và quyền
+            current_phase = None
+            phase_name = ""
             can_assess = False
-            
-            if make_epa_all == "yes":
-                can_assess = True
-            elif role == "user" and make_epa_gv == "yes":
-                can_assess = True
-            elif role == "supervisor" and make_epa_tgv == "yes":
-                can_assess = True
-            elif role == "admin":
-                can_assess = True
-                
-            # Kiểm tra thời gian
             is_open = False
-            if can_assess and start_day <= current_day <= close_day:
-                is_open = True
+            
+            # Kiểm tra giai đoạn 1: Tự đánh giá
+            if phase1_start <= current_day <= phase1_end:
+                current_phase = 1
+                phase_name = "Tự Đánh Giá"
+                if make_epa_all == "yes" or (role == "user" and make_epa_gv == "yes") or role == "admin":
+                    can_assess = True
+                    is_open = True
+            
+            # Kiểm tra giai đoạn 2: TGV chấm điểm (chỉ sau khi giai đoạn 1 kết thúc)
+            elif current_day > phase1_end and phase2_start <= current_day <= phase2_end:
+                current_phase = 2
+                phase_name = "TGV Chấm Điểm"
+                if make_epa_all == "yes" or (role == "supervisor" and make_epa_tgv == "yes") or role == "admin":
+                    can_assess = True
+                    is_open = True
+            
+            # Kiểm tra giai đoạn 3: HT/PHT chấm điểm (chỉ sau khi giai đoạn 2 kết thúc)  
+            elif current_day > phase2_end and phase3_start <= current_day <= phase3_end:
+                current_phase = 3
+                phase_name = "HT/PHT Chấm Điểm"
+                if user in ['admin', 'kimnhung', 'ngocquy'] or role == "admin":
+                    can_assess = True
+                    is_open = True
+            
+            # Xác định thời gian hiển thị dựa trên giai đoạn
+            if current_phase == 1:
+                display_start, display_end = phase1_start, phase1_end
+            elif current_phase == 2:
+                display_start, display_end = phase2_start, phase2_end
+            elif current_phase == 3:
+                display_start, display_end = phase3_start, phase3_end
+            else:
+                # Ngoài thời gian, hiển thị giai đoạn tiếp theo
+                if current_day < phase1_start:
+                    display_start, display_end = phase1_start, phase1_end
+                    phase_name = "Chờ Giai Đoạn 1"
+                elif current_day < phase2_start:
+                    display_start, display_end = phase2_start, phase2_end
+                    phase_name = "Chờ Giai Đoạn 2"
+                elif current_day < phase3_start:
+                    display_start, display_end = phase3_start, phase3_end
+                    phase_name = "Chờ Giai Đoạn 3"
+                else:
+                    display_start, display_end = phase3_start, phase3_end
+                    phase_name = "Đã Kết Thúc"
                 
             return jsonify({
                 "year": current_year,
                 "month": current_month,
-                "start_day": start_day,
-                "close_day": close_day,
                 "current_day": current_day,
+                "current_phase": current_phase,
+                "phase_name": phase_name,
+                "start_day": display_start,
+                "close_day": display_end,
                 "isOpen": is_open,
                 "can_assess": can_assess,
+                # Thông tin chi tiết 3 giai đoạn
+                "phase1": {"start": phase1_start, "end": phase1_end, "name": "Tự Đánh Giá"},
+                "phase2": {"start": phase2_start, "end": phase2_end, "name": "TGV Chấm Điểm"},
+                "phase3": {"start": phase3_start, "end": phase3_end, "name": "HT/PHT Chấm Điểm"},
+                # Quyền
                 "make_epa_gv": make_epa_gv,
                 "make_epa_tgv": make_epa_tgv,
                 "make_epa_all": make_epa_all

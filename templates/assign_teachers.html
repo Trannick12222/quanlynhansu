@@ -29,9 +29,9 @@
 <div class="col-md-3">
 <label class="form-label fw-semibold">Vai Trò</label>
 <select class="form-select" id="vai_tro">
-<option value="GVCN">GVCN</option>
-<option value="Bộ môn">Bộ môn</option>
-<option value="Bảo mẫu">Bảo mẫu</option>
+<option value="GIÁO VIÊN MẪU GIÁO">GIÁO VIÊN MẪU GIÁO</option>
+<option value="GIÁO VIÊN NHÀ TRẺ">GIÁO VIÊN NHÀ TRẺ</option>
+<option value="NHÂN VIÊN CẤP DƯỠNG">NHÂN VIÊN CẤP DƯỠNG</option>
 </select>
 </div>
 <div class="col-md-1 d-grid pt-4">
@@ -136,7 +136,7 @@ document.getElementById('assign-teacher-form').addEventListener('submit', async 
           </td>
           <td>
             <select onchange="updateField('${item.ma_gv}', 'vai_tro', this.value)">
-              ${['GVCN','Bộ môn','Bảo mẫu'].map(v => `<option ${v === item.vai_tro ? 'selected' : ''}>${v}</option>`).join('')}
+              ${['GIÁO VIÊN MẪU GIÁO','GIÁO VIÊN NHÀ TRẺ','NHÂN VIÊN CẤP DƯỠNG'].map(v => `<option ${v === item.vai_tro ? 'selected' : ''}>${v}</option>`).join('')}
             </select>
           </td>
           <td>

@@ -1,1396 +1,1314 @@
 <!DOCTYPE html>
+<html lang="vi">
 <head>
-<meta charset="utf-8"/>
-<title>- TRƯỜNG MẦM NON HOA HƯỚNG DƯƠNG -</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
-<link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250719" rel="stylesheet"/>
-
-</head>
-<body class="p-4">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>👥 Quản Lý Nhân Sự - Trường Mầm Non Hoa Hướng Dương</title>
   
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="mb-3 d-flex align-items-center gap-10">
-        - 🏫 - TRƯỜNG MẦM NON HOA HƯỚNG DƯƠNG - 🏫-
-    </h3>
-  </div>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static_files', filename='css/modern.css') }}" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', var(--font-family-sans);
+      background: var(--bg-secondary);
+      padding: var(--spacing-lg);
+    }
+    
+    .page-header {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .page-title h1 {
+      font-size: var(--text-3xl);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .page-title .icon {
+      font-size: var(--text-4xl);
+      color: var(--primary-color);
+    }
+    
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .action-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+    }
+    
+    .controls-section {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      align-items: end;
+    }
+    
+    .form-group {
+      margin-bottom: 0;
+    }
+    
+    .data-section {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+    
+    .section-header {
+      padding: var(--spacing-lg);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      font-size: var(--text-lg);
+      font-weight: var(--font-semibold);
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .table-wrapper {
+      overflow-x: auto;
+      max-height: 70vh;
+    }
+    
+    .data-table {
+      width: max-content;
+      border-collapse: collapse;
+      font-size: var(--text-sm);
+      margin: 0;
+      table-layout: auto;
+    }
+    
+    .data-table th {
+      background: var(--primary-color);
+      color: white;
+      padding: var(--spacing-md);
+      text-align: left;
+      font-weight: var(--font-semibold);
+      border-bottom: 1px solid var(--primary-dark);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+      min-width: 120px;
+    }
+    
+    .data-table td {
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: top;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+      text-align: left !important;
+      min-width: 120px;
+    }
+    
+    /* Các cột có thể có nội dung dài - cho phép xuống dòng */
+    .data-table td:nth-child(3),  /* Họ và tên */
+    .data-table td:nth-child(7),  /* Quê quán */
+    .data-table td:nth-child(15) { /* Email */
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    
+    /* Cột Email */
+    .data-table td:nth-child(15) {
+      min-width: 300px;
+      max-width: 400px;
+    }
+    .data-table td:nth-child(16) {
+      min-width: 10px;
+      max-width: 50px;
+    }
+    /* Cột Địa chỉ - hiển thị đầy đủ không xuống dòng */
+    .data-table td:nth-child(17) {
+      min-width: 450px;
+      max-width: 1000px;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+      position: relative;
+    }
+    
+    /* Tooltip cho cột địa chỉ để hiển thị đầy đủ nội dung khi hover */
+    .data-table td:nth-child(17):hover::after {
+      content: attr(title);
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: normal;
+      max-width: 500px;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      word-wrap: break-word;
+    }
+    
+    .data-table tbody tr:hover {
+      background: var(--gray-50);
+    }
+    
+    .data-table tbody tr:nth-child(even) {
+      background: var(--gray-25, #fafafa);
+    }
+    
+    .data-table tbody tr:nth-child(even):hover {
+      background: var(--gray-50);
+    }
+    
+    .inline-edit {
+      border: none;
+      background: transparent;
+      width: 100%;
+      padding: 0;
+      font-size: inherit;
+      border-radius: var(--border-radius-sm);
+      transition: all var(--transition-fast);
+    }
+    
+    .inline-edit:focus {
+      background: var(--bg-primary);
+      border: 1px solid var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: var(--spacing-xs);
+    }
+    
+    .btn-action {
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: var(--text-xs);
+      border-radius: var(--border-radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+    
+    .btn-edit {
+      background: var(--warning-color);
+      color: white;
+    }
+    
+    .btn-edit:hover {
+      background: #c2410c;
+    }
+    
+    .btn-delete {
+      background: var(--error-color);
+      color: white;
+    }
+    
+    .btn-delete:hover {
+      background: #b91c1c;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: var(--spacing-2xl);
+      color: var(--text-tertiary);
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-lg);
+      color: var(--gray-300);
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: var(--text-xs);
+      font-weight: var(--font-medium);
+      border-radius: var(--border-radius-sm);
+      line-height: 1;
+    }
+    
+    .badge-department {
+      background: var(--info-color);
+      color: white;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .stat-card {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-lg);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+    }
+    
+    .stat-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--border-radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .stat-icon.students {
+      background: #dbeafe;
+      color: var(--primary-color);
+    }
+    
+    .stat-icon.teachers {
+      background: #d1fae5;
+      color: var(--success-color);
+    }
+    
+    .stat-value {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+    }
+    
+    .stat-label {
+      font-size: var(--text-sm);
+      color: var(--text-tertiary);
+    }
+    
+    /* Loading States */
+    .loading {
+      position: relative;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+    
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gray-300);
+      border-top: 2px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: var(--spacing-md);
+      }
+      
+      .page-header {
+        padding: var(--spacing-lg);
+      }
+      
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--text-xs);
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      /* Giảm độ rộng cột địa chỉ trên mobile */
+      .data-table td:nth-child(17) {
+        min-width: 250px;
+        max-width: 400px;
+      }
+    }
+    
+    /* Hide sections initially */
+    .department-section {
+      display: none;
+    }
+    
+    .department-section.active {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-<div class="d-flex justify-content-between align-items-center mb-2">
-  <div class="btn-group flex-wrap">
-    <div class="admin-panel p-3 mb-4">
-      <div class="admin-buttons d-flex flex-wrap justify-content-center">
-        {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-        <div class="admin-buttons d-flex flex-wrap justify-content-center">
-          <a class="btn btn-outline-secondary" href="/users">👥 Tài Khoản</a>
-          <a class="btn btn-outline-primary" href="/data_epa">📝 Bảng Đánh Giá</a>
-          <a class="btn btn-outline-info" href="/epa_summary">📊 Bảng xếp hạng</a>
-          <a class="btn btn-outline-success" href="/export-data">📤 Xuất Dữ Liệu</a>
-        
-        <div class="d-flex align-items-center gap-2">
-          <button class="btn btn-outline-primary" onclick="document.getElementById('excelFileInput').click()">
-            📚 Nhập Dữ Liệu
-          </button>
-          <input accept=".xlsx" hidden id="excelFileInput" onchange="importExcel()" type="file"/>
-        </div>
+    /* Tăng độ rộng cho các cột cụ thể */
+    .data-table td:nth-child(3), /* Họ và tên */
+    .data-table td:nth-child(8), /* Họ tên bố */
+    .data-table td:nth-child(10), /* Họ tên mẹ */
+    .data-table td:nth-child(12), /* Hộ khẩu */
+    .data-table td:nth-child(13) { /* CCCD Bố/Mẹ */
+      min-width: 200px;
+      max-width: none;
+      white-space: normal;
+      word-wrap: break-word;
+    }
 
-            {% if session['role'] == 'admin' %}
-            <button class="btn btn-outline-primary" onclick="updateDataBase()">⏳ Cập Nhật Dữ Liệu</button>
-            <button class="btn btn-warning" onclick="removeDeptData()">🗑 Xóa Dữ Liệu</button>
-          <div class="mt-3 table-responsive" id="dbStructureResult"></div>
-            {% endif %}
-            <a class="btn btn-warning" href="/admin/questions">📝 Câu Hỏi Đánh Giá</a>
-            <a class="btn btn-warning" href="/thoigianmoepa">📆 Đặt Thời Gian Đánh Giá</a>
-            <a class="btn btn-outline-secondary" href="/stats">📊 Thông tin</a>
-            <a class="btn btn-outline-secondary" href="/logs">📜 Nhật Ký</a>
-          </div>
+    .data-table td:nth-child(14) { /* SĐT */
+      min-width: 120px;
+      max-width: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-title">
+      <i class="fas fa-users icon"></i>
+      <div>
+        <h1>Quản Lý Nhân Sự</h1>
+        <p style="margin: 0; color: var(--text-tertiary); font-size: var(--text-sm);">
+          Trường Mầm Non Hoa Hướng Dương
+        </p>
+      </div>
+    </div>
+    
+    <!-- Action Bar -->
+    {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+    <div class="action-bar">
+      <div class="action-group">
+        <a href="/users" class="btn btn-outline-primary">
+          <i class="fas fa-users-cog"></i>
+          Tài Khoản
+        </a>
+        <a href="/data_epa" class="btn btn-outline-success">
+          <i class="fas fa-chart-line"></i>
+          Đánh Giá EPA
+        </a>
+        <a href="/epa_summary" class="btn btn-outline-info">
+          <i class="fas fa-trophy"></i>
+          Xếp Hạng
+        </a>
+        <a href="/export-data" class="btn btn-outline-secondary">
+          <i class="fas fa-download"></i>
+          Xuất Dữ Liệu
+        </a>
+      </div>
+      
+      <div class="action-group">
+        <button class="btn btn-primary" onclick="document.getElementById('excelFileInput').click()">
+          <i class="fas fa-upload"></i>
+          Nhập Excel
+        </button>
+        <input accept=".xlsx" hidden id="excelFileInput" onchange="importExcel()" type="file"/>
         
+        {% if session['role'] == 'admin' %}
+        <button class="btn btn-secondary" onclick="updateDataBase()">
+          <i class="fas fa-sync"></i>
+          Cập Nhật DB
+        </button>
+        <button class="btn btn-danger" onclick="removeDeptData()">
+          <i class="fas fa-trash"></i>
+          Xóa Dữ Liệu
+        </button>
         {% endif %}
       </div>
     </div>
+    {% endif %}
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon students">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div class="stat-value" id="studentCount">-</div>
+      <div class="stat-label">Học Sinh</div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon teachers">
+        <i class="fas fa-chalkboard-teacher"></i>
+      </div>
+      <div class="stat-value" id="teacherCount">-</div>
+      <div class="stat-label">Giáo Viên</div>
+    </div>
+  </div>
+
   {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-  <!-- Dept select riêng dòng -->
-  <div class="row g-2 mb-2">
-    <div class="col-auto">
-      <label class="form-label fw-bold w-100" for="deptSelect">Thông Tin</label>
-        <select class="form-select form-select-sm" id="deptSelect" style="width: 250px;" onchange="switchDept()">
-          <option value="">-- Chọn --</option>
+  <!-- Controls Section -->
+  <div class="controls-section">
+    <div class="controls-grid">
+      <div class="form-group">
+        <label class="form-label" for="deptSelect">
+          <i class="fas fa-filter"></i>
+          Loại Dữ Liệu
+        </label>
+        <select class="form-control" id="deptSelect" onchange="switchDept()">
+          <option value="">-- Chọn loại dữ liệu --</option>
           <option value="HS">👧 Học Sinh</option>
           <option value="GV">👩‍🏫 Giáo Viên</option>
         </select>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="searchInput">
+          <i class="fas fa-search"></i>
+          Tìm Kiếm
+        </label>
+        <input 
+          class="form-control" 
+          id="searchInput" 
+          placeholder="Tìm kiếm theo họ và tên..." 
+          type="text"
+          oninput="performSearch()"
+        />
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">&nbsp;</label>
+        <button class="btn btn-success w-full" onclick="showAddForm()">
+          <i class="fas fa-plus"></i>
+          Thêm Mới
+        </button>
+      </div>
     </div>
-    <div>
-      <label class="sr-only" for="searchInput">Tìm kiếm</label>
-      <input class="form-control form-control-sm" id="searchInput" placeholder="🔍 Tìm kiếm..." style="width: 250px;" type="text"/>
+    
+    <!-- Dynamic Input Row -->
+    <div id="dynamicInputRow" style="margin-top: var(--spacing-lg); display: none;">
+      <!-- Sẽ được render động bằng JavaScript -->
     </div>
   </div>
-  <!-- Các input field sẽ được render động tại đây -->
-  <div class="row g-2 mb-3 input-row text-center small" id="dynamicInputRow"></div>
+  {% endif %}
+
+  <!-- Students Section -->
+  <div class="department-section" id="section_hs">
+    <div class="data-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <i class="fas fa-graduation-cap"></i>
+          Danh Sách Học Sinh
+        </h3>
+        <span class="badge badge-department">
+          <i class="fas fa-users"></i>
+          <span id="hsCount">0</span> học sinh
+        </span>
+      </div>
+      
+      <div class="table-wrapper">
+        <table class="data-table" id="table_hs">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã HS</th>
+              <th>Họ và Tên</th>
+              <th>Ngày Sinh</th>
+              <th>Giới Tính</th>
+              <th>Dân Tộc</th>
+              <th>Mã Định Danh</th>
+              <th>Họ Tên Bố</th>
+              <th>Nghề Nghiệp Bố</th>
+              <th>Họ Tên Mẹ</th>
+              <th>Nghề Nghiệp Mẹ</th>
+              <th>Hộ Khẩu</th>
+              <th>CCCD Bố/Mẹ</th>
+              <th>SĐT</th>
+              {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+              <th>Hành Động</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody id="hsTableBody">
+            <tr>
+              <td colspan="15" class="empty-state">
+                <i class="fas fa-search"></i>
+                <div>Chọn "Học Sinh" để xem dữ liệu</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teachers Section -->
+  <div class="department-section" id="section_gv">
+    <div class="data-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          <i class="fas fa-chalkboard-teacher"></i>
+          Danh Sách Giáo Viên
+        </h3>
+        <span class="badge badge-department">
+          <i class="fas fa-users"></i>
+          <span id="gvCount">0</span> giáo viên
+        </span>
+      </div>
+      
+      <div class="table-wrapper">
+        <table class="data-table" id="table_gv">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã GV</th>
+              <th>Họ và Tên</th>
+              <th>Tên TK</th>
+              <th>Chức Vụ</th>
+              <th>Ngày Sinh</th>
+              <th>Quê Quán</th>
+              <th>CCCD</th>
+              <th>Ngày Cấp</th>
+              <th>MST</th>
+              <th>CMND</th>
+              <th>Số BH</th>
+              <th>SĐT</th>
+              <th>TK NH</th>
+              <th>Email</th>
+              <th>Nhóm Máu</th>
+              <th>Địa Chỉ</th>
+              {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+              <th>Hành Động</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody id="gvTableBody">
+            <tr>
+              <td colspan="18" class="empty-state">
+                <i class="fas fa-search"></i>
+                <div>Chọn "Giáo Viên" để xem dữ liệu</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Database Structure Result -->
+  <div id="dbStructureResult" style="margin-top: var(--spacing-lg);"></div>
+
+  <script>
+    // Global variables
+    let currentDept = '';
+    let allData = {};
+    let filteredData = {};
+    
+    // Department switching
+    function switchDept() {
+      const deptSelect = document.getElementById('deptSelect');
+      const selectedDept = deptSelect.value;
+      
+      // Hide all sections
+      document.querySelectorAll('.department-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      if (selectedDept) {
+        currentDept = selectedDept;
+        
+        // Show selected section
+        const targetSection = document.getElementById(`section_${selectedDept.toLowerCase()}`);
+        if (targetSection) {
+          targetSection.classList.add('active');
+        }
+        
+        // Load data for selected department
+        loadDepartmentData(selectedDept);
+        
+        // Show dynamic input row for adding new records
+        {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+        showDynamicInputs(selectedDept);
         {% endif %}
-    <!-- Hiển thị nội dung bảng dept là HS -->
-  <div class="table-responsive" id="table_hs" style="overflow-x: auto; display: none;">
-    <table class="table table-bordered table-hover text-center align-middle table-sm" style="min-width: 1200px;">
-    <thead class="table-dark">
-    <tr>
-    <th>STT</th>
-    <th>Mã HS</th>
-    <th>Họ và Tên</th>
-    <th>Ngày Sinh</th>
-    <th>Giới Tính</th>
-    <th>Dân Tộc</th>
-    <th>Mã Định Danh</th>
-    <th>Họ Tên Bố</th>
-    <th>Nghề Nghiệp Bố</th>
-    <th>Họ Tên Mẹ</th>
-    <th>Nghề Nghiệp Mẹ</th>
-    <th>Hộ Khẩu</th>
-    <th>CCCD Bố/Mẹ</th>
-    <th>SĐT</th>
-                {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                <th>Action</th>
-                {% endif %}
-              </tr>
-    </thead>
-    <tbody>
-              {% for row in data_hs %}
-              <tr>
-    <td>{{ loop.index }}</td>
-    <td>{{ row['ma_hs'] }}</td> <!-- Mã HS không cho chỉnh sửa -->
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Ho Va Ten', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['ho_va_ten'] }}"/>
-                      {% else %}
-                          {{ row['ho_va_ten'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Ngay Sinh', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['ngay_sinh'].strftime('%d/%m/%Y') if row['ngay_sinh'] else '' }}"/>
-                      {% else %}
-                          {{ row['ngay_sinh'].strftime('%d/%m/%Y') if row['ngay_sinh'] else '' }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Gioi Tinh', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['gioi_tinh'] }}"/>
-                      {% else %}
-                          {{ row['gioi_tinh'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Dan Toc', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['dan_toc'] }}"/>
-                      {% else %}
-                          {{ row['dan_toc'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Ma Dinh Danh', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['ma_dinh_danh'] }}"/>
-                      {% else %}
-                          {{ row['ma_dinh_danh'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Ho Ten Bo', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['ho_ten_bo'] }}"/>
-                      {% else %}
-                          {{ row['ho_ten_bo'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Nghe Nghiep Bo', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['nghe_nghiep_bo'] }}"/>
-                      {% else %}
-                          {{ row['nghe_nghiep_bo'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Ho Ten Me', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['ho_ten_me'] }}"/>
-                      {% else %}
-                          {{ row['ho_ten_me'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Nghe Nghiep Me', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['nghe_nghiep_me'] }}"/>
-                      {% else %}
-                          {{ row['nghe_nghiep_me'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Ho Khau', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['ho_khau'] }}"/>
-                      {% else %}
-                          {{ row['ho_khau'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Cccd Bo Me', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['cccd_bo_me'] }}"/>
-                      {% else %}
-                          {{ row['cccd_bo_me'] }}
-                      {% endif %}
-                  </td>
-    <td>
-                      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                          <input class="form-control inline-edit" onkeypress="saveEdit(event, this, 'Sdt', '{{ row['ma_hs'] }}', 'HS')" type="text" value="{{ row['sdt'] }}"/>
-                      {% else %}
-                          {{ row['sdt'] }}
-                      {% endif %}
-                  </td>
-                  {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                  <td>
-    <button class="btn btn-sm btn-primary" data-bs-target="#editModalHS" data-bs-toggle="modal" onclick="populateModalHS('{{ row['ma_hs'] }}', '{{ row['ho_va_ten'] }}', '{{ row['ngay_sinh'].strftime('%d/%m/%Y') if row['ngay_sinh'] else '' }}', '{{ row['gioi_tinh'] }}')">Edit</button>
-    <button class="btn btn-sm btn-danger" onclick="deleteRow('HS', '{{ row['ma_hs'] }}')">Delete</button>
-    </td>
-                  {% endif %}
-              </tr>
-              {% endfor %}
-            </tbody>
-    </table>
-  </div>
-<!-- Hiển thị nội dung bảng dept là GV -->
-  <div class="table-responsive" id="table_gv" style="overflow-x: auto; display: none;">
-    <table class="table table-bordered table-hover text-center align-middle table-sm" style="min-width: 1200px;">
-    <thead class="table-dark">
-    <tr>
-    <th>STT</th>
-    <th>Mã GV</th>
-    <th>Họ và Tên</th>
-    <th>Tên TK</th>
-    <th>Chức vụ</th>
-    <th>Ngày Sinh</th>
-    <th>Quê Quán</th>
-    <th>CCCD</th>
-    <th>Ngày Cấp</th>
-    <th>MST</th>
-    <th>CMND</th>
-    <th>Số BH</th>
-    <th>SĐT</th>
-    <th>Số TK</th>
-    <th>Email</th>
-    <th>Nhóm Máu</th>
-    <th>Địa Chỉ</th>
-                {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                <th>Action</th>
-                {% endif %}
-              </tr>
-    </thead>
-    <tbody>
-              {% for row in data_gv %}
-              <tr data-staff-id="{{ row['ma_gv'] }}">
-    <td>{{ loop.index }}</td>
-    <td>{{ row['ma_gv'] }}</td>
-    <td>{{ row['ho_va_ten'] }}</td>
-    <td>{{ row['ten_tk'] }}</td>
-    <td>{{ row['chuc_vu'] }}</td>
-    <td>{{ row['ngay_sinh'].strftime('%d/%m/%Y') if row['ngay_sinh'] else '' }}</td>
-    <td>{{ row['que_quan'] }}</td>
-    <td>{{ row['cccd'] }}</td>
-    <td>{{ row['ngay_cap'].strftime('%d/%m/%Y') if row['ngay_cap'] else '' }}</td>
-    <td>{{ row['mst'] }}</td>
-    <td>{{ row['cmnd'] }}</td>
-    <td>{{ row['so_bh'] }}</td>
-    <td>{{ row['sdt'] }}</td>
-    <td>{{ row['tk_nh'] }}</td>
-    <td>{{ row['email'] }}</td>
-    <td>{{ row['nhom_mau'] }}</td>
-    <td>{{ row['dia_chi'] }}</td>
-                {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-                <td>
-    <button class="btn btn-sm btn-danger" onclick="deleteRowGV('{{ row['ma_gv'] }}')">Delete</button>
-    </td>
-                {% endif %}
-              </tr>
-              {% endfor %}
-            </tbody>
-    </table>
-  </div>
-  <!-- Modal cho HS -->
-  <div class="modal" id="editModalHS">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Sửa thông tin HS</h5>
-          <button class="close" data-dismiss="modal" type="button">×</button>
-        </div>
-        <div class="modal-body">
-          <form id="editFormHS">
-            <div class="form-group">
-            <label for="ma_hs">Mã HS</label>
-            <input class="form-control" id="ma_hs" name="ma_hs" readonly="" type="text"/>
+      } else {
+        currentDept = '';
+        document.getElementById('dynamicInputRow').style.display = 'none';
+      }
+    }
+    
+    // Load department data
+    async function loadDepartmentData(dept) {
+      try {
+        console.log(`🔄 Loading ${dept} department data...`);
+        const tableBody = document.getElementById(`${dept.toLowerCase()}TableBody`);
+        tableBody.innerHTML = '<tr><td colspan="20" class="loading">Đang tải dữ liệu...</td></tr>';
+        
+        const endpoint = dept === 'HS' ? '/fetch_hs' : '/fetch_gv';
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        
+        if (data.rows && data.rows.length > 0) {
+          allData[dept] = data.rows;
+          filteredData[dept] = data.rows;
+          renderTable(dept, data.rows);
+          updateStats();
+          console.log(`✅ Loaded ${data.rows.length} ${dept} records`);
+        } else {
+          // Even if no data, make sure allData is set to empty array
+          allData[dept] = [];
+          filteredData[dept] = [];
+          updateStats(); // Update stats to show 0
+          console.log(`ℹ️ No ${dept} data found`);
+          
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="20" class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <div>Không có dữ liệu ${dept === 'HS' ? 'học sinh' : 'giáo viên'}</div>
+              </td>
+            </tr>
+          `;
+        }
+      } catch (error) {
+        console.error(`❌ Error loading ${dept} data:`, error);
+        // Set empty data for stats
+        allData[dept] = [];
+        filteredData[dept] = [];
+        updateStats();
+        const tableBody = document.getElementById(`${dept.toLowerCase()}TableBody`);
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="20" class="empty-state" style="color: var(--error-color);">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>Lỗi tải dữ liệu: ${error.message}</div>
+            </td>
+          </tr>
+        `;
+      }
+    }
+    
+    // Render table with data
+    function renderTable(dept, data) {
+      const tableBody = document.getElementById(`${dept.toLowerCase()}TableBody`);
+      const canEdit = {{ 'true' if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' else 'false' }};
+      
+      // Format date - remove GMT timezone info
+      const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('vi-VN');
+      };
+      
+      if (!data || data.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="20" class="empty-state">
+              <i class="fas fa-search"></i>
+              <div>Không tìm thấy kết quả</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      let html = '';
+      data.forEach((row, index) => {
+        html += '<tr>';
+        html += `<td>${index + 1}</td>`;
+        
+        if (dept === 'HS') {
+          html += `<td>${row.ma_hs || ''}</td>`;
+          html += `<td title="${row.ho_va_ten || ''}">${canEdit ? `<input class="inline-edit" value="${row.ho_va_ten || ''}" onkeypress="saveEdit(event, this, 'Ho Va Ten', '${row.ma_hs}', 'HS')" />` : (row.ho_va_ten || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_sinh)}" onkeypress="saveEdit(event, this, 'Ngay Sinh', '${row.ma_hs}', 'HS')" />` : formatDate(row.ngay_sinh)}</td>`;
+          html += `<td>${canEdit ? `<select class="inline-edit" onchange="saveEdit(null, this, 'Gioi Tinh', '${row.ma_hs}', 'HS')"><option value="Nam" ${row.gioi_tinh === 'Nam' ? 'selected' : ''}>Nam</option><option value="Nu" ${row.gioi_tinh === 'Nu' ? 'selected' : ''}>Nữ</option></select>` : (row.gioi_tinh === 'Nu' ? 'Nữ' : row.gioi_tinh || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.dan_toc || ''}" onkeypress="saveEdit(event, this, 'Dan Toc', '${row.ma_hs}', 'HS')" />` : (row.dan_toc || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ma_dinh_danh || ''}" onkeypress="saveEdit(event, this, 'Ma Dinh Danh', '${row.ma_hs}', 'HS')" />` : (row.ma_dinh_danh || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ho_ten_bo || ''}" onkeypress="saveEdit(event, this, 'Ho Ten Bo', '${row.ma_hs}', 'HS')" />` : (row.ho_ten_bo || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.nghe_nghiep_bo || ''}" onkeypress="saveEdit(event, this, 'Nghe Nghiep Bo', '${row.ma_hs}', 'HS')" />` : (row.nghe_nghiep_bo || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ho_ten_me || ''}" onkeypress="saveEdit(event, this, 'Ho Ten Me', '${row.ma_hs}', 'HS')" />` : (row.ho_ten_me || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.nghe_nghiep_me || ''}" onkeypress="saveEdit(event, this, 'Nghe Nghiep Me', '${row.ma_hs}', 'HS')" />` : (row.nghe_nghiep_me || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ho_khau || ''}" onkeypress="saveEdit(event, this, 'Ho Khau', '${row.ma_hs}', 'HS')" />` : (row.ho_khau || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.cccd_bo_me || ''}" onkeypress="saveEdit(event, this, 'Cccd Bo Me', '${row.ma_hs}', 'HS')" />` : (row.cccd_bo_me || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.sdt || ''}" onkeypress="saveEdit(event, this, 'Sdt', '${row.ma_hs}', 'HS')" />` : (row.sdt || '')}</td>`;
+        } else {
+          // Teacher data
+          html += `<td>${row.ma_gv || ''}</td>`;
+          html += `<td title="${row.ho_va_ten || ''}">${canEdit ? `<input class="inline-edit" value="${row.ho_va_ten || ''}" onkeypress="saveEdit(event, this, 'Ho Va Ten', '${row.ma_gv}', 'GV')" />` : (row.ho_va_ten || '')}</td>`;
+          html += `<td>${row.ten_tk || ''}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.chuc_vu || ''}" onkeypress="saveEdit(event, this, 'Chuc Vu', '${row.ma_gv}', 'GV')" />` : (row.chuc_vu || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_sinh)}" onkeypress="saveEdit(event, this, 'Ngay Sinh', '${row.ma_gv}', 'GV')" />` : formatDate(row.ngay_sinh)}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.que_quan || ''}" onkeypress="saveEdit(event, this, 'Que Quan', '${row.ma_gv}', 'GV')" />` : (row.que_quan || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.cccd || ''}" onkeypress="saveEdit(event, this, 'Cccd', '${row.ma_gv}', 'GV')" />` : (row.cccd || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_cap)}" onkeypress="saveEdit(event, this, 'Ngay Cap', '${row.ma_gv}', 'GV')" />` : formatDate(row.ngay_cap)}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.mst || ''}" onkeypress="saveEdit(event, this, 'Mst', '${row.ma_gv}', 'GV')" />` : (row.mst || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.cmnd || ''}" onkeypress="saveEdit(event, this, 'Cmnd', '${row.ma_gv}', 'GV')" />` : (row.cmnd || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.so_bh || ''}" onkeypress="saveEdit(event, this, 'So Bh', '${row.ma_gv}', 'GV')" />` : (row.so_bh || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.sdt || ''}" onkeypress="saveEdit(event, this, 'Sdt', '${row.ma_gv}', 'GV')" />` : (row.sdt || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.tk_nh || ''}" onkeypress="saveEdit(event, this, 'Tk Nh', '${row.ma_gv}', 'GV')" />` : (row.tk_nh || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.email || ''}" onkeypress="saveEdit(event, this, 'Email', '${row.ma_gv}', 'GV')" />` : (row.email || '')}</td>`;
+          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.nhom_mau || ''}" onkeypress="saveEdit(event, this, 'Nhom Mau', '${row.ma_gv}', 'GV')" />` : (row.nhom_mau || '')}</td>`;
+          // Cột địa chỉ với title để hiển thị tooltip
+          const addressValue = row.dia_chi || '';
+          html += `<td title="${addressValue}">${canEdit ? `<input class="inline-edit" value="${addressValue}" onkeypress="saveEdit(event, this, 'Dia Chi', '${row.ma_gv}', 'GV')" />` : addressValue}</td>`;
+        }
+        
+        if (canEdit) {
+          html += `<td>
+            <div class="action-buttons">
+              <button class="btn-action btn-delete" onclick="deleteRecord('${dept === 'HS' ? row.ma_hs : row.ma_gv}', '${dept}')">
+                <i class="fas fa-trash"></i>
+              </button>
             </div>
-            <div class="form-group">
-            <label for="ho_va_ten_hs">Họ và Tên</label>
-            <input class="form-control" id="ho_va_ten_hs" name="Ho Va Ten" type="text"/>
-            </div>
-            <div class="form-group">
-            <label for="ngay_sinh_hs">Ngày Sinh (dd/mm/yyyy)</label>
-            <input class="form-control" id="ngay_sinh_hs" name="Ngay Sinh" type="text"/>
-            </div>
-            <div class="form-group">
-            <label for="gioi_tinh_hs">Giới Tính</label>
-            <input class="form-control" id="gioi_tinh_hs" name="Gioi Tinh" type="text"/>
-            </div>
-            <!-- Thêm các trường khác như ma_gv, dan_toc, v.v. nếu cần -->
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-dismiss="modal" type="button">Hủy</button>
-          <button class="btn btn-primary" onclick="saveEdit('HS')" type="button">Lưu</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal cho GV -->
-  <div class="modal" id="editModalGV">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title">Sửa thông tin GV</h5>
-        <button class="close" data-dismiss="modal" type="button">×</button>
-        </div>
-        <div class="modal-body">
-        <form id="editFormGV">
-        <div class="form-group">
-        <label for="ma_gv">Mã GV</label>
-        <input class="form-control" id="ma_gv" name="ma_gv" readonly="" type="text"/>
-        </div>
-        <div class="form-group">
-        <label for="ho_va_ten_gv">Họ và Tên</label>
-        <input class="form-control" id="ho_va_ten_gv" name="Ho Va Ten" type="text"/>
-        </div>
-        <div class="form-group">
-        <label for="ngay_sinh_gv">Ngày Sinh (dd/mm/yyyy)</label>
-        <input class="form-control" id="ngay_sinh_gv" name="Ngay Sinh" type="text"/>
-        </div>
-        <div class="form-group">
-        <label for="chuc_vu_gv">Chức Vụ</label>
-        <input class="form-control" id="chuc_vu_gv" name="Chuc Vu" type="text"/>
-        </div>
-        <!-- Thêm các trường khác như que_quan, cccd, v.v. nếu cần -->
-        </form>
-        </div>
-        <div class="modal-footer">
-        <button class="btn btn-secondary" data-dismiss="modal" type="button">Hủy</button>
-        <button class="btn btn-primary" onclick="saveEdit('GV')" type="button">Lưu</button>
-        </div>
-      </div>
-    </div>
-  </div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    // Hàm 1: Chỉnh sửa thông tin nhân sự
-    function saveEdit(dept) {
-        // Kiểm tra dept hợp lệ
-        if (!['HS', 'GV'].includes(dept)) {
-            alert('Phòng ban không hợp lệ!');
-            return;
+          </td>`;
         }
-        // Xác định biểu mẫu
-        const formId = dept === 'HS' ? 'editFormHS' : 'editFormGV';
-        const form = document.getElementById(formId);
-        if (!form) {
-            alert('Không tìm thấy biểu mẫu!');
-            return;
+        
+        html += '</tr>';
+      });
+      
+      tableBody.innerHTML = html;
+      
+      // Update count badge
+      const countElement = document.getElementById(`${dept.toLowerCase()}Count`);
+      if (countElement) {
+        countElement.textContent = data.length;
+      }
+    }
+    
+    // Search functionality - search only in name column
+    function performSearch() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      
+      if (!currentDept || !allData[currentDept]) return;
+      
+      if (!searchTerm) {
+        filteredData[currentDept] = allData[currentDept];
+      } else {
+        filteredData[currentDept] = allData[currentDept].filter(row => {
+          // Search only in the name column (ho_va_ten)
+          const name = String(row.ho_va_ten || '').toLowerCase();
+          return name.includes(searchTerm);
+        });
+      }
+      
+      renderTable(currentDept, filteredData[currentDept]);
+    }
+    
+    // Update statistics
+    function updateStats() {
+      const studentCount = allData.HS ? allData.HS.length : 0;
+      const teacherCount = allData.GV ? allData.GV.length : 0;
+      
+      document.getElementById('studentCount').textContent = studentCount;
+      document.getElementById('teacherCount').textContent = teacherCount;
+      
+      // Cập nhật cả hsCount và gvCount nếu có
+      const hsCountEl = document.getElementById('hsCount');
+      const gvCountEl = document.getElementById('gvCount');
+      if (hsCountEl) hsCountEl.textContent = studentCount;
+      if (gvCountEl) gvCountEl.textContent = teacherCount;
+    }
+    
+    // Load all data for statistics (without showing tables)
+    async function loadAllDataForStats() {
+      try {
+        console.log('🔄 Loading all data for dashboard stats...');
+        
+        // Load both HS and GV data in parallel
+        const [hsResponse, gvResponse] = await Promise.all([
+          fetch('/fetch_hs'),
+          fetch('/fetch_gv')
+        ]);
+        
+        const [hsData, gvData] = await Promise.all([
+          hsResponse.json(),
+          gvResponse.json()
+        ]);
+        
+        // Store data
+        if (hsData.rows) {
+          allData.HS = hsData.rows;
         }
-        // Thu thập dữ liệu
-        const data = {};
-        for (let input of form.elements) {
-            if (input.name && input.name !== 'ma_hs' && input.name !== 'ma_gv') {
-                if (input.value.trim() === '' && input.required) {
-                    alert(`Vui lòng điền ${input.name}!`);
-                    return;
-                }
-                data[input.name] = input.value.trim();
-            }
+        if (gvData.rows) {
+          allData.GV = gvData.rows;
         }
-        // Kiểm tra ID
-        const idField = dept === 'HS' ? 'ma_hs' : 'ma_gv';
-        const id = document.getElementById(idField)?.value;
-        if (!id) {
-            alert('Không tìm thấy ID!');
-            return;
-        }
-        // Kiểm tra định dạng ngày sinh (nếu có)
-        if (data['Ngay Sinh'] && !/^\d{2}\/\d{2}\/\d{4}$/.test(data['Ngay Sinh'])) {
-            alert('Ngày sinh phải có định dạng dd/mm/yyyy!');
-            return;
-        }
-        // Tạo payload
-        const updateData = {
+        
+        // Update stats immediately
+        updateStats();
+        
+        console.log(`✅ Stats loaded: ${allData.HS ? allData.HS.length : 0} học sinh, ${allData.GV ? allData.GV.length : 0} giáo viên`);
+        
+      } catch (error) {
+        console.error('❌ Error loading stats data:', error);
+        // Show fallback stats
+        document.getElementById('studentCount').textContent = '❌';
+        document.getElementById('teacherCount').textContent = '❌';
+      }
+    }
+    
+    // Save edit functionality
+    async function saveEdit(event, element, field, id, dept) {
+      if (event && event.key !== 'Enter') return;
+      
+      const value = element.value;
+      
+      try {
+        const response = await fetch('/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             Dept: dept,
             id: id,
-            data: data
-        };
-        // Gửi yêu cầu
-        fetch('/update', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(result => {
-            if (result.status === 'ok') {
-                alert('Cập nhật thông tin thành công');
-                const dept = document.getElementById("deptSelect").value;
-                fetchAndRenderDept(dept);
-            } else {
-                alert('Cập nhật thất bại: ' + result.reason);
-            }
-        })
-        .catch(error => {
-            alert('Lỗi khi gửi yêu cầu: ' + error.message);
+            data: { [field]: value }
+          })
         });
-    }
-    // Hàm điền dữ liệu vào modal HS
-    function populateModalHS(ma_hs, ho_va_ten, ngay_sinh, gioi_tinh) {
-        document.getElementById('ma_hs').value = ma_hs;
-        document.getElementById('ho_va_ten_hs').value = ho_va_ten;
-        document.getElementById('ngay_sinh_hs').value = ngay_sinh;
-        document.getElementById('gioi_tinh_hs').value = gioi_tinh;
-    }
-    // Hàm điền dữ liệu vào modal GV
-    function populateModalGV(ma_gv, ho_va_ten, chuc_vu, ngay_sinh) {
-        document.getElementById('ma_gv').value = ma_gv;
-        document.getElementById('ho_va_ten_gv').value = ho_va_ten;
-        document.getElementById('chuc_vu_gv').value = chuc_vu;
-        document.getElementById('ngay_sinh_gv').value = ngay_sinh;
-    }
-    // Gắn hàm vào window
-    window.saveEdit = saveEdit;
-    window.populateModalHS = populateModalHS;
-    window.populateModalGV = populateModalGV;
-});
-document.addEventListener('DOMContentLoaded', async () => {
-    const section = document.getElementById('non-admin-epa-section');
-    console.log('[DEBUG] non-admin-epa-section exists:', !!section);
-    if (section) {
-        await loadYears();
-        document.getElementById('year_epa').addEventListener('change', loadEPATable);
-    }
-});
-</script>
-<!-- 🔧 Modal chỉnh sửa giáo viên -->
-<div aria-hidden="true" aria-labelledby="editGVModalLabel" class="modal fade" id="editGVModal" tabindex="-1">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-<div class="modal-header">
-<h5 class="modal-title">Chỉnh sửa thông tin giáo viên</h5>
-<button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-</div>
-<div class="modal-body">
-<form id="editGVForm">
-<input id="edit_ten_tk" type="hidden"/>
-<div class="row g-3">
-<div class="col-md-6">
-<label>Mã GV</label>
-<input class="form-control" id="edit_ma_gv"/>
-</div>
-<div class="col-md-6">
-<label>Họ và tên</label>
-<input class="form-control" id="edit_ho_va_ten"/>
-</div>
-<div class="col-md-6">
-<label>Chức vụ</label>
-<input class="form-control" id="edit_chuc_vu"/>
-</div>
-<div class="col-md-6">
-<label>Ngày sinh</label>
-<input class="form-control" id="edit_ngay_sinh" type="date"/>
-</div>
-<div class="col-md-6">
-<label>Quê quán</label>
-<input class="form-control" id="edit_que_quan"/>
-</div>
-<div class="col-md-6">
-<label>CCCD</label>
-<input class="form-control" id="edit_cccd"/>
-</div>
-<div class="col-md-6">
-<label>Ngày cấp</label>
-<input class="form-control" id="edit_ngay_cap" type="date"/>
-</div>
-<div class="col-md-6">
-<label>MST</label>
-<input class="form-control" id="edit_mst"/>
-</div>
-<div class="col-md-6">
-<label>CMND</label>
-<input class="form-control" id="edit_cmnd"/>
-</div>
-<div class="col-md-6">
-<label>Sổ BH</label>
-<input class="form-control" id="edit_so_bh"/>
-</div>
-<div class="col-md-6">
-<label>SĐT</label>
-<input class="form-control" id="edit_sdt"/>
-</div>
-<div class="col-md-6">
-<label>Tài khoản NH</label>
-<input class="form-control" id="edit_tk_nh"/>
-</div>
-<div class="col-md-6">
-<label>Email</label>
-<input class="form-control" id="edit_email"/>
-</div>
-<div class="col-md-6">
-<label>Nhóm máu</label>
-<input class="form-control" id="edit_nhom_mau"/>
-</div>
-<div class="col-md-6">
-<label>Địa chỉ</label>
-<input class="form-control" id="edit_dia_chi"/>
-</div>
-</div>
-</form>
-</div>
-<div class="modal-footer">
-<button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-<button class="btn btn-primary" onclick="submitGVUpdate()">Lưu thay đổi</button>
-</div>
-</div>
-</div>
-</div>
-<div class="modal fade" id="editHSModal" tabindex="-1">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
-<div class="modal-header"><h5 class="modal-title">Chỉnh sửa thông tin học sinh</h5></div>
-<div class="modal-body">
-<form>
-<input id="edit_ma_hs" type="hidden"/>
-<div class="row g-3">
-<div class="col-md-6"><label>Họ và tên</label><input class="form-control" id="edit_ho_va_ten_hs"/></div>
-<div class="col-md-6"><label>Ngày sinh</label><input class="form-control" id="edit_ngay_sinh" type="date"/></div>
-<div class="col-md-6"><label>Giới tính</label><input class="form-control" id="edit_gioi_tinh"/></div>
-<div class="col-md-6"><label>Dân tộc</label><input class="form-control" id="edit_dan_toc"/></div>
-<div class="col-md-6"><label>Mã định danh</label><input class="form-control" id="edit_ma_dinh_danh"/></div>
-<div class="col-md-6"><label>Họ tên bố</label><input class="form-control" id="edit_ho_ten_bo"/></div>
-<div class="col-md-6"><label>Nghề bố</label><input class="form-control" id="edit_nghe_nghiep_bo"/></div>
-<div class="col-md-6"><label>Họ tên mẹ</label><input class="form-control" id="edit_ho_ten_me"/></div>
-<div class="col-md-6"><label>Nghề mẹ</label><input class="form-control" id="edit_nghe_nghiep_me"/></div>
-<div class="col-md-6"><label>Hộ khẩu</label><input class="form-control" id="edit_ho_khau"/></div>
-<div class="col-md-6"><label>CCCD bố/mẹ</label><input class="form-control" id="edit_cccd_bo_me"/></div>
-<div class="col-md-6"><label>Số điện thoại</label><input class="form-control" id="edit_sdt_hs"/></div>
-</div>
-</form>
-</div>
-<div class="modal-footer">
-<button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-<button class="btn btn-primary" onclick="submitHSUpdate()">Lưu thay đổi</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-</body>
-
-<script>
-  async function fetchTeacherOptions() {
-    const res = await fetch("/api/teachers");
-    const data = await res.json();
-    return data; // [{ ma_gv: "...", ho_va_ten: "..." }, ...]
-    }
-function getInputValues() {
-  const dept = document.getElementById("deptSelect").value;
-  if (dept === "GV") {
-    return {
-      "Dept": "GV",
-      "Staff ID": document.getElementById("staff_id")?.value.trim(),
-      "Full Name": document.getElementById("full_name")?.value.trim(),
-      "Nick Name": document.getElementById("nick_name")?.value.trim(),
-      "Team": document.getElementById("team")?.value.trim(),
-      "Birth Date": document.getElementById("birth_date")?.value,
-      "Hometown": document.getElementById("hometown")?.value.trim(),
-      "Cccd": document.getElementById("cccd")?.value.trim(),
-      "Cccd Issued Date": document.getElementById("cccd_issued_date")?.value,
-      "Tax Code": document.getElementById("tax_code")?.value.trim(),
-      "Cmnd": document.getElementById("cmnd")?.value.trim(),
-      "Insurance Number": document.getElementById("insurance_number")?.value.trim(),
-      "Phone Number": document.getElementById("phone_number")?.value.trim(),
-      "Bank Account": document.getElementById("bank_account")?.value.trim(),
-      "Email": document.getElementById("email")?.value.trim(),
-      "Blood Type": document.getElementById("blood_type")?.value.trim(),
-      "Address": document.getElementById("address")?.value.trim()
-    };
-  }
-  return {};
-}
-let schemaByDept = {};
-
-async function fetchSchema() {
-  const res = await fetch("/api/table-schema");
-  schemaByDept = await res.json();
-  switchDept();  // render lần đầu
-}
-
-async function switchDept() {
-  console.log("DEBUG: switchDept started");
-  const dept = document.getElementById("deptSelect").value;
-  const container = document.getElementById("dynamicInputRow");
-  console.log(`DEBUG: Selected dept: ${dept}`);
-  // Reset content
-  container.innerHTML = "";
-  console.log("DEBUG: Container content reset");
-  // Toggle bảng
-  document.getElementById("table_hs").style.display = (dept === "HS") ? "block" : "none";
-  document.getElementById("table_gv").style.display = (dept === "GV") ? "block" : "none";
-  console.log(`DEBUG: Table HS display: ${document.getElementById("table_hs").style.display}, Table GV display: ${document.getElementById("table_gv").style.display}`);
-  // Nếu không chọn hoặc schema không có thì dừng
-  if (!dept || !schemaByDept[dept]) {
-    console.log(`DEBUG: Invalid dept or schema not found for ${dept}, exiting`);
-    return;
-  }
-  // Render input động
-  console.log(`DEBUG: Rendering inputs for schema: ${schemaByDept[dept]}`);
-  let rowDiv = document.createElement("div");
-  rowDiv.className = "row g-2 mb-2 w-100 d-flex";
-  const teachers = dept === "HS" ? await fetchTeacherOptions() : [];
-
-  for (let index = 0; index < schemaByDept[dept].length; index++) {
-    const field = schemaByDept[dept][index];
-    const label = field.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-    const colDiv = document.createElement("div");
-    colDiv.className = "col-3 col-sm-2 col-md-1 input-dynamic";
-
-    if (field.toLowerCase() === "ma_gv" && dept === "HS") {
-      const options = teachers.map(t => `<option value="${t.ma_gv}">${t.ma_gv} - ${t.ho_va_ten}</option>`).join("");
-      colDiv.innerHTML = `
-        <label class="form-label fw-bold w-100">${label}</label>
-        <select id="${field}" class="form-control form-control-sm">
-          <option value="">-- Chọn mã GV --</option>
-          ${options}
-        </select>
-      `;
-    } else {
-      colDiv.innerHTML = `
-        <label class="form-label fw-bold w-100">${label}</label>
-        <input type="text" id="${field}" class="form-control form-control-sm" placeholder="${label}">
-      `;
-    }
-
-    rowDiv.appendChild(colDiv);
-
-    if ((index + 1) % 8 === 0) {
-      container.appendChild(rowDiv);
-      rowDiv = document.createElement("div");
-      rowDiv.className = "row g-2 mb-2 w-100 d-flex";
-    }
-  }
-
-  if (rowDiv.childElementCount > 0) {
-    container.appendChild(rowDiv);
-  }
-  if (dept === "GV") {
-    await fetchAndSetNextMaGV();  // ✅ Điền mã GV gợi ý
-  }
-
-  // ✅ BƯỚC C: Gọi API để hiển thị mã HS tự tạo vào input
-  if (dept === "HS") {
-    try {
-      const res = await fetch("/api/next-ma-hs?prefix=HS");
-      const result = await res.json();
-      if (result.next_ma_hs) {
-        const input = document.getElementById("ma_hs");
-        if (input && !input.value) {
-          input.value = result.next_ma_hs;
-          console.log(`DEBUG: Auto-filled ma_hs = ${result.next_ma_hs}`);
-        }
-      }
-    } catch (err) {
-      console.error("❌ Lỗi khi fetch mã HS tự sinh:", err);
-    }
-  }
-
-  // Nút Add
-  const buttonRow = document.createElement("div");
-  buttonRow.className = "row g-2 mt-2 w-100 input-dynamic";
-  buttonRow.innerHTML = `
-    <div class="col-auto d-grid">
-      <button class="btn btn-success btn-sm" onclick="addEmployee()">➕ Add</button>
-    </div>
-  `;
-  container.appendChild(buttonRow);
-  console.log("DEBUG: Added 'Add' button row");
-
-  // Fetch lại bảng dữ liệu đúng Dept vừa chọn
-  console.log(`DEBUG: Fetching data for dept: ${dept}`);
-  await fetchAndRenderDept(dept);
-  console.log("DEBUG: switchDept completed");
-}
-
-//TỰ ĐIỀN ma_gv KHI CHỌN "GV"
-async function fetchAndSetNextMaGV(prefix = "GV") {
-  try {
-    const res = await fetch(`/api/next-ma-gv?prefix=${prefix}`);
-    const result = await res.json();
-    if (result.next_ma_gv) {
-      const input = document.getElementById("ma_gv");
-      if (input && !input.value) {
-        input.value = result.next_ma_gv;
-        console.log(`DEBUG: Auto-filled ma_gv = ${result.next_ma_gv}`);
-      }
-    }
-  } catch (err) {
-    console.error("❌ Lỗi khi fetch mã GV tự sinh:", err);
-  }
-}
-
-async function fetchAndRenderDept(dept) {
-  console.log(`DEBUG: fetchAndRenderDept started for dept: ${dept}`);
-  try {
-    const res = await fetch(`/api/employees?dept=${dept}`);
-    console.log(`DEBUG: Fetch response status: ${res.status}`);
-    const result = await res.json();
-    const rows = result.rows || [];
-    console.log(`DEBUG: Fetched ${rows.length} rows for dept: ${dept}`);
-    if (dept === "HS") {
-      console.log("DEBUG: Rendering HS table");
-      renderTable("table_hs", rows);
-    } else if (dept === "HS") {
-      console.log("DEBUG: Rendering GV table");
-      renderTable("table_gv", rows);
-    }
-  } catch (err) {
-    console.error(`❌ DEBUG: Fetch failed for dept ${dept}:`, err);
-  }
-  console.log("DEBUG: fetchAndRenderDept completed");
-}
-function renderTable(tableId, rows) {
-  console.log(`DEBUG: renderTable started for table: ${tableId}, rows: ${rows.length}`);
-  const table = document.getElementById(tableId).querySelector("tbody");
-  table.innerHTML = "";
-  console.log(`DEBUG: Cleared tbody for table: ${tableId}`);
-  rows.forEach((row, idx) => {
-    console.log(`DEBUG: Generating row ${idx + 1} for table: ${tableId}`);
-    const tr = document.createElement("tr");
-    tr.innerHTML = generateRowHtml(tableId, row, idx + 1);
-    table.appendChild(tr);
-  });
-  console.log(`DEBUG: renderTable completed for table: ${tableId}`);
-}
-function generateRowHtml(tableId, row, index) {
-  console.log(`DEBUG: generateRowHtml for table: ${tableId}, row index: ${index}`);
-  if (tableId === "table_hs") {
-    console.log(`DEBUG: Generating HS row with data: ${JSON.stringify(row)}`);
-    return `
-      <td>${index}</td>
-      <td>${row.full_name || ""}</td>
-      <td>${formatDate(row.birth_date)}</td>
-      <td>${row.gender || ""}</td>
-      <td>${row.ethnicity || ""}</td>
-      <td>${row.identifier_code || ""}</td>
-      <td>${row.father_name || ""}</td>
-      <td>${row.father_job || ""}</td>
-      <td>${row.mother_name || ""}</td>
-      <td>${row.mother_job || ""}</td>
-      <td>${row.household_address || ""}</td>
-      <td>${row.parent_id_card || ""}</td>
-      <td>${row.parent_phone || ""}</td>
-    `;
-  }
-  if (tableId === "table_gv") {
-    console.log(`DEBUG: Generating GV row with data: ${JSON.stringify(row)}`);
-    return `
-      <td>${index}</td>
-      <td>${row.staff_id || ""}</td>
-      <td>${row.full_name || ""}</td>
-      <td>${row.nick_name || ""}</td>
-      <td>${row.team || ""}</td>
-      <td>${formatDate(row.birth_date)}</td>
-      <td>${row.hometown || ""}</td>
-      <td>${row.cccd || ""}</td>
-      <td>${formatDate(row.cccd_issued_date)}</td>
-      <td>${row.tax_code || ""}</td>
-      <td>${row.cmnd || ""}</td>
-      <td>${row.insurance_number || ""}</td>
-      <td>${row.phone_number || ""}</td>
-      <td>${row.bank_account || ""}</td>
-      <td>${row.email || ""}</td>
-      <td>${row.blood_type || ""}</td>
-      <td>${row.address || ""}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deleteRowGV('${row.staff_id}')">Delete</button></td>
-    `;
-  }
-  console.log(`DEBUG: No matching tableId: ${tableId}, returning empty string`);
-  return "";
-}
-function formatDate(dateStr) {
-  if (!dateStr || isNaN(new Date(dateStr))) return "";
-  const d = new Date(dateStr);
-  return d.getDate().toString().padStart(2, '0') + "/" +
-         (d.getMonth() + 1).toString().padStart(2, '0') + "/" +
-         d.getFullYear();
-}
-
-// Hàm chuẩn hóa mã bất kỳ về dạng XY00000
-function normalizeCode(raw) {
-  if (!raw) return "";
-  raw = raw.trim().toUpperCase();
-  const match = raw.match(/^([A-ZÀ-Ỵ]{2})(\d{1,5})$/);
-  if (!match) return raw;
-  const prefix = match[1];
-  const number = match[2].padStart(5, "0");
-  return prefix + number;
-}
-
-// Lấy mã HS tiếp theo
-async function getNextMaHS(prefix = "HS") {
-  const res = await fetch(`/api/last-ma-hs-prefix?prefix=${prefix}`);
-  const result = await res.json();
-  const next = result.next_num;
-  return result.prefix + next.toString().padStart(5, "0");
-}
-
-// Lấy mã GV tiếp theo
-async function getNextMaGV(prefix = "GV") {
-  const res = await fetch(`/api/next-ma-gv?prefix=${prefix}`);
-  const result = await res.json();
-  const next = result.next_num;
-  return result.prefix + next.toString().padStart(5, "0");
-}
-
-// Tự điền mã HS
-async function fetchAndSetNextMaHS(prefix = "HS") {
-  try {
-    const res = await fetch(`/api/next-ma-hs?prefix=${prefix}`);
-    const result = await res.json();
-    if (result.next_ma_hs) {
-      const input = document.getElementById("ma_hs");
-      if (input && !input.value) {
-        input.value = result.next_ma_hs;
-      }
-    }
-  } catch (err) {
-    console.error("❌ Lỗi khi lấy mã HS tự động:", err);
-  }
-}
-
-// Tự điền mã GV
-async function fetchAndSetNextMaGV(prefix = "GV") {
-  try {
-    const res = await fetch(`/api/next-ma-gv?prefix=${prefix}`);
-    const result = await res.json();
-    if (result.next_ma_gv) {
-      const input = document.getElementById("ma_gv");
-      if (input && !input.value) {
-        input.value = result.next_ma_gv;
-      }
-    }
-  } catch (err) {
-    console.error("❌ Lỗi khi lấy mã GV tự động:", err);
-  }
-}
-
-async function addEmployee() {
-  const dept = document.getElementById("deptSelect").value;
-  if (!dept || !schemaByDept[dept]) {
-    alert("Please select a department.");
-    return;
-  }
-  const data = { "Dept": dept };  // ✅ báo backend
-  schemaByDept[dept].forEach(field => {
-    const key = field.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-    let value = document.getElementById(field)?.value?.trim() || "";
-    if (dept === "HS" && field === "ma_hs") {
-      if (!value) {
-        value = "HS";  // mặc định
-      }
-      const match = value.match(/^([A-ZÀ-Ỵ]{2})(\d{0,5})$/);
-      if (match) {
-        const prefix = match[1];
-        const num = match[2];
-
-        if (!num) {
-          // Gọi API để lấy số tiếp theo
-          getNextMaHS(prefix).then(autoCode => {
-            const confirmed = confirm(`Bạn chưa nhập mã HS hoặc nhập thiếu. Hệ thống gợi ý: ${autoCode}. Bạn có muốn dùng không?`);
-            if (confirmed) {
-              document.getElementById(field).value = autoCode;
-              data[key] = autoCode;
+        
+        const result = await response.json();
+        
+        if (result.status === 'ok') {
+          element.style.background = '#d4edda';
+          setTimeout(() => {
+            element.style.background = '';
+          }, 1000);
+          
+          // Update local data
+          if (allData[dept]) {
+            const record = allData[dept].find(r => 
+              r[dept === 'HS' ? 'ma_hs' : 'ma_gv'] === id
+            );
+            if (record) {
+              const fieldKey = field.toLowerCase().replace(/ /g, '_');
+              record[fieldKey] = value;
             }
-          });
-        } else {
-          const normalized = prefix + num.padStart(5, "0");
-          if (normalized !== value) {
-            const confirmed = confirm(`Bạn nhập "${value}", có muốn dùng "${normalized}" không?`);
-            if (!confirmed) return;
-            value = normalized;
-            document.getElementById(field).value = normalized;
           }
-        }
-      }
-    }
-    data[key] = value;
-  });
-
-  if (dept === "HS" && (!data["Ma Hs"] || !data["Ho Va Ten"])) {
-    alert("Mã HS và Họ và Tên là bắt buộc.");
-    return;
-  }
-  const res = await fetch("/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-  const result = await res.json();
-  if (result.status === "ok") {
-    window.location.href = "/employees";
-  } else {
-    alert("❌ Failed to add employee: " + (result.message || ""));
-  }
-}
-window.addEventListener("DOMContentLoaded", async () => {
-  await fetchSchema();
-  const lastFile = localStorage.getItem('lastImportedFile');
-  if (lastFile) {
-    if (lastFile.includes("hocsinh")) {
-      document.getElementById("deptSelect").value = "HS";
-    } else if (lastFile.includes("giaovien")) {
-      document.getElementById("deptSelect").value = "GV";
-    }
-    await switchDept();
-    localStorage.removeItem('lastImportedFile');
-  }
-});
-
-function editCell(td, column) {
-  const original = td.innerText.trim();
-  const index = td.parentElement.getAttribute("data-index");
-  const dept = document.getElementById("deptSelect").value;
-  td.innerHTML = `
-    <input type='text' class='form-control form-control-sm'
-      value='${original}'
-      onkeydown='saveEdit(event, this, "${column}", ${index}, "${dept}")'
-      onblur='saveOnBlur(this, "${column}", ${index}, "${original}", "${dept}")'>
-  `;
-  td.querySelector("input").focus();
-}
-async function saveOnBlur(input, column, index, original, dept) {
-  const value = input.value.trim();
-  if (value === original) return;
-  const res = await fetch("/update", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ [column]: value, index: index, Dept: dept })
-  });
-  const result = await res.json();
-  if (result.status === "ok") {
-    const dept = document.getElementById("deptSelect").value;
-    fetchAndRenderDept(dept);
-  } else {
-    alert("Update failed");
-  }
-}
-async function saveEdit(e, input, column, index, dept) {
-  if (e.key === "Enter") {
-    const value = input.value.trim();
-    const data = { [column]: value, index: index, Dept: dept };
-    const res = await fetch("/update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    if (result.status === "ok") {
-      const dept = document.getElementById("deptSelect").value;
-      fetchAndRenderDept(dept);
-    } else {
-      alert("Update failed");
-    }
-  } else if (e.key === "Escape") {
-      const dept = document.getElementById("deptSelect").value;
-      fetchAndRenderDept(dept);
-  }
-}
-async function deleteRow(btn) {
-  if (!confirm("Are you sure you want to delete this employee?")) return;
-  const staffId = btn.closest("tr").getAttribute("data-staff-id");
-  const dept = document.getElementById("deptSelect").value;
-  const res = await fetch("/delete", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ staff_id: staffId, dept: dept })  // ✅ Gửi thêm dept
-  });
-  const result = await res.json();
-  if (result.status === "ok") {
-    btn.closest("tr").remove();
-  } else {
-    alert("❌ Delete failed: " + (result.reason || ""));
-  }
-}
-async function importExcel() {
-  console.log("importExcel() called");   // 💥 Thêm dòng này để debug xem đã gọi chưa
-  const dept = document.getElementById("deptSelect").value;
-  const input = document.getElementById('excelFileInput');
-  const file = input.files[0];
-  if (!file) {
-    console.log("⚠️ No file selected");
-    return;
-  }
-  if (!dept) {
-    alert("⚠️ Bạn chưa chọn Dept.");
-    return;
-  }
-  const formData = new FormData();
-  formData.append('file', file);
-  let endpoint = "";
-  switch (dept) {
-    case "HS":
-      endpoint = "/import_hs";
-      break;
-    case "GV":
-      endpoint = "/import_gv";  // ✅ Thêm dòng này
-      break;
-    default:
-      alert(`⚠️ Dept ${dept} chưa hỗ trợ import.`);
-      return;
-  }
-  console.log(`Uploading file to: ${endpoint}`);  // 💥 Thêm dòng này nữa để confirm endpoint
-  try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      body: formData
-    });
-    const result = await res.json();
-    if (result.status === "success") {
-      alert("✅ Import thành công!");
-      window.location.reload();
-    } else {
-      alert("❌ Import lỗi: " + (result.error || ""));
-    }
-  } catch (err) {
-    console.error(err);
-    alert("❌ Có lỗi xảy ra khi upload file.");
-  }
-}
-function loadDataForDept(dept) {
-  fetch(`/api/employees?dept=${dept}`)
-    .then(res => res.json())
-    .then(data => {
-      if (!data.rows) {
-        alert("❌ Không có dữ liệu để hiển thị.");
-        return;
-      }
-      const tableId = `table_${dept.toLowerCase()}`;
-      const table = document.getElementById(tableId);
-      if (!table) {
-        alert(`❌ Không tìm thấy bảng với id ${tableId}`);
-        return;
-      }
-      const tbody = table.querySelector("tbody");
-      const thead = table.querySelector("thead");
-      if (!tbody || !thead) {
-        alert("❌ Bảng không có thead hoặc tbody.");
-        return;
-      }
-      // Clear nội dung cũ
-      tbody.innerHTML = "";
-      if (data.rows.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='99' class='text-center text-danger'>Không có dữ liệu</td></tr>";
-        return;
-      }
-      for (const row of data.rows) {
-        const headers = Object.keys(row);
-        const tr = document.createElement("tr");
-        tr.innerHTML = headers.map(h => `<td>${row[h] ?? ""}</td>`).join("");
-        tbody.appendChild(tr);
-      }
-    })
-    .catch(err => {
-      alert("❌ Lỗi khi load dữ liệu: " + err);
-    });
-}
-async function importFile(dept, file) {
-  const formData = new FormData();
-  formData.append('file', file);
-  const endpointMap = {
-    HS: "/import_hs",
-    GV: "/import_gv"
-  };
-  const endpoint = endpointMap[dept];
-  if (!endpoint) {
-    alert(`Dept không hỗ trợ import: ${dept}`);
-    return;
-  }
-  try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      body: formData
-    });
-    const result = await res.json();
-    if (result.status === "success") {
-      alert("✅ Import thành công!");
-      await fetchAndRenderDept(dept);
-    } else {
-      alert("❌ Lỗi import: " + (result.error || ""));
-    }
-  } catch (err) {
-    console.error(err);
-    alert("❌ Có lỗi xảy ra khi upload file.");
-  }
-}
-async function fetchAndRenderDept(dept) {
-  try {
-    const res = await fetch(`/api/employees?dept=${dept}`);
-    const result = await res.json();
-    const rows = result.rows || [];
-    if (dept === "HS") {
-      renderHS(rows);
-    } else if (dept === "GV") {
-      renderGV(rows);  // ✅ Thêm dòng này để hỗ trợ giáo viên
-    }
-  } catch (err) {
-    console.error("❌ Fetch thất bại:", err);
-  }
-}
-// Render bảng học sinh
-function renderHS(rows) {
-  console.log(`DEBUG: renderHS started, rows: ${rows.length}`);
-  const tbody = document.querySelector("#table_hs tbody");
-  tbody.innerHTML = "";
-  rows.forEach((row, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${row.ma_hs || ""}</td>
-      <td>${row.ho_va_ten || ""}</td>
-      <td>${formatDate(row.ngay_sinh)}</td>
-      <td>${row.gioi_tinh || ""}</td>
-      <td>${row.dan_toc || ""}</td>
-      <td>${row.ma_dinh_danh || ""}</td>
-      <td>${row.ho_ten_bo || ""}</td>
-      <td>${row.nghe_nghiep_bo || ""}</td>
-      <td>${row.ho_ten_me || ""}</td>
-      <td>${row.nghe_nghiep_me || ""}</td>
-      <td>${row.ho_khau || ""}</td>
-      <td>${row.cccd_bo_me || ""}</td>
-      <td>${row.sdt || ""}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deleteRowHS('${row.ma_hs}')">Delete</button></td>
-    `;
-    tbody.appendChild(tr);
-    tr.ondblclick = () => openEditHSModal(row); // 👈 Gắn double-click
-  });
-}
-// Render bảng giáo viên
-function renderGV(rows) {
-  console.log(`DEBUG: renderGV started, rows: ${rows.length}`);
-  const tbody = document.querySelector("#table_gv tbody");
-  tbody.innerHTML = "";
-  console.log("DEBUG: Cleared GV table tbody");
-  rows.forEach((row, index) => {
-    console.log(`DEBUG: Rendering GV row ${index + 1}: ${JSON.stringify(row)}`);
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${row.ma_gv || ""}</td>
-      <td>${row.ho_va_ten || ""}</td>
-      <td>${row.ten_tk || ""}</td>
-      <td>${row.chuc_vu || ""}</td>
-      <td>${formatDate(row.ngay_sinh)}</td>
-      <td>${row.que_quan || ""}</td>
-      <td>${row.cccd || ""}</td>
-      <td>${formatDate(row.ngay_cap)}</td>
-      <td>${row.mst || ""}</td>
-      <td>${row.cmnd || ""}</td>
-      <td>${row.so_bh || ""}</td>
-      <td>${row.sdt || ""}</td>
-      <td>${row.tk_nh || ""}</td>
-      <td>${row.email || ""}</td>
-      <td>${row.nhom_mau || ""}</td>
-      <td>${row.dia_chi || ""}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deleteRowGV('${row.ma_gv}')">Delete</button></td>
-    `;
-    tbody.appendChild(tr);
-    tr.ondblclick = () => openEditGVModal(row);
-  });
-  console.log("DEBUG: renderGV completed");
-}
-async function deleteRowHS(identifier_code) {
-  if (!confirm(`Xóa học sinh Mã Định Danh: ${identifier_code}?`)) return;
-  await deleteRow("HS", identifier_code);
-}
-async function deleteRowGV(staff_id) {
-  if (!confirm(`Xóa giáo viên Staff ID: ${staff_id}?`)) return;
-  await deleteRow("GV", staff_id);
-}
-async function deleteRow(dept, id) {
-  const res = await fetch("/delete", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ staff_id: id, dept: dept })  // ✅ THÊM dept vào đây
-  });
-  const result = await res.json();
-  if (result.status === "ok") {
-    alert("✅ Xóa thành công!");
-    await fetchAndRenderDept(dept);
-  } else {
-    alert("❌ Xóa thất bại: " + (result.reason || ""));
-  }
-}
-
-function removeDeptData() {
-    const deptSelect = document.getElementById("deptSelect");
-    const dept = deptSelect.value;
-
-    if (!dept) return alert("Please select a Dept first.");
-    if (!confirm(`Are you sure to remove all data from ${dept}?`)) return;
-    if (!confirm(`This action cannot be undone. Are you really sure?`)) return;
-
-    fetch(`/remove-dept-data`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ dept }),
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message);
-
-        // 🔄 Reload lại trang và set lại lựa chọn dept
-        const currentDept = dept;  // lưu giá trị hiện tại
-        window.location.reload();  // reload
-        // nếu muốn set lại giá trị dept sau reload thì cần logic phía server giữ lại trạng thái dept
-    })
-    .catch(err => alert("Error: " + err));
-}
-
-  function updateDataBase() {
-    fetch("/update-database", { method: "POST" })
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById("dbStructureResult");
-        if (data.success) {
-          let html = `<table class="table table-bordered table-sm"><thead><tr>
-            <th>Tên bảng</th><th>Tên các cột</th><th>Số lượng cột</th><th>Số lượng dòng</th></tr></thead><tbody>`;
-          data.tables.forEach(row => {
-            html += `<tr>
-              <td>${row.table_name}</td>
-              <td>${row.column_names}</td>
-              <td>${row.column_count}</td>
-              <td>${row.row_count}</td>
-            </tr>`;
-          });
-          html += "</tbody></table>";
-          container.innerHTML = html;
         } else {
-          container.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+          element.style.background = '#f8d7da';
+          alert('Lỗi cập nhật: ' + (result.reason || 'Unknown error'));
         }
-      })
-      .catch(error => {
-        document.getElementById("dbStructureResult").innerHTML = `<div class="alert alert-danger">Lỗi kết nối máy chủ.</div>`;
-        console.error("❌ Update DB error:", error);
-      });
-  }
-</script>
-<script>
-  function formatDateForInput(dateStr) {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    return date.toISOString().split("T")[0]; // yyyy-mm-dd
-  }
-
-  function openEditGVModal(row) {
-    document.getElementById("edit_ten_tk").value = row.ten_tk;
-    document.getElementById("edit_ma_gv").value = row.ma_gv || "";
-    document.getElementById("edit_ho_va_ten").value = row.ho_va_ten || "";
-    document.getElementById("edit_chuc_vu").value = row.chuc_vu || "";
-    document.getElementById("edit_ngay_sinh").value = formatDateForInput(row.ngay_sinh);
-    document.getElementById("edit_que_quan").value = row.que_quan || "";
-    document.getElementById("edit_cccd").value = row.cccd || "";
-    document.getElementById("edit_ngay_cap").value = formatDateForInput(row.ngay_cap);
-    document.getElementById("edit_mst").value = row.mst || "";
-    document.getElementById("edit_cmnd").value = row.cmnd || "";
-    document.getElementById("edit_so_bh").value = row.so_bh || "";
-    document.getElementById("edit_sdt").value = row.sdt || "";
-    document.getElementById("edit_tk_nh").value = row.tk_nh || "";
-    document.getElementById("edit_email").value = row.email || "";
-    document.getElementById("edit_nhom_mau").value = row.nhom_mau || "";
-    document.getElementById("edit_dia_chi").value = row.dia_chi || "";
-
-    new bootstrap.Modal(document.getElementById("editGVModal")).show();
-  }
-
-  async function submitGVUpdate() {
-    const data = {
-      ten_tk: document.getElementById("edit_ten_tk").value,
-      ma_gv: document.getElementById("edit_ma_gv").value,
-      ho_va_ten: document.getElementById("edit_ho_va_ten").value,
-      chuc_vu: document.getElementById("edit_chuc_vu").value,
-      ngay_sinh: document.getElementById("edit_ngay_sinh").value,
-      que_quan: document.getElementById("edit_que_quan").value,
-      cccd: document.getElementById("edit_cccd").value,
-      ngay_cap: document.getElementById("edit_ngay_cap").value,
-      mst: document.getElementById("edit_mst").value,
-      cmnd: document.getElementById("edit_cmnd").value,
-      so_bh: document.getElementById("edit_so_bh").value,
-      sdt: document.getElementById("edit_sdt").value,
-      tk_nh: document.getElementById("edit_tk_nh").value,
-      email: document.getElementById("edit_email").value,
-      nhom_mau: document.getElementById("edit_nhom_mau").value,
-      dia_chi: document.getElementById("edit_dia_chi").value
-    };
-
-    try {
-      const res = await fetch("/api/update_gv", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await res.json();
-
-      if (result.status === "success") {
-        alert("✅ Dữ liệu đã được cập nhật thành công!");
-
-        // Đóng modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById("editGVModal"));
-        if (modal) modal.hide();
-
-        // ✅ Refresh bảng GV
-        if (typeof loadGVData === "function") {
-          loadGVData(); // Gọi lại API nếu có hàm loadGVData()
+      } catch (error) {
+        element.style.background = '#f8d7da';
+        alert('Lỗi kết nối: ' + error.message);
+      }
+    }
+    
+    // Delete record
+    async function deleteRecord(id, dept) {
+      if (!confirm(`Bạn có chắc chắn muốn xóa ${dept === 'HS' ? 'học sinh' : 'giáo viên'} này?`)) {
+        return;
+      }
+      
+      try {
+        const response = await fetch('/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            staff_id: id,
+            dept: dept
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'ok') {
+          // Remove from local data
+          if (allData[dept]) {
+            allData[dept] = allData[dept].filter(r => 
+              r[dept === 'HS' ? 'ma_hs' : 'ma_gv'] !== id
+            );
+            filteredData[dept] = allData[dept];
+          }
+          
+          // Re-render table
+          renderTable(dept, filteredData[dept]);
+          updateStats();
+          
+          alert('Xóa thành công!');
         } else {
-            const dept = document.getElementById("deptSelect").value;
-            fetchAndRenderDept(dept);// Nếu không có thì reload toàn trang
+          alert('Lỗi xóa: ' + (result.reason || 'Unknown error'));
         }
+      } catch (error) {
+        alert('Lỗi kết nối: ' + error.message);
+      }
+    }
+    
+    // Show dynamic inputs for adding new records
+    function showDynamicInputs(dept) {
+      const dynamicRow = document.getElementById('dynamicInputRow');
+      
+      let html = '<div style="border-top: 1px solid var(--gray-200); padding-top: var(--spacing-lg);"><h5 style="margin-bottom: var(--spacing-md); color: var(--text-primary);">Thêm mới ' + (dept === 'HS' ? 'học sinh' : 'giáo viên') + '</h5>';
+      html += '<div class="row g-2">';
+      
+      if (dept === 'HS') {
+        html += `
+          <div class="col-md-3"><input class="form-control" id="new_ma_hs" placeholder="Mã HS" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ho_va_ten" placeholder="Họ và tên" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ngay_sinh" placeholder="Ngày sinh (DD/MM/YYYY)" /></div>
+          <div class="col-md-3">
+            <select class="form-control" id="new_gioi_tinh">
+              <option value="">Giới tính</option>
+              <option value="Nam">Nam</option>
+              <option value="Nu">Nữ</option>
+            </select>
+          </div>
+          <div class="col-md-3"><input class="form-control" id="new_dan_toc" placeholder="Dân tộc" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ma_dinh_danh" placeholder="Mã định danh" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ho_ten_bo" placeholder="Họ tên bố" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_nghe_nghiep_bo" placeholder="Nghề nghiệp bố" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ho_ten_me" placeholder="Họ tên mẹ" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_nghe_nghiep_me" placeholder="Nghề nghiệp mẹ" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ho_khau" placeholder="Hộ khẩu" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_cccd_bo_me" placeholder="CCCD bố/mẹ" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_sdt" placeholder="SĐT" /></div>
+        `;
       } else {
-        alert("❌ Cập nhật thất bại: " + (result.error || "Không rõ lỗi"));
+        html += `
+          <div class="col-md-3"><input class="form-control" id="new_ma_gv" placeholder="Mã GV" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ho_va_ten" placeholder="Họ và tên" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ten_tk" placeholder="Tên TK" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_chuc_vu" placeholder="Chức vụ" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ngay_sinh" placeholder="Ngày sinh (DD/MM/YYYY)" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_que_quan" placeholder="Quê quán" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_cccd" placeholder="CCCD" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_ngay_cap" placeholder="Ngày cấp (DD/MM/YYYY)" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_mst" placeholder="MST" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_cmnd" placeholder="CMND" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_so_bh" placeholder="Số BH" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_sdt" placeholder="SĐT" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_tk_nh" placeholder="TK NH" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_email" placeholder="Email" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_nhom_mau" placeholder="Nhóm máu" /></div>
+          <div class="col-md-3"><input class="form-control" id="new_dia_chi" placeholder="Địa chỉ" /></div>
+        `;
       }
-    } catch (err) {
-      console.error("Lỗi khi gửi request:", err);
-      alert("❌ Lỗi kết nối hoặc xử lý dữ liệu!");
+      
+      html += '<div class="col-12" style="margin-top: var(--spacing-md);"><button class="btn btn-success" onclick="addNewRecord(\'' + dept + '\')"><i class="fas fa-plus"></i> Thêm mới</button></div>';
+      html += '</div></div>';
+      
+      dynamicRow.innerHTML = html;
+      dynamicRow.style.display = 'block';
     }
-  }
-
-  function openEditHSModal(row) {
-    document.getElementById("edit_ma_hs").value = row.ma_hs || "";
-    document.getElementById("edit_ho_va_ten_hs").value = row.ho_va_ten || "";
-    document.getElementById("edit_ngay_sinh").value = formatDateForInput(row.ngay_sinh);
-    document.getElementById("edit_gioi_tinh").value = row.gioi_tinh || "";
-    document.getElementById("edit_dan_toc").value = row.dan_toc || "";
-    document.getElementById("edit_ma_dinh_danh").value = row.ma_dinh_danh || "";
-    document.getElementById("edit_ho_ten_bo").value = row.ho_ten_bo || "";
-    document.getElementById("edit_nghe_nghiep_bo").value = row.nghe_nghiep_bo || "";
-    document.getElementById("edit_ho_ten_me").value = row.ho_ten_me || "";
-    document.getElementById("edit_nghe_nghiep_me").value = row.nghe_nghiep_me || "";
-    document.getElementById("edit_ho_khau").value = row.ho_khau || "";
-    document.getElementById("edit_cccd_bo_me").value = row.cccd_bo_me || "";
-    document.getElementById("edit_sdt_hs").value = row.sdt || "";
-
-    new bootstrap.Modal(document.getElementById("editHSModal")).show();
-  }
-
-  async function submitHSUpdate() {
-    const data = {
-      ma_hs: document.getElementById("edit_ma_hs").value,
-      ho_va_ten: document.getElementById("edit_ho_va_ten_hs").value,
-      ngay_sinh: document.getElementById("edit_ngay_sinh").value,
-      gioi_tinh: document.getElementById("edit_gioi_tinh").value,
-      dan_toc: document.getElementById("edit_dan_toc").value,
-      ma_dinh_danh: document.getElementById("edit_ma_dinh_danh").value,
-      ho_ten_bo: document.getElementById("edit_ho_ten_bo").value,
-      nghe_nghiep_bo: document.getElementById("edit_nghe_nghiep_bo").value,
-      ho_ten_me: document.getElementById("edit_ho_ten_me").value,
-      nghe_nghiep_me: document.getElementById("edit_nghe_nghiep_me").value,
-      ho_khau: document.getElementById("edit_ho_khau").value,
-      cccd_bo_me: document.getElementById("edit_cccd_bo_me").value,
-      sdt: document.getElementById("edit_sdt_hs").value
-    };
-
-    const res = await fetch("/api/update_hs", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-
-    const result = await res.json();
-    if (result.status === "success") {
-      alert("✅ Đã cập nhật học sinh!");
-      const modal = bootstrap.Modal.getInstance(document.getElementById("editHSModal"));
-      if (modal) modal.hide();
-      if (typeof loadHSData === "function") loadHSData(); 
-        else {
-            const dept = document.getElementById("deptSelect").value;
-            fetchAndRenderDept(dept);  
+    
+    // Add new record
+    async function addNewRecord(dept) {
+      const data = {};
+      const prefix = 'new_';
+      
+      // Collect form data
+      const inputs = document.querySelectorAll('#dynamicInputRow input, #dynamicInputRow select');
+      inputs.forEach(input => {
+        const fieldName = input.id.replace(prefix, '');
+        const camelCase = fieldName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        data[camelCase] = input.value;
+      });
+      
+      // Set department
+      data.Dept = dept;
+      
+      try {
+        const response = await fetch('/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'ok') {
+          alert('Thêm mới thành công!');
+          
+          // Clear form
+          inputs.forEach(input => input.value = '');
+          
+          // Reload data
+          loadDepartmentData(dept);
+        } else {
+          alert('Lỗi thêm mới: ' + (result.message || 'Unknown error'));
         }
-    } else {
-      alert("❌ Lỗi cập nhật: " + (result.error || "Không rõ lỗi"));
+      } catch (error) {
+        alert('Lỗi kết nối: ' + error.message);
+      }
     }
-  }
-
-</script>
-<script>
-  document.getElementById('searchInput').addEventListener('input', function() {
-    const q = this.value.trim().toLowerCase();
-    // Chọn tbody của bảng HS hoặc GV đang hiển thị
-    const tbody = document.getElementById('table_hs').style.display === 'block'
-      ? document.querySelector('#table_hs tbody')
-      : document.getElementById('table_gv').style.display === 'block'
-        ? document.querySelector('#table_gv tbody')
-        : null;
-    if (!tbody) return;
-
-    tbody.querySelectorAll('tr').forEach(tr => {
-      // Lấy đúng ô “Họ và Tên”
-      const nameTd = tr.querySelector('td:nth-child(3)');
-      const name = nameTd ? nameTd.innerText.toLowerCase() : '';
-      // Chỉ hiển thị những dòng có tên match
-      tr.style.display = name.includes(q) ? '' : 'none';
+    
+    // Other functions (importExcel, updateDataBase, removeDeptData)
+    async function importExcel() {
+      const fileInput = document.getElementById('excelFileInput');
+      if (!fileInput.files[0]) return;
+      
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      
+      try {
+        const response = await fetch('/import-data', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('Import thành công!');
+          if (currentDept) {
+            loadDepartmentData(currentDept);
+          }
+        } else {
+          alert('Lỗi import: ' + (result.message || 'Unknown error'));
+        }
+      } catch (error) {
+        alert('Lỗi kết nối: ' + error.message);
+      }
+      
+      fileInput.value = '';
+    }
+    
+    async function updateDataBase() {
+      if (!confirm('Bạn có chắc chắn muốn cập nhật database?')) return;
+      
+      try {
+        const response = await fetch('/update-database', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('Cập nhật database thành công!');
+          
+          // Show database structure
+          let html = '<div class="mt-3"><h5>Cấu trúc Database:</h5><div class="table-responsive"><table class="table table-sm table-bordered">';
+          html += '<thead><tr><th>Bảng</th><th>Số cột</th><th>Số dòng</th></tr></thead><tbody>';
+          
+          result.tables.forEach(table => {
+            html += `<tr><td>${table.table_name}</td><td>${table.column_count}</td><td>${table.row_count}</td></tr>`;
+          });
+          
+          html += '</tbody></table></div></div>';
+          
+          document.getElementById('dbStructureResult').innerHTML = html;
+        } else {
+          alert('Lỗi cập nhật: ' + (result.message || 'Unknown error'));
+        }
+      } catch (error) {
+        alert('Lỗi kết nối: ' + error.message);
+      }
+    }
+    
+    async function removeDeptData() {
+      const dept = prompt('Nhập loại dữ liệu cần xóa (GV hoặc HS):');
+      if (!dept || !['GV', 'HS'].includes(dept.toUpperCase())) {
+        alert('Loại dữ liệu không hợp lệ!');
+        return;
+      }
+      
+      if (!confirm(`Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu ${dept}? Hành động này không thể hoàn tác!`)) {
+        return;
+      }
+      
+      try {
+        const response = await fetch('/remove-dept-data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dept: dept.toUpperCase() })
+        });
+        
+        const result = await response.json();
+        alert(result.message);
+        
+        if (currentDept) {
+          loadDepartmentData(currentDept);
+        }
+      } catch (error) {
+        alert('Lỗi kết nối: ' + error.message);
+      }
+    }
+    
+    // Show add form
+    function showAddForm() {
+      if (!currentDept) {
+        alert('Vui lòng chọn loại dữ liệu trước!');
+        return;
+      }
+      
+      // Scroll to dynamic input row
+      document.getElementById('dynamicInputRow').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+    
+    // Import Excel function
+    async function importExcel() {
+      const fileInput = document.getElementById('excelFileInput');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert('Vui lòng chọn file Excel!');
+        return;
+      }
+      
+      if (!currentDept) {
+        alert('Vui lòng chọn loại dữ liệu (HS hoặc GV) trước khi import!');
+        return;
+      }
+      
+      // Validate file type
+      const allowedTypes = [
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel'
+      ];
+      
+      if (!allowedTypes.includes(file.type)) {
+        alert('Chỉ chấp nhận file Excel (.xlsx, .xls)!');
+        return;
+      }
+      
+      // Create FormData
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      // Determine endpoint based on department
+      const endpoint = currentDept === 'HS' ? '/import_hs' : '/import_gv';
+      
+      try {
+        // Show loading state
+        const importBtn = document.querySelector('button[onclick="document.getElementById(\'excelFileInput\').click()"]');
+        const originalText = importBtn.innerHTML;
+        importBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang import...';
+        importBtn.disabled = true;
+        
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: formData
+        });
+        
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          // If not JSON, try to get text content for error diagnosis
+          const text = await response.text();
+          console.error('Non-JSON response:', text);
+          throw new Error('Server trả về định dạng không hợp lệ. Vui lòng kiểm tra log server.');
+        }
+        
+        const result = await response.json();
+        
+        if (response.ok && result.status === 'success') {
+          alert('Import thành công!');
+          
+          // Reset file input
+          fileInput.value = '';
+          
+          // Reload data for current department
+          if (currentDept) {
+            await loadDepartmentData(currentDept);
+          }
+          
+          // Update stats
+          updateStats();
+        } else {
+          throw new Error(result.error || result.message || 'Import thất bại');
+        }
+        
+      } catch (error) {
+        console.error('Import error:', error);
+        
+        // More specific error messages
+        if (error.message.includes('fetch')) {
+          alert('Lỗi kết nối server. Vui lòng kiểm tra kết nối mạng.');
+        } else if (error.message.includes('JSON')) {
+          alert('Lỗi định dạng dữ liệu từ server. Vui lòng liên hệ quản trị viên.');
+        } else {
+          alert('Lỗi import: ' + error.message);
+        }
+      } finally {
+        // Restore button state
+        const importBtn = document.querySelector('button[onclick="document.getElementById(\'excelFileInput\').click()"]');
+        importBtn.innerHTML = '<i class="fas fa-upload"></i> Nhập Excel';
+        importBtn.disabled = false;
+      }
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('📊 Dashboard initialization started...');
+      
+      // Load all data for stats immediately when page loads
+      loadAllDataForStats();
+      
+      // Also call updateStats as fallback
+      updateStats();
+      
+      console.log('✅ Dashboard initialized');
     });
-  });
-</script>
+  </script>
+</body>
+</html>

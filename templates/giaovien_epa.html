@@ -1,46 +1,348 @@
 <!DOCTYPE html>
-
 <html lang="vi">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Tự Đánh Giá EPA</title>
-<link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250716" rel="stylesheet"/>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📝 Tự Đánh Giá EPA - Trường Mầm Non Hoa Hướng Dương</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static_files', filename='css/modern.css') }}" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', var(--font-family-sans);
+      background: var(--bg-secondary);
+      padding: var(--spacing-lg);
+    }
+    
+    .page-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: var(--spacing-xl);
+      border-radius: var(--border-radius-lg);
+      margin-bottom: var(--spacing-lg);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .page-title {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+      margin: 0 0 var(--spacing-sm) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .school-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-right: var(--spacing-md);
+    }
+    
+    .page-subtitle {
+      font-size: var(--text-sm);
+      opacity: 0.9;
+      margin: 0;
+    }
+    
+    .content-card {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius-lg);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--gray-200);
+    }
+    
+    .section-title {
+      font-size: var(--text-xl);
+      font-weight: var(--font-semibold);
+      color: var(--text-primary);
+      margin: 0 0 var(--spacing-lg) 0;
+      padding-bottom: var(--spacing-sm);
+      border-bottom: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .status-message {
+      padding: var(--spacing-md);
+      border-radius: var(--border-radius-md);
+      margin-bottom: var(--spacing-lg);
+      font-weight: var(--font-medium);
+    }
+    
+    .status-message.success {
+      background: var(--success-light);
+      border: 1px solid var(--success-color);
+      color: var(--success-dark);
+    }
+    
+    .status-message.warning {
+      background: var(--warning-light);
+      border: 1px solid var(--warning-color);
+      color: var(--warning-dark);
+    }
+    
+    .status-message.error {
+      background: var(--error-light);
+      border: 1px solid var(--error-color);
+      color: var(--error-dark);
+    }
+    
+    .total-score-display {
+      background: var(--primary-light);
+      border: 1px solid var(--primary-color);
+      color: var(--primary-dark);
+      padding: var(--spacing-md);
+      border-radius: var(--border-radius-md);
+      font-weight: var(--font-semibold);
+      margin-bottom: var(--spacing-lg);
+      text-align: center;
+    }
+    
+    .btn-primary-modern {
+      background: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      color: white;
+      padding: var(--spacing-md) var(--spacing-xl);
+      border-radius: var(--border-radius-md);
+      font-weight: var(--font-semibold);
+      font-size: var(--text-sm);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    
+    .btn-primary-modern:hover:not(:disabled) {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-primary-modern:disabled {
+      background: var(--gray-400);
+      border-color: var(--gray-400);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .modern-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .modern-table th {
+      background: var(--gray-50);
+      color: var(--text-primary);
+      font-weight: var(--font-semibold);
+      padding: var(--spacing-md);
+      text-align: left;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .modern-table td {
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--text-secondary);
+    }
+    
+    .modern-table tr:hover {
+      background: var(--gray-25);
+    }
+    
+    .question {
+      background: var(--bg-primary);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--border-radius-md);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .question p {
+      margin: 0 0 var(--spacing-md) 0;
+      font-weight: var(--font-semibold);
+      color: var(--text-primary);
+    }
+    
+    .score-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .score-inputs > div {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+    
+    .score-inputs label {
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--text-secondary);
+    }
+    
+    .score-inputs input {
+      padding: var(--spacing-sm);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      font-size: var(--text-sm);
+      transition: all var(--transition-fast);
+    }
+    
+    .score-inputs input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .score-inputs input:disabled {
+      background: var(--gray-100);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+    
+    .comment-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-md);
+    }
+    
+    .comment-inputs > div {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+    
+    .comment-inputs label {
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+      color: var(--text-secondary);
+    }
+    
+    .comment-inputs textarea {
+      padding: var(--spacing-sm);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--border-radius);
+      font-size: var(--text-sm);
+      min-height: 80px;
+      resize: vertical;
+      font-family: inherit;
+      transition: all var(--transition-fast);
+    }
+    
+    .comment-inputs textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .comment-inputs textarea:disabled {
+      background: var(--gray-100);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 768px) {
+      .score-inputs,
+      .comment-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body><div class="container-fluid mt-4"><div class="card"><div class="card-body">
-<div class="container-fluid">
-<!--<h1>Tự Đánh Giá EPA - {{month}} - {{ user }}</h1> -->
-<h1 id="epa-title">Tự Đánh Giá EPA</h1>
-<!-- Period Check -->
-<div id="period-message"></div>
-<!-- Last Assessment -->
-<h2>Kết Quả Tự Đánh Giá Trước Đây</h2>
-<div id="last-assessment"></div>
-<!-- Total Score Table -->
-<h2>Tổng Điểm Đánh Giá</h2>
-<table id="total-score-table">
-<thead>
-<tr>
-<th>Năm</th>
-<th>Tháng</th>
-<th>Tổng điểm tự đánh giá</th>
-<th>Tổng điểm giám sát</th>
-<th>Điểm cấp trên</th>
-<th>Nhận xét cấp trên</th>
-</tr>
-</thead>
-<tbody id="total-score-table-body"></tbody>
-</table>
-<!-- Assessment Form -->
-<h2>Gửi Đánh Giá EPA Mới</h2>
-<div class="total-score" id="total-score-display">
-            Tổng điểm tự đánh giá: 0 | Tổng điểm giám sát: 0
+
+<body>
+  <div class="page-header">
+    <div style="display: flex; align-items: center;">
+      <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
+           alt="Logo Trường Mầm Non Hoa Hướng Dương" 
+           class="school-logo">
+      <div>
+        <div class="page-title">
+          <i class="fas fa-clipboard-check"></i>
+          Tự Đánh Giá EPA
         </div>
-<div id="assessment-form"></div>
-<button disabled="" id="submit-btn">Gửi</button>
-<div id="form-message"></div>
-</div>
+        <div class="page-subtitle">
+          Hệ thống đánh giá hiệu suất nhân viên - {{ user }} ({{ role }})
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-title">
+      <i class="fas fa-clock"></i>
+      Thời Gian Đánh Giá
+    </div>
+    <div id="period-message"></div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-title">
+      <i class="fas fa-history"></i>
+      Kết Quả Tự Đánh Giá Trước Đây
+    </div>
+    <div id="last-assessment"></div>
+  </div>
+
+  <div class="content-card">
+    <div class="section-title">
+      <i class="fas fa-chart-bar"></i>
+      Tổng Điểm Đánh Giá
+    </div>
+    <table id="total-score-table" class="modern-table">
+      <thead>
+        <tr>
+          <th>Năm</th>
+          <th>Tháng</th>
+          <th>Tổng điểm tự đánh giá</th>
+          <th>Tổng điểm giám sát</th>
+          <th>Điểm cấp trên</th>
+          <th>Nhận xét cấp trên</th>
+        </tr>
+      </thead>
+      <tbody id="total-score-table-body"></tbody>
+    </table>
+  </div>
+
+  <div class="content-card">
+    <div class="section-title">
+      <i class="fas fa-edit"></i>
+      Gửi Đánh Giá EPA Mới
+    </div>
+    <div class="total-score-display" id="total-score-display">
+      Tổng điểm tự đánh giá: 0 | Tổng điểm giám sát: 0
+    </div>
+    <div id="assessment-form"></div>
+    <button disabled="" id="submit-btn" class="btn-primary-modern">
+      <i class="fas fa-paper-plane"></i> Gửi Đánh Giá
+    </button>
+    <button type="button" onclick="testTextareaInput()" class="btn-secondary-modern" style="margin-left: 10px;">
+      <i class="fas fa-bug"></i> Test Textarea (Debug)
+    </button>
+    <div id="form-message"></div>
+  </div>
 <script>
         const API_BASE_URL = '/api';
         const tenTk = '{{ user }}';
@@ -52,29 +354,45 @@
 
         async function checkAssessmentPeriod() {
             try {
+                console.log('🚀 STARTING: Fetching assessment period...');
                 const response = await fetch(`${API_BASE_URL}/assessment-period`);
+                console.log('📡 RESPONSE: Status:', response.status, 'OK:', response.ok);
+                
+                if (!response.ok) {
+                    console.error('❌ HTTP Error:', response.status, response.statusText);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
                 const data = await response.json();
+                console.log('🔍 DEBUG: API Response from /assessment-period:', data);
 
                 const monthYear = `${data.month}/${data.year}`;
-                const startDay = data.start_day ?? 'N/A';
-                const closeDay = data.close_day ?? 'N/A';
+                const currentPhase = data.current_phase || 'Không xác định';
+                const startDay = data.start_day || 'N/A';
+                const closeDay = data.close_day || 'N/A';
+                
+                let msg = `<p><strong>Giai đoạn hiện tại:</strong> ${currentPhase}</p>`;
+                msg += `<p><strong>Thời gian:</strong> ${startDay}/${monthYear} → ${closeDay}/${monthYear}</p>`;
+                
+                console.log('🔍 DEBUG: isOpen value:', data.isOpen, 'Type:', typeof data.isOpen);
 
-                let msg = `<p>Thời gian đánh giá EPA: ${startDay}/${monthYear} → ${closeDay}/${monthYear}</p>`;
-
-                const now = new Date().getDate();
-
-                if (!startDay || !closeDay || startDay === 0 || closeDay === 0) {
-                    msg += `<p class="text-danger">⛔ Chưa thiết lập thời gian đánh giá EPA</p>`;
-                    document.getElementById('submit-btn').disabled = true;
-                } else if (now < startDay) {
-                    msg += `<p class="text-warning">⏳ Chưa đến thời gian đánh giá EPA</p>`;
-                    document.getElementById('submit-btn').disabled = true;
-                } else if (now > closeDay) {
-                    msg += `<p class="text-danger">⛔ Đã quá thời hạn đánh giá EPA</p>`;
-                    document.getElementById('submit-btn').disabled = true;
-                } else {
-                    msg += `<p class="text-success">✅ Thời gian đánh giá đang mở</p>`;
+                // Simplified logic based on actual API response
+                if (data.isOpen === true || data.isOpen === 'true') {
+                    msg += `<div class="status-message success">✅ Thời gian đánh giá đang mở - ${currentPhase}</div>`;
                     document.getElementById('submit-btn').disabled = false;
+                } else {
+                    // Check specific phases for better error messages
+                    if (currentPhase && currentPhase.includes('Phase 3')) {
+                        msg += `<div class="status-message error">⛔ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn HT/PHT đánh giá.</div>`;
+                    } else if (currentPhase && currentPhase.includes('Phase 2')) {
+                        msg += `<div class="status-message warning">⏳ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn TGV đánh giá.</div>`;
+                    } else if (currentPhase && currentPhase.includes('Phase 1')) {
+                        msg += `<div class="status-message success">⌚ Đang trong giai đoạn tự đánh giá - kiểm tra quyền truy cập...</div>`;
+                        console.log('⚠️ WARNING: Phase 1 detected but isOpen=false. Checking user permissions...');
+                    } else {
+                        msg += `<div class="status-message error">⛔ Ngoài thời gian đánh giá EPA</div>`;
+                    }
+                    document.getElementById('submit-btn').disabled = true;
                 }
 
                 document.getElementById('period-message').innerHTML = msg;
@@ -84,7 +402,7 @@
             } catch (error) {
                 console.error('Lỗi kiểm tra thời gian:', error);
                 document.getElementById('period-message').innerHTML =
-                    '<p class="text-danger">Lỗi khi kiểm tra thời gian.</p>';
+                    '<div class="status-message error">Lỗi khi kiểm tra thời gian.</div>';
                 return false;
             }
         }
@@ -100,26 +418,35 @@
                 formDiv.innerHTML = data.questions.slice(0, 10).map((q, index) => `
                     <div class="question">
                         <p><strong>${index + 1}. ${q.question}</strong></p>
+                        <p style="font-size: 14px; color: #6b7280; margin: 5px 0;">
+                            <i class="fas fa-star"></i> Điểm tối đa: <strong>${q.max_score || 20}</strong>
+                        </p>
                         <!-- nếu bạn vẫn muốn hiển thị English, có thể thêm dòng sau: -->
                         <!-- <p class="text-muted"><em>(${q.translate || ''})</em></p> -->
                         <div class="score-inputs">
                             <div>
                                 <label>Điểm tự chấm:</label>
-                                <input type="number" min="0" max="30" id="score-${q.id}" placeholder="Nhập điểm (0-30)">
+                                <input type="number" min="0" max="${q.max_score || 20}" id="score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})">
                             </div>
                             <div>
                                 <label>Điểm từ Supervisor:</label>
-                                <input type="number" min="0" max="30" id="sup-score-${q.id}" placeholder="Nhập điểm (0-30)" ${isSupervisorOrAdmin ? '' : 'disabled'}>
+                                <input type="number" min="0" max="${q.max_score || 20}" id="sup-score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})" ${isSupervisorOrAdmin ? '' : 'disabled'}>
                             </div>
                         </div>
                         <div class="comment-inputs">
                             <div>
                                 <label>Ý kiến tự đánh giá:</label>
-                                <textarea id="user-comment-${q.id}" placeholder="Nhập ý kiến của bạn cho câu hỏi này..."></textarea>
+                                <textarea id="user-comment-${q.id}" placeholder="Nhập ý kiến của bạn cho câu hỏi này..." maxlength="1000" oninput="updateCharCount(this, 'user-count-${q.id}')"></textarea>
+                                <small class="text-muted">
+                                    <span id="user-count-${q.id}">0</span>/1000 ký tự
+                                </small>
                             </div>
                             <div>
                                 <label>Ý kiến từ Supervisor:</label>
-                                <textarea id="sup-comment-${q.id}" placeholder="Nhập ý kiến đánh giá (Supervisor)" ${isSupervisorOrAdmin ? '' : 'disabled'}></textarea>
+                                <textarea id="sup-comment-${q.id}" placeholder="Nhập ý kiến đánh giá (Supervisor)" maxlength="1000" ${isSupervisorOrAdmin ? '' : 'disabled'} oninput="updateCharCount(this, 'sup-count-${q.id}')"></textarea>
+                                <small class="text-muted">
+                                    <span id="sup-count-${q.id}">0</span>/1000 ký tự
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -131,9 +458,42 @@
                 scoreInputs.forEach(input => input.addEventListener('input', updateTotalScore));
                 supScoreInputs.forEach(input => input.addEventListener('input', updateTotalScore));
                 updateTotalScore();
+                
+                // Initialize character counters for all textareas
+                const textareas = document.querySelectorAll('textarea[maxlength]');
+                textareas.forEach(textarea => {
+                    const counterId = textarea.getAttribute('oninput').match(/'([^']+)'/)[1];
+                    updateCharCount(textarea, counterId);
+                    
+                    // Add debug event listeners
+                    textarea.addEventListener('input', function(e) {
+                        console.log(`INPUT EVENT: ${this.id} - Length: ${this.value.length}`);
+                    });
+                    
+                    textarea.addEventListener('keydown', function(e) {
+                        console.log(`KEYDOWN: ${e.key} - Current length: ${this.value.length}`);
+                        if (this.value.length >= 29 && e.key.length === 1) {
+                            console.log('WARNING: At 29 char limit, key will be processed...');
+                        }
+                    });
+                    
+                    textarea.addEventListener('keyup', function(e) {
+                        console.log(`KEYUP: ${e.key} - New length: ${this.value.length}`);
+                    });
+                    
+                    textarea.addEventListener('paste', function(e) {
+                        console.log(`PASTE EVENT detected`);
+                        setTimeout(() => {
+                            console.log(`PASTE RESULT: New length: ${this.value.length}`);
+                        }, 0);
+                    });
+                });
+                
+                // Load existing data into form if available
+                await loadExistingDataIntoForm();
             } catch (error) {
                 debugLog('Lỗi tải câu hỏi:', error);
-                document.getElementById('assessment-form').innerHTML = '<p class="error">Không thể tải câu hỏi.</p>';
+                document.getElementById('assessment-form').innerHTML = '<div class="status-message error">Không thể tải câu hỏi.</div>';
             }
         }
 
@@ -144,13 +504,155 @@
             let supTotal = 0;
             scoreInputs.forEach(input => {
                 const value = parseInt(input.value) || 0;
-                if (value >= 0 && value <= 30) userTotal += value;
+                const maxScore = parseInt(input.getAttribute('max')) || 20;
+                if (value >= 0 && value <= maxScore) userTotal += value;
             });
             supScoreInputs.forEach(input => {
                 const value = parseInt(input.value) || 0;
-                if (value >= 0 && value <= 30) supTotal += value;
+                const maxScore = parseInt(input.getAttribute('max')) || 20;
+                if (value >= 0 && value <= maxScore) supTotal += value;
             });
             document.getElementById('total-score-display').textContent = `Tổng điểm tự đánh giá: ${userTotal} | Tổng điểm giám sát: ${supTotal}`;
+        }
+
+        function updateCharCount(textarea, counterId) {
+            const currentLength = textarea.value.length;
+            const maxLength = parseInt(textarea.getAttribute('maxlength')) || 1000;
+            const counter = document.getElementById(counterId);
+            
+            // Debug logging
+            console.log(`UPDATE CHAR COUNT: ${textarea.id} = ${currentLength}/${maxLength} chars`);
+            console.log(`Textarea value: "${textarea.value}"`);
+            
+            if (counter) {
+                counter.textContent = currentLength;
+                // Change color based on usage
+                if (currentLength > maxLength * 0.9) {
+                    counter.style.color = '#dc3545'; // Red when near limit
+                } else if (currentLength > maxLength * 0.7) {
+                    counter.style.color = '#fd7e14'; // Orange when approaching limit
+                } else {
+                    counter.style.color = '#6c757d'; // Default gray
+                }
+            }
+        }
+
+        async function loadExistingDataIntoForm() {
+            try {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1;
+                
+                console.log('=== LOADING EXISTING DATA INTO FORM ===');
+                const response = await fetch(`${API_BASE_URL}/last-assessment?year=${year}&month=${month}`);
+                const data = await response.json();
+                
+                if (response.ok && data.assessments && data.assessments.length > 0) {
+                    console.log('Found existing assessments:', data.assessments.length);
+                    
+                    // Create a map for quick lookup
+                    const assessmentMap = {};
+                    data.assessments.forEach(assessment => {
+                        // Try to match by question content
+                        const questionKey = assessment.question.substring(0, 50); // First 50 chars as key
+                        assessmentMap[questionKey] = assessment;
+                    });
+                    
+                    // Populate form fields
+                    const questions = document.querySelectorAll('.question');
+                    questions.forEach((questionDiv, index) => {
+                        const questionText = questionDiv.querySelector('p strong').textContent;
+                        const questionKey = questionText.substring(3, 53); // Remove "1. " and take first 50 chars
+                        
+                        console.log(`Question ${index + 1}: Looking for key "${questionKey}"`);
+                        
+                        // Find matching assessment
+                        let matchedAssessment = null;
+                        for (const [key, assessment] of Object.entries(assessmentMap)) {
+                            if (key.includes(questionKey) || questionKey.includes(key)) {
+                                matchedAssessment = assessment;
+                                break;
+                            }
+                        }
+                        
+                        if (matchedAssessment) {
+                            console.log(`Found match for question ${index + 1}:`, matchedAssessment);
+                            
+                            // Get question ID from the first input
+                            const scoreInput = questionDiv.querySelector('input[type="number"]');
+                            if (scoreInput) {
+                                const questionId = scoreInput.id.split('-')[1];
+                                
+                                // Populate user score and comment
+                                if (matchedAssessment.user_score) {
+                                    document.getElementById(`score-${questionId}`).value = matchedAssessment.user_score;
+                                }
+                                
+                                if (matchedAssessment.user_comment) {
+                                    const userCommentTextarea = document.getElementById(`user-comment-${questionId}`);
+                                    console.log(`Setting user comment for ${questionId}: "${matchedAssessment.user_comment}" (${matchedAssessment.user_comment.length} chars)`);
+                                    userCommentTextarea.value = matchedAssessment.user_comment;
+                                    userCommentTextarea.dispatchEvent(new Event('input'));
+                                }
+                                
+                                // Populate supervisor score and comment if user has permission
+                                if (matchedAssessment.sup_score) {
+                                    const supScoreInput = document.getElementById(`sup-score-${questionId}`);
+                                    if (!supScoreInput.disabled) {
+                                        supScoreInput.value = matchedAssessment.sup_score;
+                                    }
+                                }
+                                
+                                if (matchedAssessment.sup_comment) {
+                                    const supCommentTextarea = document.getElementById(`sup-comment-${questionId}`);
+                                    if (!supCommentTextarea.disabled) {
+                                        supCommentTextarea.value = matchedAssessment.sup_comment;
+                                        supCommentTextarea.dispatchEvent(new Event('input'));
+                                    }
+                                }
+                            }
+                        } else {
+                            console.log(`No match found for question ${index + 1}`);
+                        }
+                    });
+                    
+                    updateTotalScore();
+                    console.log('=== FORM POPULATED SUCCESSFULLY ===');
+                } else {
+                    console.log('No existing assessments found or error loading data');
+                }
+            } catch (error) {
+                console.error('Error loading existing data into form:', error);
+            }
+        }
+
+        // Debug function to test textarea input
+        function testTextareaInput() {
+            const firstTextarea = document.querySelector('textarea[id^="user-comment-"]');
+            if (firstTextarea) {
+                console.log('=== TESTING TEXTAREA INPUT ===');
+                console.log('Original length:', firstTextarea.value.length);
+                console.log('Original maxlength:', firstTextarea.getAttribute('maxlength'));
+                
+                // Remove maxlength temporarily
+                firstTextarea.removeAttribute('maxlength');
+                
+                const testText = 'Test dài tới 100 ký tự: ' + 'ABCDEFGHIJ'.repeat(10) + ' - END';
+                console.log('Setting test text with length:', testText.length);
+                
+                firstTextarea.value = testText;
+                firstTextarea.dispatchEvent(new Event('input'));
+                
+                console.log('Final length after set:', firstTextarea.value.length);
+                console.log('Final value:', firstTextarea.value);
+                
+                // Restore maxlength
+                firstTextarea.setAttribute('maxlength', '1000');
+                
+                alert(`TEST RESULTS:\nOriginal: ${firstTextarea.value.length > 29 ? 'PASSED' : 'FAILED'}\nCurrent length: ${firstTextarea.value.length}\nTarget: 130+ chars`);
+            } else {
+                alert('Không tìm thấy textarea để test!');
+            }
         }
 
         async function loadLastAssessment() {
@@ -164,7 +666,7 @@
 
                 // Load individual assessments
                 if (data.assessments && data.assessments.length === 0) {
-                    assessmentDiv.innerHTML = '<p>Không tìm thấy kết quả đánh giá trước đây.</p>';
+                    assessmentDiv.innerHTML = '<div class="status-message warning">Không tìm thấy kết quả đánh giá trước đây.</div>';
                 } else {
                     assessmentDiv.innerHTML = (data.assessments || data).map(a => `
                         <div class="assessment-entry">
@@ -195,8 +697,8 @@
                 }
             } catch (error) {
                 debugLog('Lỗi tải đánh giá trước:', error);
-                document.getElementById('last-assessment').innerHTML = '<p class="error">Hãy hoàn thành bảng đánh giá thángtháng.</p>';
-                document.getElementById('total-score-table-body').innerHTML = '<tr><td colspan="6">Lỗi khi tải tổng điểm.</td></tr>';
+                document.getElementById('last-assessment').innerHTML = '<div class="status-message warning">Không thể tải kết quả đánh giá trước đây. Có thể bạn chưa thực hiện đánh giá hoặc có lỗi kết nối.</div>';
+                document.getElementById('total-score-table-body').innerHTML = '<tr><td colspan="6">Không thể tải tổng điểm. Vui lòng thử lại sau.</td></tr>';
             }
         }
 
@@ -225,33 +727,61 @@
                         user_comment,
                         sup_comment
                     });
-                    if (user_score >= 0 && user_score <= 30) userTotalScore += user_score;
-                    if (sup_score >= 0 && sup_score <= 30) supTotalScore += sup_score;
+                    // Lấy điểm tối đa từ thuộc tính max của input
+                    const userScoreInput = inputGroup.querySelector(`#score-${questionId}`);
+                    const maxScore = parseInt(userScoreInput.getAttribute('max')) || 20;
+                    
+                    if (user_score >= 0 && user_score <= maxScore) {
+                        userTotalScore += user_score;
+                    } else if (user_score > maxScore) {
+                        document.getElementById('form-message').innerHTML = `<div class="status-message error">Câu ${questionId}: Điểm tối đa chỉ được ${maxScore}, không thể nhập ${user_score}</div>`;
+                        return;
+                    }
+                    
+                    if (!isNaN(sup_score) && sup_score >= 0 && sup_score <= maxScore) {
+                        supTotalScore += sup_score;
+                    } else if (!isNaN(sup_score) && sup_score > maxScore) {
+                        document.getElementById('form-message').innerHTML = `<div class="status-message error">Câu ${questionId}: Điểm TGV tối đa chỉ được ${maxScore}, không thể nhập ${sup_score}</div>`;
+                        return;
+                    }
                 }
             });
             debugLog('Gửi dữ liệu:', { ten_tk: tenTk, year, month, scores, user_total_score: userTotalScore, sup_total_score: supTotalScore });
             if (scores.length === 0) {
-                document.getElementById('form-message').innerHTML = '<p class="error">Vui lòng nhập ít nhất một điểm số.</p>';
+                document.getElementById('form-message').innerHTML = '<div class="status-message error">Vui lòng nhập ít nhất một điểm số.</div>';
                 return;
             }
 
             try {
+                const requestPayload = {
+                    ten_tk: tenTk, 
+                    year, 
+                    month, 
+                    scores,
+                    user_total_score: userTotalScore,
+                    sup_total_score: supTotalScore
+                };
+                
+                debugLog('🚀 Sending request to:', `${API_BASE_URL}/submit-assessment`);
+                debugLog('📦 Request payload:', requestPayload);
+                
                 const response = await fetch(`${API_BASE_URL}/submit-assessment`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        ten_tk: tenTk, 
-                        year, 
-                        month, 
-                        scores,
-                        user_total_score: userTotalScore,
-                        sup_total_score: supTotalScore
-                    })
+                    body: JSON.stringify(requestPayload)
                 });
+                
+                debugLog('📡 Response status:', response.status);
+                debugLog('✅ Response ok:', response.ok);
+                
                 const data = await response.json();
-                debugLog('Kết quả gửi:', data);
-                if (!response.ok) throw new Error(data.message || 'Lỗi khi gửi đánh giá');
-                document.getElementById('form-message').innerHTML = '<p class="success">Đánh giá đã được gửi thành công!</p>';
+                debugLog('📄 Response data:', data);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${data.message || 'Lỗi khi gửi đánh giá'}`);
+                }
+                
+                document.getElementById('form-message').innerHTML = '<div class="status-message success">✅ Đánh giá đã được gửi thành công!</div>';
                 questionInputs.forEach(inputGroup => {
                     const questionId = inputGroup.querySelector('input[type="number"]').id.split('-')[1];
                     inputGroup.querySelector(`#score-${questionId}`).value = '';
@@ -263,8 +793,9 @@
                 updateTotalScore();
                 loadLastAssessment();
             } catch (error) {
-                debugLog('Lỗi gửi đánh giá:', error);
-                document.getElementById('form-message').innerHTML = '<p class="error">Không thể gửi đánh giá.</p>';
+                debugLog('❌ Lỗi gửi đánh giá:', error);
+                console.error('Full error details:', error);
+                document.getElementById('form-message').innerHTML = `<div class="status-message error">❌ Không thể gửi đánh giá: ${error.message}</div>`;
             }
         }
 
@@ -277,9 +808,6 @@
             await loadLastAssessment();
             document.getElementById('submit-btn').addEventListener('click', submitAssessment);
         }
-        const now = new Date();
-        const monthDisplay = `${now.getMonth() + 1}/${now.getFullYear()}`;
-        document.getElementById("epa-title").innerText = `Tự Đánh Giá EPA - ${monthDisplay} - ${tenTk}`;
         window.onload = init;
     </script>
 </div></div></div></body>

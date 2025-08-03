@@ -6,17 +6,208 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Xuất Dữ Liệu</title>
 <link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250716" rel="stylesheet"/>
+<style>
+.nav {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.nav a {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+.nav a:active {
+    transform: translateY(0);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header .school-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #667eea;
+    margin-right: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content h1 {
+    color: #2d3748;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+
+.header-content p {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0;
+}
+
+.form-group {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-select {
+    padding: 10px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.table-wrapper {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+    margin: 0;
+}
+
+.table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 13px;
+}
+
+.table td {
+    padding: 10px 8px;
+    font-size: 13px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody tr:hover {
+    background-color: #f7fafc;
+}
+
+#info-title {
+    color: #2d3748;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 25px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* PDF Export specific styles */
+#pdf-export {
+    font-family: 'Times New Roman', Times, serif !important;
+    line-height: 1.2;
+}
+
+#pdf-export img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+#pdf-export .header-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 15px;
+}
+
+#pdf-export table {
+    page-break-inside: auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#pdf-export tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
+
+#pdf-export td, #pdf-export th {
+    page-break-inside: avoid;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+@media print {
+    #pdf-export {
+        font-family: 'Times New Roman', Times, serif !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+    
+    #pdf-export img {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+}
+</style>
 </head>
 <body><div class="container-fluid mt-4"><div class="card"><div class="card-body">
 <div class="container-fluid">
     
     <div class="header">
-        <h1>📤 Xuất Dữ Liệu</h1>
-            <div class="nav">
-                <a href="#" onclick="exportToPDF()">📄 Xuất file PDF</a>
-                <a href="#" onclick="exportData()">📤 Xuất File CSV</a>
-                <a href="#" onclick="printData()">In Dữ Liệu</a>
-            </div>
+        <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
+             alt="Logo Trường Mầm Non Hoa Hướng Dương" 
+             class="school-logo">
+        <div class="header-content">
+            <h1>📤 Xuất Dữ Liệu</h1>
+            <p>Trường Mầm Non Hoa Hướng Dương</p>
+        </div>
+    </div>
+    
+    <div class="nav">
+        <a href="#" onclick="exportToPDF()">📄 Xuất file PDF</a>
+        <a href="#" onclick="exportToExcel()">📊 Xuất File Excel</a>
+        <a href="#" onclick="exportData()">📤 Xuất File CSV</a>
+        <a href="#" onclick="printData()">🖨️ In Dữ Liệu</a>
     </div>
 
     <div class="form-group">
@@ -91,12 +282,18 @@
 </div>
 
 <div id="pdf-export" style="display:none; font-family: 'Times New Roman', Times, serif; font-size: 13px; padding: 20px;">
-        <h5 style="text-align:left; padding-left:40px; font-size: 10px;">UBND Xã ĐINH VĂN - LÂM HÀ</h5>
-        <h5 style="text-align:left; font-weight:bold; padding-left:10px; font-size: 10px;">TRƯỜNG MẦM NON HOA HƯỚNG DƯƠNG</h5>
-        <h3 style="text-align:center; font-weight:bold;">DANH SÁCH <span id="dept-name"></span></h3>
-    <br/>
+        <div class="header-section" style="display: flex; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #0d6efd; padding-bottom: 15px;">
+            <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
+                 style="width: 80px; height: 80px; margin-right: 20px; border-radius: 50%; border: 2px solid #28a745;" 
+                 alt="Logo Trường Mầm Non Hoa Hướng Dương">
+            <div style="flex: 1; text-align: center;">
+                <h5 style="margin: 0; font-size: 12px; font-weight: normal; color: #6c757d;">UBND XÃ ĐINH VĂN - LÂM HÀ</h5>
+                <h4 style="margin: 5px 0; font-size: 14px; font-weight: bold; color: #dc3545;">TRƯỜNG MẦM NON HOA HƯỚNG DƯƠNG</h4>
+                <h3 style="margin: 10px 0; font-size: 16px; font-weight: bold; color: #0d6efd;">DANH SÁCH <span id="dept-name"></span></h3>
+            </div>
+        </div>
         <table style="width:100%; border-collapse: collapse; text-align:center; font-size: 10px;">
-            <thead style="background-color: #cfe2ff;">
+            <thead style="background-color: #4472C4; color: #FFFFFF;">
                 <tr id="pdf-header-row"></tr>
             </thead>
             <tbody id="pdf-body"></tbody>
@@ -219,61 +416,152 @@
             const sourceTable = document.getElementById(sourceTableId);
             const rows = sourceTable.querySelectorAll("tbody tr");
 
-            const pdfBody = document.getElementById("pdf-body");
-            const pdfHeaderRow = document.getElementById("pdf-header-row");
-            
-            document.querySelector('#pdf-export #dept-name').textContent =
-                dept === "HS" ? "-HỌC SINH" :
-                dept === "GV" ? "-GIÁO VIÊN" : "";
+            if (rows.length === 0 || (rows.length === 1 && rows[0].textContent.includes('Chưa có dữ liệu'))) {
+                alert("Không có dữ liệu để xuất PDF.");
+                return;
+            }
 
-            // Xoá nội dung cũ
-            pdfBody.innerHTML = "";
-            pdfHeaderRow.innerHTML = "";
+            try {
+                // Show loading state
+                event.target.innerHTML = '⏳ Đang xuất PDF...';
+                event.target.style.pointerEvents = 'none';
 
-            // Chép header
-            const sourceHeader = sourceTable.querySelector("thead tr");
-            sourceHeader.querySelectorAll("th").forEach((th, index) => {
-                if (dept === "GV" && (index === 1 || index === 3 || index === 4)) return; // ❌ Bỏ "Mã GV" và "Tên Gọi"
-                const newTh = document.createElement("th");
-                newTh.textContent = th.textContent;
-                newTh.style.border = "0.5px solid #000";
-                pdfHeaderRow.appendChild(newTh);
-            });
-
-            // Chép dữ liệu
-            rows.forEach(row => {
-                const newRow = document.createElement("tr");
-                newRow.style.border = "0.5px solid #000";
-                row.querySelectorAll("td").forEach((cell, index) => {
-                    if (dept === "GV" && (index === 1 || index === 3 || index === 4)) return; // ❌ Bỏ "Mã GV" và "Tên Gọi"
-                    const td = document.createElement("td");
-                    td.textContent = cell.textContent;
-                    td.style.border = "0.5px solid #000";
-                    //td.style.whiteSpace = "nowrap";
-                    //td.style.overflow = "hidden";
-                    //td.style.textOverflow = "ellipsis";
-                    newRow.appendChild(td)
+                // Show the hidden element temporarily
+                const element = document.getElementById('pdf-export');
+                element.style.display = 'block';
+                
+                // Clear and populate the hidden PDF export element
+                const pdfHeaderRow = document.getElementById('pdf-header-row');
+                const pdfBody = document.getElementById('pdf-body');
+                
+                console.log('PDF Export elements found:', {
+                    element: !!element,
+                    pdfHeaderRow: !!pdfHeaderRow,
+                    pdfBody: !!pdfBody,
+                    sourceTableRows: rows.length
                 });
-                pdfBody.appendChild(newRow);
-            });
+                
+                // Set department name
+                const deptNameSpan = document.querySelector('#pdf-export #dept-name');
+                if (deptNameSpan) {
+                    deptNameSpan.textContent = dept === "HS" ? "HỌC SINH" : "GIÁO VIÊN";
+                } else {
+                    console.log('Warning: dept-name span not found');
+                }
+                
+                // Copy header
+                const headerCells = sourceTable.querySelectorAll('thead th');
+                console.log('Header cells found:', headerCells.length);
+                
+                pdfHeaderRow.innerHTML = '';
+                let headerCount = 0;
+                headerCells.forEach((th, index) => {
+                    if (dept === "GV" && (th.textContent.includes('Mã Giáo Viên') || th.textContent.includes('Tên Gọi'))) {
+                        return; // Skip these columns for better fit
+                    }
+                    const cell = document.createElement('th');
+                    cell.textContent = th.textContent;
+                    cell.style.border = '2px solid #000';
+                    cell.style.padding = '6px';
+                    cell.style.fontSize = '11px';
+                    cell.style.fontWeight = 'bold';
+                    cell.style.textAlign = 'center';
+                    cell.style.backgroundColor = '#4472C4';
+                    cell.style.color = '#FFFFFF';
+                    pdfHeaderRow.appendChild(cell);
+                    headerCount++;
+                });
+                console.log('Headers added to PDF:', headerCount);
+                
+                // Copy data rows
+                pdfBody.innerHTML = '';
+                let rowCount = 0;
+                rows.forEach(row => {
+                    if (row.textContent.includes('Chưa có dữ liệu')) return;
+                    
+                    const newRow = document.createElement('tr');
+                    const cells = row.querySelectorAll('td');
+                    let cellCount = 0;
+                    
+                    cells.forEach((td, index) => {
+                        if (dept === "GV" && (index === 1 || index === 3)) {
+                            return; // Skip same columns
+                        }
+                        const cell = document.createElement('td');
+                        cell.textContent = td.textContent.trim();
+                        cell.style.border = '1px solid #333';
+                        cell.style.padding = '4px';
+                        cell.style.fontSize = '10px';
+                        cell.style.textAlign = 'center';
+                        cell.style.backgroundColor = '#FFFFFF';
+                        cell.style.color = '#000000';
+                        newRow.appendChild(cell);
+                        cellCount++;
+                    });
+                    
+                    if (cellCount > 0) {
+                        pdfBody.appendChild(newRow);
+                        rowCount++;
+                    }
+                });
+                console.log('Data rows added to PDF:', rowCount);
 
-            // Hiển thị để export
-            const exportDiv = document.getElementById("pdf-export");
-            exportDiv.style.display = "block";
-            // 🔽 Giảm font nếu là bảng Giáo Viên
-            exportDiv.style.fontSize = dept === "GV" ? "8px" : "10px";
+                // Check if we have content to export
+                if (rowCount === 0) {
+                    element.style.display = 'none';
+                    alert('❌ Không có dữ liệu để xuất PDF. Vui lòng chọn dữ liệu trước.');
+                    return;
+                }
 
-            const opt = {
-                margin: 0, // ❗ KHÔNG CÓ LỀ
-                filename: dept === "HS" ? "hoc_sinh.pdf" : "giao_vien.pdf",
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-            };
+                // Wait a bit for DOM to update, then generate PDF
+                setTimeout(() => {
+                    console.log('Starting PDF generation...');
+                    console.log('Element dimensions:', element.offsetWidth, 'x', element.offsetHeight);
+                    
+                    const opt = {
+                        margin: [5, 5, 5, 5],
+                        filename: `danh_sach_${dept === 'HS' ? 'hoc_sinh' : 'giao_vien'}_${new Date().toISOString().slice(0,10).replace(/-/g, '')}.pdf`,
+                        image: { type: 'jpeg', quality: 0.95 },
+                        html2canvas: { 
+                            scale: 1.5,
+                            useCORS: false,
+                            letterRendering: true,
+                            allowTaint: false,
+                            logging: false,
+                            backgroundColor: '#ffffff',
+                            removeContainer: false
+                        },
+                        jsPDF: { 
+                            unit: 'mm', 
+                            format: 'a3', 
+                            orientation: 'landscape'
+                        },
+                        pagebreak: { 
+                            mode: 'avoid-all',
+                            before: '.page-break',
+                            after: '.page-break'
+                        }
+                    };
 
-            html2pdf().from(exportDiv).set(opt).save().then(() => {
-                exportDiv.style.display = "none";
-            });
+                    html2pdf().set(opt).from(element).save().then(() => {
+                        console.log('PDF generation successful');
+                        element.style.display = 'none';
+                        alert('✅ Đã xuất thành công file PDF với font tiếng Việt!');
+                    }).catch(error => {
+                        console.error('PDF export error:', error);
+                        element.style.display = 'none';
+                        alert(`❌ Lỗi xuất PDF: ${error.message}`);
+                    });
+                }, 1000);
+
+            } catch (error) {
+                console.error('PDF export error:', error);
+                alert(`❌ Lỗi xuất PDF: ${error.message}`);
+            } finally {
+                // Restore button state
+                event.target.innerHTML = '📄 Xuất file PDF';
+                event.target.style.pointerEvents = 'auto';
+            }
         }
 
         function printData() {
@@ -324,6 +612,93 @@
             printWindow.focus();
             printWindow.print();
             printWindow.close();
+        }
+
+        async function exportToExcel() {
+            const dept = document.getElementById("deptSelect").value;
+            if (!dept) {
+                alert("Vui lòng chọn loại dữ liệu để xuất Excel.");
+                return;
+            }
+            
+            // Get data from the visible table
+            const tableId = dept === 'HS' ? 'table_hs' : 'table_gv';
+            const table = document.getElementById(tableId);
+            const tableRows = table.querySelectorAll('tbody tr');
+            
+            if (table.style.display === 'none' || tableRows.length === 0) {
+                alert("Vui lòng chọn và tải dữ liệu trước khi xuất Excel.");
+                return;
+            }
+            
+            try {
+                // Show loading state
+                event.target.innerHTML = '⏳ Đang xuất...';
+                event.target.style.pointerEvents = 'none';
+                
+                // Use SheetJS library for client-side Excel generation
+                if (typeof XLSX === 'undefined') {
+                    // Load SheetJS library dynamically
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+                    document.head.appendChild(script);
+                    
+                    await new Promise((resolve) => {
+                        script.onload = resolve;
+                    });
+                }
+                
+                // Prepare data
+                const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+                const data = [headers];
+                
+                Array.from(tableRows).forEach(row => {
+                    const rowData = Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim());
+                    if (rowData.length > 0 && !rowData[0].includes('Chưa có dữ liệu')) {
+                        data.push(rowData);
+                    }
+                });
+                
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                
+                // Set column widths
+                const colWidths = headers.map((_, index) => {
+                    let maxLength = 0;
+                    data.forEach(row => {
+                        if (row[index] && row[index].length > maxLength) {
+                            maxLength = row[index].length;
+                        }
+                    });
+                    return { wch: Math.min(Math.max(maxLength + 2, 10), 50) };
+                });
+                ws['!cols'] = colWidths;
+                
+                // Add worksheet to workbook
+                const sheetName = dept === 'HS' ? 'Danh Sách Học Sinh' : 'Danh Sách Giáo Viên';
+                XLSX.utils.book_append_sheet(wb, ws, sheetName);
+                
+                // Generate filename
+                const now = new Date();
+                const dateStr = now.toISOString().slice(0,10).replace(/-/g, '');
+                const timeStr = now.toTimeString().slice(0,5).replace(/:/g, '');
+                const filename = `danh_sach_${dept === 'HS' ? 'hoc_sinh' : 'giao_vien'}_${dateStr}_${timeStr}.xlsx`;
+                
+                // Save file
+                XLSX.writeFile(wb, filename);
+                
+                // Show success message
+                alert(`✅ Đã xuất thành công file Excel: ${filename}`);
+                
+            } catch (error) {
+                console.error('Excel export error:', error);
+                alert(`❌ Lỗi xuất Excel: ${error.message}`);
+            } finally {
+                // Restore button state
+                event.target.innerHTML = '📊 Xuất File Excel';
+                event.target.style.pointerEvents = 'auto';
+            }
         }
 
         function exportData() {
