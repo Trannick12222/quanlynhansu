@@ -7258,3 +7258,368 @@ OSError: [Errno 22] Invalid argument
 2025-08-05 14:41:13,986 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:13] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
 2025-08-05 14:41:14,232 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:14] "GET /fetch_hs HTTP/1.1" 200 -
 2025-08-05 14:41:14,294 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:14] "GET /fetch_gv HTTP/1.1" 200 -
+2025-08-05 14:41:33,604 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:33] "GET /assign-classes HTTP/1.1" 200 -
+2025-08-05 14:41:33,925 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:33] "[36mGET /static/css/styles.css?v=20250716 HTTP/1.1[0m" 304 -
+2025-08-05 14:41:34,184 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:34] "GET /api/students HTTP/1.1" 200 -
+2025-08-05 14:41:34,245 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:34] "GET /api/classes HTTP/1.1" 200 -
+2025-08-05 14:41:34,402 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:34] "GET /assign-teachers HTTP/1.1" 200 -
+2025-08-05 14:41:34,728 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:34] "[36mGET /static/css/styles.css?v=20250716 HTTP/1.1[0m" 304 -
+2025-08-05 14:41:34,972 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:34] "GET /api/teachers HTTP/1.1" 200 -
+2025-08-05 14:41:35,047 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:35] "GET /api/classes HTTP/1.1" 200 -
+2025-08-05 14:41:35,286 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:35] "GET /api/assigned-teachers HTTP/1.1" 200 -
+2025-08-05 14:41:36,554 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:36] "GET /users HTTP/1.1" 200 -
+2025-08-05 14:41:36,880 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:36] "[36mGET /static/css/styles.css?v=20250716 HTTP/1.1[0m" 304 -
+2025-08-05 14:41:37,142 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:37] "GET /api/users HTTP/1.1" 200 -
+2025-08-05 14:41:44,172 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:44] "POST /api/users/change-password HTTP/1.1" 200 -
+2025-08-05 14:41:49,246 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:49] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-08-05 14:41:49,506 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:49] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 14:41:49,557 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:49] "GET /login HTTP/1.1" 200 -
+2025-08-05 14:41:49,825 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:49] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:41:49,885 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:49] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:41:54,344 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:54] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 14:41:54,659 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:54] "GET /dashboard HTTP/1.1" 200 -
+2025-08-05 14:41:54,904 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:54] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:41:54,997 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:54] "GET /employees HTTP/1.1" 200 -
+2025-08-05 14:41:54,998 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:54] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:41:55,005 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:55] "GET /static/css/styles.css?v=20250719 HTTP/1.1" 200 -
+2025-08-05 14:41:55,239 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:55] "GET /api/danh-sach-ma HTTP/1.1" 200 -
+2025-08-05 14:41:55,501 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:55] "GET /api/table-schema HTTP/1.1" 200 -
+2025-08-05 14:41:55,508 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:55] "GET /api/employees?dept=HS HTTP/1.1" 200 -
+2025-08-05 14:41:56,937 [INFO] Đang truy cập user_epa_score cho user=ngocngoan, role=user
+2025-08-05 14:41:56,941 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:56] "GET /user-epa-score HTTP/1.1" 200 -
+2025-08-05 14:41:57,199 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:57] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:41:57,261 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:57] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:41:57,270 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:57] "GET /api/assessment-period HTTP/1.1" 200 -
+2025-08-05 14:41:57,583 [INFO] Đang lấy danh sách câu hỏi EPA
+2025-08-05 14:41:57,583 [INFO] Đang tải câu hỏi EPA
+2025-08-05 14:41:57,586 [DEBUG] Câu hỏi đã tải: [{'id': 1, 'question': 'Do you strictly comply with working hours this month? (Late arrivals, unpermitted absences, non-participation in collective activities…)', 'translate': '', 'max_score': 10}, {'id': 2, 'question': 'Do you fully and correctly implement professional activities: etiquette, weekly activities, morning exercise, learning activities, corner activities, and outdoor activities?', 'translate': 'Bạn có thực hiện đầy đủ và đúng quy trình các hoạt động chuyên môn: lễ giáo, sinh hoạt đầu tuần, thể dục sáng, hoạt động học, hoạt động góc, hoạt động ngoài trời không?', 'max_score': 20}, {'id': 3, 'question': 'Do you prepare teaching aids, music, and tools sufficiently and follow proper teaching methods in professional activities? (Be proactive, memorize demonstration movements, model activities for children…)', 'translate': '', 'max_score': 10}, {'id': 4, 'question': "Do you ensure children's safety during all learning and outdoor play activities? (No accidents, unsafe play, or lack of safety tools…)", 'translate': 'Bạn có đảm bảo an toàn cho trẻ trong suốt các hoạt động học tập và vui chơi ngoài trời không? (Không để xảy ra tai nạn, trẻ chơi sai cách, thiếu dụng cụ an toàn…)', 'max_score': 20}, {'id': 5, 'question': 'For boarding care: Do you maintain hygiene during mealtime, distribute food in the correct portions, and support children to eat enough according to the menu?', 'translate': '', 'max_score': 5}, {'id': 6, 'question': 'Do you ensure personal hygiene, sleep, clothing, toilet routines, and clean handling of personal items for children?', 'translate': 'Bạn có đảm bảo công tác chăm sóc trẻ: vệ sinh cá nhân, giấc ngủ, trang phục, hỗ trợ trẻ đi vệ sinh đúng quy trình và xử lý đồ dùng cá nhân sạch sẽ không?', 'max_score': 20}, {'id': 7, 'question': 'Did any child experience weight loss, no weight gain, or health issues this month due to your fault?', 'translate': 'Trong tháng, có tình trạng trẻ bị sụt cân, không lên cân, hoặc sức khỏe trẻ bị ảnh hưởng do lỗi của bạn không?', 'max_score': 10}, {'id': 8, 'question': 'Do you complete all assigned extra duties such as updating the app, submitting assignments on time, and fully participating in festivals and meetings?', 'translate': 'Bạn có thực hiện đầy đủ các công việc được phân công thêm: cập nhật app, nộp bài tập chuyên môn đúng hạn, tham gia đầy đủ lễ hội và họp không?', 'max_score': 20}, {'id': 9, 'question': "Do you collaborate well with parents and colleagues in caring for, educating children, and preserving facilities? (Put toys away, keep areas clean, work with parents to solve children's issues…)", 'translate': 'Bạn có phối hợp tốt với phụ huynh và đồng nghiệp trong công tác chăm sóc, giáo dục trẻ và bảo quản cơ sở vật chất không? (Cất đồ chơi đúng chỗ, giữ vệ sinh khu vực phụ trách, phối hợp phụ huynh giải quyết các vấn đề của trẻ…)', 'max_score': 20}, {'id': 10, 'question': "Have you been negatively reported by parents, caught on camera, or caused incidents that harmed the school's reputation this month?", 'translate': 'Trong tháng, bạn có bị phụ huynh/phản ánh tiêu cực, bị trích xuất camera, hoặc để xảy ra sự cố ảnh hưởng uy tín nhà trường không?', 'max_score': 10}]
+2025-08-05 14:41:57,587 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:57] "GET /api/epa-questions HTTP/1.1" 200 -
+2025-08-05 14:41:57,839 [INFO] Đang lấy kết quả đánh giá trước cho ten_tk=ngocngoan
+2025-08-05 14:41:57,839 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:41:57,842 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:41:57,842 [DEBUG] Month value being used: 8
+2025-08-05 14:41:57,846 [DEBUG] Đã lấy kết quả đánh giá: ()
+2025-08-05 14:41:57,846 [DEBUG] Tổng điểm: None
+2025-08-05 14:41:57,847 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:57] "GET /api/last-assessment?year=2025&month=8 HTTP/1.1" 200 -
+2025-08-05 14:41:57,902 [INFO] Đang lấy kết quả đánh giá trước cho ten_tk=ngocngoan
+2025-08-05 14:41:57,902 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:41:57,904 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:41:57,905 [DEBUG] Month value being used: None
+2025-08-05 14:41:57,908 [DEBUG] Đã lấy kết quả đánh giá: ()
+2025-08-05 14:41:57,908 [DEBUG] Tổng điểm: None
+2025-08-05 14:41:57,908 [INFO] 127.0.0.1 - - [05/Aug/2025 14:41:57] "GET /api/last-assessment HTTP/1.1" 200 -
+2025-08-05 14:42:20,291 [INFO] 🎯 === SUBMIT ASSESSMENT STARTED === ten_tk=ngocngoan, role=user
+2025-08-05 14:42:20,291 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:20,294 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:20,295 [INFO] 📥 Received data: {'ten_tk': 'ngocngoan', 'year': 2025, 'month': 8, 'scores': [{'questionId': '1', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '2', 'score': 14, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '3', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '4', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '5', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '6', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '7', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '8', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '9', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '10', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}], 'user_total_score': 74, 'sup_total_score': 0}
+2025-08-05 14:42:20,295 [INFO] 📊 Extracted: scores=10 items, year=2025, month=8
+2025-08-05 14:42:20,295 [INFO] ⏰ Time validation: Current=2025/8, Request=2025/8
+2025-08-05 14:42:20,295 [INFO] 🔍 Checking EPA period for user: ngocngoan, current day: 5
+2025-08-05 14:42:20,298 [INFO] 📋 Record from thoigianmoepa for ngocngoan: {'phase1_start': 2, 'phase1_end': 5, 'phase2_start': 26, 'phase2_end': 27, 'phase3_start': 28, 'phase3_end': 30, 'make_epa_gv': 'yes', 'make_epa_tgv': 'no', 'start_day': 2, 'close_day': 5}
+2025-08-05 14:42:20,298 [INFO] 🏷️ User permissions for ngocngoan: is_tgv=False, is_gv=True
+2025-08-05 14:42:20,298 [INFO] 📅 Phase status: phase1_open=True, phase2_open=False, phase3_open=False
+2025-08-05 14:42:20,298 [INFO] 🕐 Phase 1: 2 - 5, current day: 5
+2025-08-05 14:42:20,299 [INFO] ✅ Final result for ngocngoan: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:20,299 [INFO] 📅 Date info from DB: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:20,299 [INFO] ✅ Time validation passed (bypassed for debug)
+2025-08-05 14:42:20,302 [DEBUG] Cập nhật kết quả đánh giá cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:20,302 [WARNING] Điểm vượt quá giới hạn: question_id=1, user_score=15, max_score=10
+2025-08-05 14:42:20,302 [INFO] 🔒 Database connections closed
+2025-08-05 14:42:20,303 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:20] "[31m[1mPOST /api/submit-assessment HTTP/1.1[0m" 400 -
+2025-08-05 14:42:31,462 [INFO] 🎯 === SUBMIT ASSESSMENT STARTED === ten_tk=ngocngoan, role=user
+2025-08-05 14:42:31,463 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:31,466 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:31,466 [INFO] 📥 Received data: {'ten_tk': 'ngocngoan', 'year': 2025, 'month': 8, 'scores': [{'questionId': '1', 'score': 8, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '2', 'score': 14, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '3', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '4', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '5', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '6', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '7', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '8', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '9', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '10', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}], 'user_total_score': 82, 'sup_total_score': 0}
+2025-08-05 14:42:31,466 [INFO] 📊 Extracted: scores=10 items, year=2025, month=8
+2025-08-05 14:42:31,466 [INFO] ⏰ Time validation: Current=2025/8, Request=2025/8
+2025-08-05 14:42:31,466 [INFO] 🔍 Checking EPA period for user: ngocngoan, current day: 5
+2025-08-05 14:42:31,469 [INFO] 📋 Record from thoigianmoepa for ngocngoan: {'phase1_start': 2, 'phase1_end': 5, 'phase2_start': 26, 'phase2_end': 27, 'phase3_start': 28, 'phase3_end': 30, 'make_epa_gv': 'yes', 'make_epa_tgv': 'no', 'start_day': 2, 'close_day': 5}
+2025-08-05 14:42:31,469 [INFO] 🏷️ User permissions for ngocngoan: is_tgv=False, is_gv=True
+2025-08-05 14:42:31,469 [INFO] 📅 Phase status: phase1_open=True, phase2_open=False, phase3_open=False
+2025-08-05 14:42:31,469 [INFO] 🕐 Phase 1: 2 - 5, current day: 5
+2025-08-05 14:42:31,469 [INFO] ✅ Final result for ngocngoan: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:31,469 [INFO] 📅 Date info from DB: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:31,470 [INFO] ✅ Time validation passed (bypassed for debug)
+2025-08-05 14:42:31,472 [DEBUG] Cập nhật kết quả đánh giá cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:31,473 [DEBUG] Tạo mới câu hỏi ID 1 cho ten_tk=ngocngoan
+2025-08-05 14:42:31,474 [DEBUG] Tạo mới câu hỏi ID 2 cho ten_tk=ngocngoan
+2025-08-05 14:42:31,474 [WARNING] Điểm vượt quá giới hạn: question_id=3, user_score=15, max_score=10
+2025-08-05 14:42:31,474 [INFO] 🔒 Database connections closed
+2025-08-05 14:42:31,475 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:31] "[31m[1mPOST /api/submit-assessment HTTP/1.1[0m" 400 -
+2025-08-05 14:42:39,436 [INFO] 🎯 === SUBMIT ASSESSMENT STARTED === ten_tk=ngocngoan, role=user
+2025-08-05 14:42:39,437 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:39,440 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:39,440 [INFO] 📥 Received data: {'ten_tk': 'ngocngoan', 'year': 2025, 'month': 8, 'scores': [{'questionId': '1', 'score': 8, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '2', 'score': 14, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '3', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '4', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '5', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '6', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '7', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '8', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '9', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '10', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}], 'user_total_score': 92, 'sup_total_score': 0}
+2025-08-05 14:42:39,440 [INFO] 📊 Extracted: scores=10 items, year=2025, month=8
+2025-08-05 14:42:39,440 [INFO] ⏰ Time validation: Current=2025/8, Request=2025/8
+2025-08-05 14:42:39,440 [INFO] 🔍 Checking EPA period for user: ngocngoan, current day: 5
+2025-08-05 14:42:39,443 [INFO] 📋 Record from thoigianmoepa for ngocngoan: {'phase1_start': 2, 'phase1_end': 5, 'phase2_start': 26, 'phase2_end': 27, 'phase3_start': 28, 'phase3_end': 30, 'make_epa_gv': 'yes', 'make_epa_tgv': 'no', 'start_day': 2, 'close_day': 5}
+2025-08-05 14:42:39,443 [INFO] 🏷️ User permissions for ngocngoan: is_tgv=False, is_gv=True
+2025-08-05 14:42:39,443 [INFO] 📅 Phase status: phase1_open=True, phase2_open=False, phase3_open=False
+2025-08-05 14:42:39,444 [INFO] 🕐 Phase 1: 2 - 5, current day: 5
+2025-08-05 14:42:39,444 [INFO] ✅ Final result for ngocngoan: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:39,444 [INFO] 📅 Date info from DB: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:39,444 [INFO] ✅ Time validation passed (bypassed for debug)
+2025-08-05 14:42:39,447 [DEBUG] Cập nhật kết quả đánh giá cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:39,448 [DEBUG] Tạo mới câu hỏi ID 1 cho ten_tk=ngocngoan
+2025-08-05 14:42:39,449 [DEBUG] Tạo mới câu hỏi ID 2 cho ten_tk=ngocngoan
+2025-08-05 14:42:39,449 [DEBUG] Tạo mới câu hỏi ID 3 cho ten_tk=ngocngoan
+2025-08-05 14:42:39,450 [DEBUG] Tạo mới câu hỏi ID 4 cho ten_tk=ngocngoan
+2025-08-05 14:42:39,450 [WARNING] Điểm vượt quá giới hạn: question_id=5, user_score=15, max_score=5
+2025-08-05 14:42:39,451 [INFO] 🔒 Database connections closed
+2025-08-05 14:42:39,451 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:39] "[31m[1mPOST /api/submit-assessment HTTP/1.1[0m" 400 -
+2025-08-05 14:42:45,988 [INFO] 🎯 === SUBMIT ASSESSMENT STARTED === ten_tk=ngocngoan, role=user
+2025-08-05 14:42:45,989 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:45,992 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:45,992 [INFO] 📥 Received data: {'ten_tk': 'ngocngoan', 'year': 2025, 'month': 8, 'scores': [{'questionId': '1', 'score': 8, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '2', 'score': 14, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '3', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '4', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '5', 'score': 5, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '6', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '7', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '8', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '9', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '10', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}], 'user_total_score': 97, 'sup_total_score': 0}
+2025-08-05 14:42:45,992 [INFO] 📊 Extracted: scores=10 items, year=2025, month=8
+2025-08-05 14:42:45,992 [INFO] ⏰ Time validation: Current=2025/8, Request=2025/8
+2025-08-05 14:42:45,992 [INFO] 🔍 Checking EPA period for user: ngocngoan, current day: 5
+2025-08-05 14:42:45,995 [INFO] 📋 Record from thoigianmoepa for ngocngoan: {'phase1_start': 2, 'phase1_end': 5, 'phase2_start': 26, 'phase2_end': 27, 'phase3_start': 28, 'phase3_end': 30, 'make_epa_gv': 'yes', 'make_epa_tgv': 'no', 'start_day': 2, 'close_day': 5}
+2025-08-05 14:42:45,995 [INFO] 🏷️ User permissions for ngocngoan: is_tgv=False, is_gv=True
+2025-08-05 14:42:45,995 [INFO] 📅 Phase status: phase1_open=True, phase2_open=False, phase3_open=False
+2025-08-05 14:42:45,995 [INFO] 🕐 Phase 1: 2 - 5, current day: 5
+2025-08-05 14:42:45,995 [INFO] ✅ Final result for ngocngoan: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:45,995 [INFO] 📅 Date info from DB: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:45,996 [INFO] ✅ Time validation passed (bypassed for debug)
+2025-08-05 14:42:45,998 [DEBUG] Cập nhật kết quả đánh giá cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:45,999 [DEBUG] Tạo mới câu hỏi ID 1 cho ten_tk=ngocngoan
+2025-08-05 14:42:46,000 [DEBUG] Tạo mới câu hỏi ID 2 cho ten_tk=ngocngoan
+2025-08-05 14:42:46,000 [DEBUG] Tạo mới câu hỏi ID 3 cho ten_tk=ngocngoan
+2025-08-05 14:42:46,001 [DEBUG] Tạo mới câu hỏi ID 4 cho ten_tk=ngocngoan
+2025-08-05 14:42:46,001 [DEBUG] Tạo mới câu hỏi ID 5 cho ten_tk=ngocngoan
+2025-08-05 14:42:46,002 [DEBUG] Tạo mới câu hỏi ID 6 cho ten_tk=ngocngoan
+2025-08-05 14:42:46,002 [WARNING] Điểm vượt quá giới hạn: question_id=7, user_score=15, max_score=10
+2025-08-05 14:42:46,002 [INFO] 🔒 Database connections closed
+2025-08-05 14:42:46,002 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:46] "[31m[1mPOST /api/submit-assessment HTTP/1.1[0m" 400 -
+2025-08-05 14:42:52,475 [INFO] 🎯 === SUBMIT ASSESSMENT STARTED === ten_tk=ngocngoan, role=user
+2025-08-05 14:42:52,475 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:52,478 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:52,478 [INFO] 📥 Received data: {'ten_tk': 'ngocngoan', 'year': 2025, 'month': 8, 'scores': [{'questionId': '1', 'score': 8, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '2', 'score': 14, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '3', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '4', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '5', 'score': 5, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '6', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '7', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '8', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '9', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '10', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}], 'user_total_score': 107, 'sup_total_score': 0}
+2025-08-05 14:42:52,479 [INFO] 📊 Extracted: scores=10 items, year=2025, month=8
+2025-08-05 14:42:52,479 [INFO] ⏰ Time validation: Current=2025/8, Request=2025/8
+2025-08-05 14:42:52,479 [INFO] 🔍 Checking EPA period for user: ngocngoan, current day: 5
+2025-08-05 14:42:52,481 [INFO] 📋 Record from thoigianmoepa for ngocngoan: {'phase1_start': 2, 'phase1_end': 5, 'phase2_start': 26, 'phase2_end': 27, 'phase3_start': 28, 'phase3_end': 30, 'make_epa_gv': 'yes', 'make_epa_tgv': 'no', 'start_day': 2, 'close_day': 5}
+2025-08-05 14:42:52,482 [INFO] 🏷️ User permissions for ngocngoan: is_tgv=False, is_gv=True
+2025-08-05 14:42:52,482 [INFO] 📅 Phase status: phase1_open=True, phase2_open=False, phase3_open=False
+2025-08-05 14:42:52,482 [INFO] 🕐 Phase 1: 2 - 5, current day: 5
+2025-08-05 14:42:52,482 [INFO] ✅ Final result for ngocngoan: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:52,482 [INFO] 📅 Date info from DB: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:52,482 [INFO] ✅ Time validation passed (bypassed for debug)
+2025-08-05 14:42:52,485 [DEBUG] Cập nhật kết quả đánh giá cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:52,486 [DEBUG] Tạo mới câu hỏi ID 1 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,487 [DEBUG] Tạo mới câu hỏi ID 2 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,487 [DEBUG] Tạo mới câu hỏi ID 3 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,488 [DEBUG] Tạo mới câu hỏi ID 4 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,489 [DEBUG] Tạo mới câu hỏi ID 5 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,490 [DEBUG] Tạo mới câu hỏi ID 6 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,490 [DEBUG] Tạo mới câu hỏi ID 7 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,491 [DEBUG] Tạo mới câu hỏi ID 8 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,491 [DEBUG] Tạo mới câu hỏi ID 9 cho ten_tk=ngocngoan
+2025-08-05 14:42:52,491 [WARNING] Điểm vượt quá giới hạn: question_id=10, user_score=15, max_score=10
+2025-08-05 14:42:52,492 [INFO] 🔒 Database connections closed
+2025-08-05 14:42:52,492 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:52] "[31m[1mPOST /api/submit-assessment HTTP/1.1[0m" 400 -
+2025-08-05 14:42:56,235 [INFO] 🎯 === SUBMIT ASSESSMENT STARTED === ten_tk=ngocngoan, role=user
+2025-08-05 14:42:56,235 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:56,238 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:56,238 [INFO] 📥 Received data: {'ten_tk': 'ngocngoan', 'year': 2025, 'month': 8, 'scores': [{'questionId': '1', 'score': 8, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '2', 'score': 14, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '3', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '4', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '5', 'score': 5, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '6', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '7', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '8', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '9', 'score': 15, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}, {'questionId': '10', 'score': 10, 'sup_score': None, 'user_comment': '', 'sup_comment': ''}], 'user_total_score': 117, 'sup_total_score': 0}
+2025-08-05 14:42:56,238 [INFO] 📊 Extracted: scores=10 items, year=2025, month=8
+2025-08-05 14:42:56,238 [INFO] ⏰ Time validation: Current=2025/8, Request=2025/8
+2025-08-05 14:42:56,239 [INFO] 🔍 Checking EPA period for user: ngocngoan, current day: 5
+2025-08-05 14:42:56,241 [INFO] 📋 Record from thoigianmoepa for ngocngoan: {'phase1_start': 2, 'phase1_end': 5, 'phase2_start': 26, 'phase2_end': 27, 'phase3_start': 28, 'phase3_end': 30, 'make_epa_gv': 'yes', 'make_epa_tgv': 'no', 'start_day': 2, 'close_day': 5}
+2025-08-05 14:42:56,241 [INFO] 🏷️ User permissions for ngocngoan: is_tgv=False, is_gv=True
+2025-08-05 14:42:56,241 [INFO] 📅 Phase status: phase1_open=True, phase2_open=False, phase3_open=False
+2025-08-05 14:42:56,242 [INFO] 🕐 Phase 1: 2 - 5, current day: 5
+2025-08-05 14:42:56,242 [INFO] ✅ Final result for ngocngoan: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:56,242 [INFO] 📅 Date info from DB: {'is_open': True, 'start_day': 2, 'close_day': 5, 'year': 2025, 'month': 8, 'current_phase': 'Phase 1 (Tu danh gia)', 'message': 'Hien tai: Phase 1 (Tu danh gia)'}
+2025-08-05 14:42:56,242 [INFO] ✅ Time validation passed (bypassed for debug)
+2025-08-05 14:42:56,244 [DEBUG] Cập nhật kết quả đánh giá cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:56,245 [DEBUG] Tạo mới câu hỏi ID 1 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,246 [DEBUG] Tạo mới câu hỏi ID 2 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,246 [DEBUG] Tạo mới câu hỏi ID 3 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,247 [DEBUG] Tạo mới câu hỏi ID 4 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,248 [DEBUG] Tạo mới câu hỏi ID 5 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,248 [DEBUG] Tạo mới câu hỏi ID 6 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,249 [DEBUG] Tạo mới câu hỏi ID 7 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,249 [DEBUG] Tạo mới câu hỏi ID 8 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,250 [DEBUG] Tạo mới câu hỏi ID 9 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,250 [DEBUG] Tạo mới câu hỏi ID 10 cho ten_tk=ngocngoan
+2025-08-05 14:42:56,253 [INFO] ✅ DATABASE COMMIT SUCCESSFUL - Đã lưu kết quả đánh giá cho ten_tk=ngocngoan
+2025-08-05 14:42:56,253 [INFO] 🔄 Updating tongdiem_epa for ngocngoan
+2025-08-05 14:42:56,253 [INFO] Đang cập nhật tongdiem_epa cho ten_tk=ngocngoan, year=2025, month=8
+2025-08-05 14:42:56,260 [DEBUG] Đã cập nhật tongdiem_epa: user_total_score=117, sup_total_score=0
+2025-08-05 14:42:56,260 [INFO] 📝 Logging action for ngocngoan
+2025-08-05 14:42:56,262 [INFO] ✅ FINAL COMMIT SUCCESSFUL - Đã ghi log hành động cho ten_tk=ngocngoan
+2025-08-05 14:42:56,263 [INFO] 🎉 === SUBMIT ASSESSMENT COMPLETED SUCCESSFULLY === ✅ Đã lưu 10 câu trả lời cho ngocngoan
+2025-08-05 14:42:56,263 [INFO] 🔒 Database connections closed
+2025-08-05 14:42:56,263 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:56] "POST /api/submit-assessment HTTP/1.1" 200 -
+2025-08-05 14:42:56,499 [INFO] Đang lấy kết quả đánh giá trước cho ten_tk=ngocngoan
+2025-08-05 14:42:56,499 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:42:56,502 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:42:56,502 [DEBUG] Month value being used: None
+2025-08-05 14:42:56,505 [DEBUG] Đã lấy kết quả đánh giá: [{'id': 26, 'question': 'Do you strictly comply with working hours this month? (Late arrivals, unpermitted absences, non-participation in collective activities…)', 'translate': '', 'user_score': 8, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 27, 'question': 'Do you fully and correctly implement professional activities: etiquette, weekly activities, morning exercise, learning activities, corner activities, and outdoor activities?', 'translate': 'Bạn có thực hiện đầy đủ và đúng quy trình các hoạt động chuyên môn: lễ giáo, sinh hoạt đầu tuần, thể dục sáng, hoạt động học, hoạt động góc, hoạt động ngoài trời không?', 'user_score': 14, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 28, 'question': 'Do you prepare teaching aids, music, and tools sufficiently and follow proper teaching methods in professional activities? (Be proactive, memorize demonstration movements, model activities for children…)', 'translate': '', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 29, 'question': "Do you ensure children's safety during all learning and outdoor play activities? (No accidents, unsafe play, or lack of safety tools…)", 'translate': 'Bạn có đảm bảo an toàn cho trẻ trong suốt các hoạt động học tập và vui chơi ngoài trời không? (Không để xảy ra tai nạn, trẻ chơi sai cách, thiếu dụng cụ an toàn…)', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 30, 'question': 'For boarding care: Do you maintain hygiene during mealtime, distribute food in the correct portions, and support children to eat enough according to the menu?', 'translate': '', 'user_score': 5, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 31, 'question': 'Do you ensure personal hygiene, sleep, clothing, toilet routines, and clean handling of personal items for children?', 'translate': 'Bạn có đảm bảo công tác chăm sóc trẻ: vệ sinh cá nhân, giấc ngủ, trang phục, hỗ trợ trẻ đi vệ sinh đúng quy trình và xử lý đồ dùng cá nhân sạch sẽ không?', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 32, 'question': 'Did any child experience weight loss, no weight gain, or health issues this month due to your fault?', 'translate': 'Trong tháng, có tình trạng trẻ bị sụt cân, không lên cân, hoặc sức khỏe trẻ bị ảnh hưởng do lỗi của bạn không?', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 33, 'question': 'Do you complete all assigned extra duties such as updating the app, submitting assignments on time, and fully participating in festivals and meetings?', 'translate': 'Bạn có thực hiện đầy đủ các công việc được phân công thêm: cập nhật app, nộp bài tập chuyên môn đúng hạn, tham gia đầy đủ lễ hội và họp không?', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 34, 'question': "Do you collaborate well with parents and colleagues in caring for, educating children, and preserving facilities? (Put toys away, keep areas clean, work with parents to solve children's issues…)", 'translate': 'Bạn có phối hợp tốt với phụ huynh và đồng nghiệp trong công tác chăm sóc, giáo dục trẻ và bảo quản cơ sở vật chất không? (Cất đồ chơi đúng chỗ, giữ vệ sinh khu vực phụ trách, phối hợp phụ huynh giải quyết các vấn đề của trẻ…)', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 35, 'question': "Have you been negatively reported by parents, caught on camera, or caused incidents that harmed the school's reputation this month?", 'translate': 'Trong tháng, bạn có bị phụ huynh/phản ánh tiêu cực, bị trích xuất camera, hoặc để xảy ra sự cố ảnh hưởng uy tín nhà trường không?', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}]
+2025-08-05 14:42:56,506 [DEBUG] Tổng điểm: {'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None}
+2025-08-05 14:42:56,506 [INFO] 127.0.0.1 - - [05/Aug/2025 14:42:56] "GET /api/last-assessment HTTP/1.1" 200 -
+2025-08-05 14:44:16,236 [INFO] 127.0.0.1 - - [05/Aug/2025 14:44:16] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 14:44:16,236 [INFO] 127.0.0.1 - - [05/Aug/2025 14:44:16] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:44:16,495 [INFO] 127.0.0.1 - - [05/Aug/2025 14:44:16] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:45:52,925 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:52] "GET /dashboard?page=/user-epa-score HTTP/1.1" 200 -
+2025-08-05 14:45:53,166 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:45:53,258 [INFO] Đang truy cập user_epa_score cho user=ngocngoan, role=user
+2025-08-05 14:45:53,258 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "GET /user-epa-score HTTP/1.1" 200 -
+2025-08-05 14:45:53,259 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:45:53,297 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:45:53,486 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:45:53,610 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "GET /api/assessment-period HTTP/1.1" 200 -
+2025-08-05 14:45:53,805 [INFO] Đang lấy danh sách câu hỏi EPA
+2025-08-05 14:45:53,806 [INFO] Đang tải câu hỏi EPA
+2025-08-05 14:45:53,809 [DEBUG] Câu hỏi đã tải: [{'id': 1, 'question': 'Do you strictly comply with working hours this month? (Late arrivals, unpermitted absences, non-participation in collective activities…)', 'translate': '', 'max_score': 10}, {'id': 2, 'question': 'Do you fully and correctly implement professional activities: etiquette, weekly activities, morning exercise, learning activities, corner activities, and outdoor activities?', 'translate': 'Bạn có thực hiện đầy đủ và đúng quy trình các hoạt động chuyên môn: lễ giáo, sinh hoạt đầu tuần, thể dục sáng, hoạt động học, hoạt động góc, hoạt động ngoài trời không?', 'max_score': 20}, {'id': 3, 'question': 'Do you prepare teaching aids, music, and tools sufficiently and follow proper teaching methods in professional activities? (Be proactive, memorize demonstration movements, model activities for children…)', 'translate': '', 'max_score': 10}, {'id': 4, 'question': "Do you ensure children's safety during all learning and outdoor play activities? (No accidents, unsafe play, or lack of safety tools…)", 'translate': 'Bạn có đảm bảo an toàn cho trẻ trong suốt các hoạt động học tập và vui chơi ngoài trời không? (Không để xảy ra tai nạn, trẻ chơi sai cách, thiếu dụng cụ an toàn…)', 'max_score': 20}, {'id': 5, 'question': 'For boarding care: Do you maintain hygiene during mealtime, distribute food in the correct portions, and support children to eat enough according to the menu?', 'translate': '', 'max_score': 5}, {'id': 6, 'question': 'Do you ensure personal hygiene, sleep, clothing, toilet routines, and clean handling of personal items for children?', 'translate': 'Bạn có đảm bảo công tác chăm sóc trẻ: vệ sinh cá nhân, giấc ngủ, trang phục, hỗ trợ trẻ đi vệ sinh đúng quy trình và xử lý đồ dùng cá nhân sạch sẽ không?', 'max_score': 20}, {'id': 7, 'question': 'Did any child experience weight loss, no weight gain, or health issues this month due to your fault?', 'translate': 'Trong tháng, có tình trạng trẻ bị sụt cân, không lên cân, hoặc sức khỏe trẻ bị ảnh hưởng do lỗi của bạn không?', 'max_score': 10}, {'id': 8, 'question': 'Do you complete all assigned extra duties such as updating the app, submitting assignments on time, and fully participating in festivals and meetings?', 'translate': 'Bạn có thực hiện đầy đủ các công việc được phân công thêm: cập nhật app, nộp bài tập chuyên môn đúng hạn, tham gia đầy đủ lễ hội và họp không?', 'max_score': 20}, {'id': 9, 'question': "Do you collaborate well with parents and colleagues in caring for, educating children, and preserving facilities? (Put toys away, keep areas clean, work with parents to solve children's issues…)", 'translate': 'Bạn có phối hợp tốt với phụ huynh và đồng nghiệp trong công tác chăm sóc, giáo dục trẻ và bảo quản cơ sở vật chất không? (Cất đồ chơi đúng chỗ, giữ vệ sinh khu vực phụ trách, phối hợp phụ huynh giải quyết các vấn đề của trẻ…)', 'max_score': 20}, {'id': 10, 'question': "Have you been negatively reported by parents, caught on camera, or caused incidents that harmed the school's reputation this month?", 'translate': 'Trong tháng, bạn có bị phụ huynh/phản ánh tiêu cực, bị trích xuất camera, hoặc để xảy ra sự cố ảnh hưởng uy tín nhà trường không?', 'max_score': 10}]
+2025-08-05 14:45:53,810 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "GET /api/epa-questions HTTP/1.1" 200 -
+2025-08-05 14:45:53,927 [INFO] Đang lấy kết quả đánh giá trước cho ten_tk=ngocngoan
+2025-08-05 14:45:53,927 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:45:53,930 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:45:53,931 [DEBUG] Month value being used: 8
+2025-08-05 14:45:53,934 [DEBUG] Đã lấy kết quả đánh giá: [{'id': 26, 'question': 'Do you strictly comply with working hours this month? (Late arrivals, unpermitted absences, non-participation in collective activities…)', 'translate': '', 'user_score': 8, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 27, 'question': 'Do you fully and correctly implement professional activities: etiquette, weekly activities, morning exercise, learning activities, corner activities, and outdoor activities?', 'translate': 'Bạn có thực hiện đầy đủ và đúng quy trình các hoạt động chuyên môn: lễ giáo, sinh hoạt đầu tuần, thể dục sáng, hoạt động học, hoạt động góc, hoạt động ngoài trời không?', 'user_score': 14, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 28, 'question': 'Do you prepare teaching aids, music, and tools sufficiently and follow proper teaching methods in professional activities? (Be proactive, memorize demonstration movements, model activities for children…)', 'translate': '', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 29, 'question': "Do you ensure children's safety during all learning and outdoor play activities? (No accidents, unsafe play, or lack of safety tools…)", 'translate': 'Bạn có đảm bảo an toàn cho trẻ trong suốt các hoạt động học tập và vui chơi ngoài trời không? (Không để xảy ra tai nạn, trẻ chơi sai cách, thiếu dụng cụ an toàn…)', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 30, 'question': 'For boarding care: Do you maintain hygiene during mealtime, distribute food in the correct portions, and support children to eat enough according to the menu?', 'translate': '', 'user_score': 5, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 31, 'question': 'Do you ensure personal hygiene, sleep, clothing, toilet routines, and clean handling of personal items for children?', 'translate': 'Bạn có đảm bảo công tác chăm sóc trẻ: vệ sinh cá nhân, giấc ngủ, trang phục, hỗ trợ trẻ đi vệ sinh đúng quy trình và xử lý đồ dùng cá nhân sạch sẽ không?', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 32, 'question': 'Did any child experience weight loss, no weight gain, or health issues this month due to your fault?', 'translate': 'Trong tháng, có tình trạng trẻ bị sụt cân, không lên cân, hoặc sức khỏe trẻ bị ảnh hưởng do lỗi của bạn không?', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 33, 'question': 'Do you complete all assigned extra duties such as updating the app, submitting assignments on time, and fully participating in festivals and meetings?', 'translate': 'Bạn có thực hiện đầy đủ các công việc được phân công thêm: cập nhật app, nộp bài tập chuyên môn đúng hạn, tham gia đầy đủ lễ hội và họp không?', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 34, 'question': "Do you collaborate well with parents and colleagues in caring for, educating children, and preserving facilities? (Put toys away, keep areas clean, work with parents to solve children's issues…)", 'translate': 'Bạn có phối hợp tốt với phụ huynh và đồng nghiệp trong công tác chăm sóc, giáo dục trẻ và bảo quản cơ sở vật chất không? (Cất đồ chơi đúng chỗ, giữ vệ sinh khu vực phụ trách, phối hợp phụ huynh giải quyết các vấn đề của trẻ…)', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 35, 'question': "Have you been negatively reported by parents, caught on camera, or caused incidents that harmed the school's reputation this month?", 'translate': 'Trong tháng, bạn có bị phụ huynh/phản ánh tiêu cực, bị trích xuất camera, hoặc để xảy ra sự cố ảnh hưởng uy tín nhà trường không?', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}]
+2025-08-05 14:45:53,935 [DEBUG] Tổng điểm: {'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None}
+2025-08-05 14:45:53,936 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:53] "GET /api/last-assessment?year=2025&month=8 HTTP/1.1" 200 -
+2025-08-05 14:45:54,127 [INFO] Đang lấy kết quả đánh giá trước cho ten_tk=ngocngoan
+2025-08-05 14:45:54,127 [INFO] Đang kiểm tra vai trò cho ten_tk=ngocngoan
+2025-08-05 14:45:54,130 [DEBUG] Người dùng hợp lệ: ten_tk=ngocngoan, role=user
+2025-08-05 14:45:54,130 [DEBUG] Month value being used: None
+2025-08-05 14:45:54,134 [DEBUG] Đã lấy kết quả đánh giá: [{'id': 26, 'question': 'Do you strictly comply with working hours this month? (Late arrivals, unpermitted absences, non-participation in collective activities…)', 'translate': '', 'user_score': 8, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 27, 'question': 'Do you fully and correctly implement professional activities: etiquette, weekly activities, morning exercise, learning activities, corner activities, and outdoor activities?', 'translate': 'Bạn có thực hiện đầy đủ và đúng quy trình các hoạt động chuyên môn: lễ giáo, sinh hoạt đầu tuần, thể dục sáng, hoạt động học, hoạt động góc, hoạt động ngoài trời không?', 'user_score': 14, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 28, 'question': 'Do you prepare teaching aids, music, and tools sufficiently and follow proper teaching methods in professional activities? (Be proactive, memorize demonstration movements, model activities for children…)', 'translate': '', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 29, 'question': "Do you ensure children's safety during all learning and outdoor play activities? (No accidents, unsafe play, or lack of safety tools…)", 'translate': 'Bạn có đảm bảo an toàn cho trẻ trong suốt các hoạt động học tập và vui chơi ngoài trời không? (Không để xảy ra tai nạn, trẻ chơi sai cách, thiếu dụng cụ an toàn…)', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 30, 'question': 'For boarding care: Do you maintain hygiene during mealtime, distribute food in the correct portions, and support children to eat enough according to the menu?', 'translate': '', 'user_score': 5, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 31, 'question': 'Do you ensure personal hygiene, sleep, clothing, toilet routines, and clean handling of personal items for children?', 'translate': 'Bạn có đảm bảo công tác chăm sóc trẻ: vệ sinh cá nhân, giấc ngủ, trang phục, hỗ trợ trẻ đi vệ sinh đúng quy trình và xử lý đồ dùng cá nhân sạch sẽ không?', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 32, 'question': 'Did any child experience weight loss, no weight gain, or health issues this month due to your fault?', 'translate': 'Trong tháng, có tình trạng trẻ bị sụt cân, không lên cân, hoặc sức khỏe trẻ bị ảnh hưởng do lỗi của bạn không?', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 33, 'question': 'Do you complete all assigned extra duties such as updating the app, submitting assignments on time, and fully participating in festivals and meetings?', 'translate': 'Bạn có thực hiện đầy đủ các công việc được phân công thêm: cập nhật app, nộp bài tập chuyên môn đúng hạn, tham gia đầy đủ lễ hội và họp không?', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 34, 'question': "Do you collaborate well with parents and colleagues in caring for, educating children, and preserving facilities? (Put toys away, keep areas clean, work with parents to solve children's issues…)", 'translate': 'Bạn có phối hợp tốt với phụ huynh và đồng nghiệp trong công tác chăm sóc, giáo dục trẻ và bảo quản cơ sở vật chất không? (Cất đồ chơi đúng chỗ, giữ vệ sinh khu vực phụ trách, phối hợp phụ huynh giải quyết các vấn đề của trẻ…)', 'user_score': 15, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}, {'id': 35, 'question': "Have you been negatively reported by parents, caught on camera, or caused incidents that harmed the school's reputation this month?", 'translate': 'Trong tháng, bạn có bị phụ huynh/phản ánh tiêu cực, bị trích xuất camera, hoặc để xảy ra sự cố ảnh hưởng uy tín nhà trường không?', 'user_score': 10, 'sup_score': None, 'year': 2025, 'month': 8, 'user_comment': '', 'sup_comment': ''}]
+2025-08-05 14:45:54,135 [DEBUG] Tổng điểm: {'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None}
+2025-08-05 14:45:54,135 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:54] "GET /api/last-assessment HTTP/1.1" 200 -
+2025-08-05 14:45:54,459 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:54] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-08-05 14:45:54,766 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:54] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 14:45:55,030 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:55] "GET /login HTTP/1.1" 200 -
+2025-08-05 14:45:55,072 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:55] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:45:55,350 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:55] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:45:57,471 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:57] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 14:45:57,784 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:57] "GET /dashboard HTTP/1.1" 200 -
+2025-08-05 14:45:58,039 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:58] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:45:58,115 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:58] "GET /employees HTTP/1.1" 200 -
+2025-08-05 14:45:58,116 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:58] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 14:45:58,122 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:58] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 14:45:58,377 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:58] "GET /fetch_hs HTTP/1.1" 200 -
+2025-08-05 14:45:58,437 [INFO] 127.0.0.1 - - [05/Aug/2025 14:45:58] "GET /fetch_gv HTTP/1.1" 200 -
+2025-08-05 17:13:09,271 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-05 17:13:09,271 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-05 17:13:13,313 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:13] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 17:13:14,531 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:14] "GET /login HTTP/1.1" 200 -
+2025-08-05 17:13:14,970 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:14] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:13:14,977 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:14] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:13:15,177 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:15] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-05 17:13:17,647 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:17] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 17:13:18,211 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "GET /dashboard HTTP/1.1" 200 -
+2025-08-05 17:13:18,451 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:13:18,590 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:13:18,591 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:13:18,598 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:13:18,808 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "GET /fetch_gv HTTP/1.1" 200 -
+2025-08-05 17:13:18,922 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:18] "GET /fetch_hs HTTP/1.1" 200 -
+2025-08-05 17:13:21,561 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:21] "GET /fetch_gv HTTP/1.1" 200 -
+2025-08-05 17:13:32,232 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:32] "POST /update HTTP/1.1" 200 -
+2025-08-05 17:13:39,087 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:39] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:13:39,442 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:39] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:13:39,794 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:13:39,814 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:39] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:13:46,627 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:46] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:13:46,953 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:46] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:13:46,999 [INFO] 127.0.0.1 - - [05/Aug/2025 17:13:46] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:17:23,055 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:23] "GET /dashboard?page=/data_epa HTTP/1.1" 200 -
+2025-08-05 17:17:23,301 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:23] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:17:23,383 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:23] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:17:23,383 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:23] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:17:23,440 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:23] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:17:23,637 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:17:23,637 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:23] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:17:28,132 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:28] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:17:28,434 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:28] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:17:28,449 [INFO] 127.0.0.1 - - [05/Aug/2025 17:17:28] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:20:09,018 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:09] "GET /dashboard?page=/data_epa HTTP/1.1" 200 -
+2025-08-05 17:20:09,629 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:09] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:20:09,943 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:09] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:20:10,140 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:10] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:20:10,141 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:10] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:20:10,522 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:10] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:20:10,543 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:10] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:20:10,874 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:10] "GET /static/css/modern.css HTTP/1.1" 200 -
+2025-08-05 17:20:11,871 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:20:11,872 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:11] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:20:43,324 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "GET /dashboard?page=/data_epa HTTP/1.1" 200 -
+2025-08-05 17:20:43,649 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:20:43,649 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:20:43,653 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:20:43,899 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:20:43,964 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:20:43,980 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:43] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:20:44,278 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:20:44,279 [INFO] 127.0.0.1 - - [05/Aug/2025 17:20:44] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:21:26,412 [INFO] 127.0.0.1 - - [05/Aug/2025 17:21:26] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:21:26,715 [INFO] 127.0.0.1 - - [05/Aug/2025 17:21:26] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:21:26,721 [INFO] 127.0.0.1 - - [05/Aug/2025 17:21:26] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:22:58,204 [INFO] 127.0.0.1 - - [05/Aug/2025 17:22:58] "GET /dashboard?page=/data_epa HTTP/1.1" 200 -
+2025-08-05 17:22:58,798 [INFO] 127.0.0.1 - - [05/Aug/2025 17:22:58] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:22:59,100 [INFO] 127.0.0.1 - - [05/Aug/2025 17:22:59] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:22:59,267 [INFO] 127.0.0.1 - - [05/Aug/2025 17:22:59] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:22:59,268 [INFO] 127.0.0.1 - - [05/Aug/2025 17:22:59] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:22:59,999 [INFO] 127.0.0.1 - - [05/Aug/2025 17:22:59] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:23:00,017 [INFO] 127.0.0.1 - - [05/Aug/2025 17:23:00] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:23:00,335 [INFO] 127.0.0.1 - - [05/Aug/2025 17:23:00] "GET /static/css/modern.css HTTP/1.1" 200 -
+2025-08-05 17:23:01,051 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:23:01,051 [INFO] 127.0.0.1 - - [05/Aug/2025 17:23:01] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:25:01,069 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:01] "GET /dashboard?page=/data_epa HTTP/1.1" 200 -
+2025-08-05 17:25:01,662 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:01] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:25:01,965 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:01] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:25:02,207 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:02] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:25:02,208 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:02] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:25:02,864 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:02] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:25:02,880 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:02] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:25:03,214 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:03] "GET /static/css/modern.css HTTP/1.1" 200 -
+2025-08-05 17:25:03,919 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:25:03,919 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:03] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:25:37,188 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:37] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:25:37,189 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:37] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:25:37,432 [INFO] 127.0.0.1 - - [05/Aug/2025 17:25:37] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:26:47,721 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:47] "GET /dashboard?page=/data_epa HTTP/1.1" 200 -
+2025-08-05 17:26:48,313 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:48] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:26:48,622 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:48] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:26:48,773 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:48] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:26:48,833 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:48] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:26:49,509 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:49] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:26:49,514 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:49] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 17:26:49,846 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:49] "GET /static/css/modern.css HTTP/1.1" 200 -
+2025-08-05 17:26:50,555 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 17:26:50,555 [INFO] 127.0.0.1 - - [05/Aug/2025 17:26:50] "GET /api/epa-full HTTP/1.1" 200 -
+2025-08-05 17:27:05,774 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:05] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-08-05 17:27:05,775 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:05] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:27:06,032 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:06] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:27:33,741 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:33] "GET /epa_summary HTTP/1.1" 200 -
+2025-08-05 17:27:34,059 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:34] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:27:34,322 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:34] "GET /api/list_ten_tk HTTP/1.1" 200 -
+2025-08-05 17:27:34,565 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:34] "GET /admin/questions HTTP/1.1" 200 -
+2025-08-05 17:27:34,885 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:34] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:27:35,150 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:35] "GET /api/cauhoi_epa HTTP/1.1" 200 -
+2025-08-05 17:27:35,436 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:35] "GET /thoigianmoepa HTTP/1.1" 200 -
+2025-08-05 17:27:35,751 [INFO] 127.0.0.1 - - [05/Aug/2025 17:27:35] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:48:22,144 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-05 17:48:22,144 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-05 17:48:23,748 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:23] "[32mGET / HTTP/1.1[0m" 302 -
+2025-08-05 17:48:24,060 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:24] "GET /login HTTP/1.1" 200 -
+2025-08-05 17:48:24,140 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:24] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:48:24,380 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:24] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:48:24,858 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:24] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-05 17:48:26,356 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:26] "[32mPOST /login HTTP/1.1[0m" 302 -
+2025-08-05 17:48:26,668 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:26] "GET /dashboard HTTP/1.1" 200 -
+2025-08-05 17:48:26,921 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:26] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:48:27,007 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:27] "GET /employees HTTP/1.1" 200 -
+2025-08-05 17:48:27,007 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:27] "[36mGET /static/mnhhd.jpg HTTP/1.1[0m" 304 -
+2025-08-05 17:48:27,015 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:27] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 17:48:27,247 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:27] "GET /fetch_hs HTTP/1.1" 200 -
+2025-08-05 17:48:27,338 [INFO] 127.0.0.1 - - [05/Aug/2025 17:48:27] "GET /fetch_gv HTTP/1.1" 200 -
+2025-08-05 18:04:16,623 [INFO] 127.0.0.1 - - [05/Aug/2025 18:04:16] "GET /data_epa HTTP/1.1" 200 -
+2025-08-05 18:04:16,873 [INFO] 127.0.0.1 - - [05/Aug/2025 18:04:16] "[36mGET /static/css/modern.css HTTP/1.1[0m" 304 -
+2025-08-05 18:04:16,949 [INFO] [DEBUG] Dữ liệu EPA cho năm 2025: [{'id': 1, 'ten_tk': 'ngocngoan', 'ho_va_ten': 'Quách Ngọc Ngoan', 'chuc_vu': 'TGV1', 'year': 2025, 'month': 8, 'user_total_score': 117, 'sup_total_score': 0, 'pri_total_score': None, 'pri_comment': None, 'xeploai': 'Chưa Hoàn Thành'}]
+2025-08-05 18:04:16,950 [INFO] 127.0.0.1 - - [05/Aug/2025 18:04:16] "GET /api/epa-full HTTP/1.1" 200 -

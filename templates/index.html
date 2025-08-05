@@ -240,6 +240,18 @@
       text-decoration: none;
     }
     
+    .btn-logout {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+      border-color: #dc2626 !important;
+    }
+    
+    .btn-logout:hover {
+      background: #b91c1c !important;
+      border-color: #b91c1c !important;
+      color: #ffffff !important;
+    }
+    
     .user-info {
       display: flex;
       align-items: center;
@@ -282,7 +294,7 @@
     .content-area {
       flex: 1;
       padding: var(--spacing-lg);
-      overflow-y: auto;
+      overflow: auto; /* Cho phép scroll cả ngang và dọc */
     }
     
     .content-frame {
@@ -293,6 +305,7 @@
       background: var(--bg-primary);
       box-shadow: var(--shadow);
       transition: all var(--transition-normal);
+      overflow: auto; /* Đảm bảo iframe có thể scroll */
     }
     
     .content-frame:hover {
@@ -547,6 +560,10 @@
             <i class="fas fa-key"></i>
             <span>Đổi MK</span>
           </button>
+          <a class="btn-topbar btn-logout" href="/logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Đăng Xuất</span>
+          </a>
           <div class="user-info">
             <div class="user-avatar">
               {{ user[0].upper() if user else 'U' }}
