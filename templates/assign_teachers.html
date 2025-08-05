@@ -136,7 +136,7 @@ document.getElementById('assign-teacher-form').addEventListener('submit', async 
           </td>
           <td>
             <select onchange="updateField('${item.ma_gv}', 'vai_tro', this.value)">
-              ${['GIÁO VIÊN MẪU GIÁO','GIÁO VIÊN NHÀ TRẺ','NHÂN VIÊN CẤP DƯỠNG'].map(v => `<option ${v === item.vai_tro ? 'selected' : ''}>${v}</option>`).join('')}
+              ${['GIÁO VIÊN MẪU GIÁO','GIÁO VIÊN NHÀ TRẺ','NHÂN VIÊN CẤP DƯỠNG'].map(v => `<option value="${v}" ${v === item.vai_tro ? 'selected' : ''}>${v}</option>`).join('')}
             </select>
           </td>
           <td>

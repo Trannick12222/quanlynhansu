@@ -338,9 +338,7 @@
     <button disabled="" id="submit-btn" class="btn-primary-modern">
       <i class="fas fa-paper-plane"></i> Gửi Đánh Giá
     </button>
-    <button type="button" onclick="testTextareaInput()" class="btn-secondary-modern" style="margin-left: 10px;">
-      <i class="fas fa-bug"></i> Test Textarea (Debug)
-    </button>
+
     <div id="form-message"></div>
   </div>
 <script>
@@ -626,34 +624,7 @@
             }
         }
 
-        // Debug function to test textarea input
-        function testTextareaInput() {
-            const firstTextarea = document.querySelector('textarea[id^="user-comment-"]');
-            if (firstTextarea) {
-                console.log('=== TESTING TEXTAREA INPUT ===');
-                console.log('Original length:', firstTextarea.value.length);
-                console.log('Original maxlength:', firstTextarea.getAttribute('maxlength'));
-                
-                // Remove maxlength temporarily
-                firstTextarea.removeAttribute('maxlength');
-                
-                const testText = 'Test dài tới 100 ký tự: ' + 'ABCDEFGHIJ'.repeat(10) + ' - END';
-                console.log('Setting test text with length:', testText.length);
-                
-                firstTextarea.value = testText;
-                firstTextarea.dispatchEvent(new Event('input'));
-                
-                console.log('Final length after set:', firstTextarea.value.length);
-                console.log('Final value:', firstTextarea.value);
-                
-                // Restore maxlength
-                firstTextarea.setAttribute('maxlength', '1000');
-                
-                alert(`TEST RESULTS:\nOriginal: ${firstTextarea.value.length > 29 ? 'PASSED' : 'FAILED'}\nCurrent length: ${firstTextarea.value.length}\nTarget: 130+ chars`);
-            } else {
-                alert('Không tìm thấy textarea để test!');
-            }
-        }
+
 
         async function loadLastAssessment() {
             try {

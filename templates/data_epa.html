@@ -52,9 +52,16 @@
     }
     
     .page-subtitle {
-      font-size: var(--text-sm);
-      opacity: 0.9;
+      font-size: var(--text-lg);
+      color: #ffffff;
+      font-weight: var(--font-bold);
       margin-top: var(--spacing-xs);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      opacity: 1;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--border-radius);
+      display: inline-block;
     }
     
     .filter-panel {
@@ -513,10 +520,7 @@
           <i class="fas fa-file-pdf"></i>
           Xuất PDF
         </button>
-        <button class="btn btn-secondary" onclick="testCommentTextarea()" style="margin-left: 10px;">
-          <i class="fas fa-bug"></i>
-          Test Textarea (Debug)
-        </button>
+
       </div>
     </div>
     
@@ -784,30 +788,7 @@ function updateCommentCharCount(textarea) {
   }
 }
 
-// Debug function for testing textarea input
-function testCommentTextarea() {
-  const firstTextarea = document.querySelector('textarea[id^="comment-"]');
-  if (firstTextarea) {
-    console.log('=== TESTING COMMENT TEXTAREA INPUT ===');
-    console.log('Original length:', firstTextarea.value.length);
-    console.log('Original maxlength:', firstTextarea.getAttribute('maxlength'));
-    
-    // Test with long text
-    const testText = 'Test dài cho HT/PHT: ' + 'ABCDEFGHIJ'.repeat(15) + ' - END của đoạn nhận xét này';
-    console.log('Setting test text with length:', testText.length);
-    
-    firstTextarea.value = testText;
-    firstTextarea.dispatchEvent(new Event('input'));
-    updateCommentCharCount(firstTextarea);
-    
-    console.log('Final length after set:', firstTextarea.value.length);
-    console.log('Final value:', firstTextarea.value);
-    
-    alert(`TEST RESULTS:\\nCurrent length: ${firstTextarea.value.length}\\nTarget: 150+ chars\\nStatus: ${firstTextarea.value.length > 150 ? 'PASSED' : 'FAILED'}`);
-  } else {
-    alert('Không tìm thấy textarea để test!');
-  }
-}
+
 
 function exportEPAtoPDF() {
   const sourceTable = document.querySelector("#epa-table-container table");
