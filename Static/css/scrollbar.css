@@ -1,0 +1,184 @@
+/* 
+ * Custom Scrollbar Styles
+ * Extracted from data_epa.html for reuse across all templates
+ */
+
+/* Custom scrollbar cho body - Scrollbar ngang cho toàn trang */
+body {
+  overflow-x: auto; /* Buộc hiển thị scrollbar ngang */
+  min-width: 1400px; /* Đảm bảo body đủ rộng */
+}
+
+/* Custom scrollbar cho body */
+body::-webkit-scrollbar {
+  height: 14px; /* Scrollbar ngang cao hơn */
+  width: 14px; /* Scrollbar dọc */
+}
+
+body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 7px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #3b82f6; /* Màu xanh nổi bật */
+  border-radius: 7px;
+  border: 2px solid #f1f5f9;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: #2563eb; /* Xanh đậm khi hover */
+}
+
+/* Container fluid styling để hỗ trợ scrollbar */
+.container-fluid {
+  width: 100%;
+  min-width: 1400px; /* Đảm bảo container đủ rộng */
+  padding: 0 var(--spacing-sm, 12px);
+}
+
+/* Custom scrollbar cho table container */
+.table-container {
+  background: var(--bg-primary, #ffffff);
+  border-radius: var(--border-radius-lg, 12px);
+  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  overflow: auto;
+  width: 100%;
+  min-width: 1200px; /* Đảm bảo bảng có kích thước tối thiểu */
+  position: relative;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  overflow-y: visible;
+  border: 1px solid var(--gray-300, #d1d5db);
+  border-radius: var(--border-radius, 8px);
+  background: var(--bg-primary, #ffffff);
+}
+
+/* Custom scrollbar styling cho table */
+.table-responsive::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+  border: 2px solid #f1f5f9;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Thêm shadow cho table để làm rõ ranh giới khi scroll */
+.table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(to left, rgba(0,0,0,0.1), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Styling cho bảng để hỗ trợ scrollbar */
+.scrollable-table {
+  margin: 0;
+  table-layout: auto; /* Thay đổi từ fixed sang auto để có thể mở rộng */
+  width: 100%;
+  min-width: 1400px; /* Đặt kích thước tối thiểu cho bảng */
+}
+
+/* Custom scrollbar cho các div có class scrollable */
+.scrollable {
+  overflow: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 5px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 5px;
+  border: 1px solid #f1f5f9;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Custom scrollbar cho modal và popup */
+.modal-body {
+  overflow: auto;
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    min-width: 768px; /* Giảm min-width cho mobile */
+  }
+  
+  .container-fluid {
+    min-width: 768px;
+  }
+  
+  .table-container {
+    min-width: 600px;
+  }
+  
+  .scrollable-table {
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    min-width: 480px;
+  }
+  
+  .container-fluid {
+    min-width: 480px;
+  }
+  
+  .table-container {
+    min-width: 400px;
+  }
+  
+  .scrollable-table {
+    min-width: 600px;
+  }
+}

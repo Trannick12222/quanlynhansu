@@ -297,11 +297,12 @@ def get_assessment_period():
                     can_assess = True
                     is_open = True
             
-            # Kiểm tra giai đoạn 2: TGV chấm điểm (chỉ sau khi giai đoạn 1 kết thúc)
+            # Kiểm tra giai đoạn 2: TGV chấm điểm tổ viên (KHÔNG thể tự chấm)
             elif current_day > phase1_end and phase2_start <= current_day <= phase2_end:
                 current_phase = 2
-                phase_name = "TGV Chấm Điểm"
-                if make_epa_all == "yes" or (role == "supervisor" and make_epa_tgv == "yes") or role == "admin":
+                phase_name = "TGV Chấm Tổ Viên"
+                # TGV KHÔNG thể tự đánh giá trong giai đoạn 2, chỉ admin mới có thể
+                if make_epa_all == "yes" or role == "admin":
                     can_assess = True
                     is_open = True
             

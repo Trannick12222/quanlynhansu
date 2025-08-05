@@ -15,6 +15,7 @@
   
   <!-- Custom CSS -->
   <link href="{{ url_for('static_files', filename='css/modern.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static_files', filename='css/scrollbar.css') }}" rel="stylesheet">
   
   <style>
     body {
@@ -383,7 +384,7 @@
                     if (currentPhase && currentPhase.includes('Phase 3')) {
                         msg += `<div class="status-message error">⛔ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn HT/PHT đánh giá.</div>`;
                     } else if (currentPhase && currentPhase.includes('Phase 2')) {
-                        msg += `<div class="status-message warning">⏳ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn TGV đánh giá.</div>`;
+                        msg += `<div class="status-message warning">⏳ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn TGV chấm điểm tổ viên (không thể tự chấm).</div>`;
                     } else if (currentPhase && currentPhase.includes('Phase 1')) {
                         msg += `<div class="status-message success">⌚ Đang trong giai đoạn tự đánh giá - kiểm tra quyền truy cập...</div>`;
                         console.log('⚠️ WARNING: Phase 1 detected but isOpen=false. Checking user permissions...');
@@ -400,17 +401,23 @@
             } catch (error) {
                 console.error('Lỗi kiểm tra thời gian:', error);
                 document.getElementById('period-message').innerHTML =
-                    '<div class="status-message error">Lỗi khi kiểm tra thời gian.</div>';
+                    '<div class="status-message warning">⏳ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn TGV chấm điểm tổ viên (không thể tự chấm).</div>';
+                document.getElementById('submit-btn').disabled = true;
                 return false;
             }
         }
 
         async function loadQuestions() {
             try {
+                console.log('🔄 Loading questions...');
                 const response = await fetch(`${API_BASE_URL}/epa-questions`);
                 const data = await response.json();
                 debugLog('Danh sách câu hỏi:', data);
-                if (!response.ok) throw new Error(data.message || 'Lỗi khi tải câu hỏi');
+                
+                if (!response.ok) {
+                    console.error('❌ Failed to load questions:', data.message);
+                    throw new Error(data.message || 'Lỗi khi tải câu hỏi');
+                }
                 const formDiv = document.getElementById('assessment-form');
                 const isSupervisorOrAdmin = userRole === 'supervisor' || userRole === 'admin';
                 formDiv.innerHTML = data.questions.slice(0, 10).map((q, index) => `
@@ -487,8 +494,7 @@
                     });
                 });
                 
-                // Load existing data into form if available
-                await loadExistingDataIntoForm();
+                console.log('✅ Questions loaded successfully');
             } catch (error) {
                 debugLog('Lỗi tải câu hỏi:', error);
                 document.getElementById('assessment-form').innerHTML = '<div class="status-message error">Không thể tải câu hỏi.</div>';
@@ -542,48 +548,63 @@
                 const month = now.getMonth() + 1;
                 
                 console.log('=== LOADING EXISTING DATA INTO FORM ===');
+                console.log(`🔍 Requesting: ${API_BASE_URL}/last-assessment?year=${year}&month=${month}`);
+                
                 const response = await fetch(`${API_BASE_URL}/last-assessment?year=${year}&month=${month}`);
+                console.log('📡 Response status:', response.status, 'OK:', response.ok);
+                
                 const data = await response.json();
+                console.log('📄 Response data:', data);
                 
                 if (response.ok && data.assessments && data.assessments.length > 0) {
                     console.log('Found existing assessments:', data.assessments.length);
                     
-                    // Create a map for quick lookup
-                    const assessmentMap = {};
-                    data.assessments.forEach(assessment => {
-                        // Try to match by question content
-                        const questionKey = assessment.question.substring(0, 50); // First 50 chars as key
-                        assessmentMap[questionKey] = assessment;
+                    // Use index-based matching since questions in DB don't have numbers
+                    console.log('📊 Assessment data for matching:');
+                    data.assessments.forEach((assessment, index) => {
+                        console.log(`  ${index + 1}. "${assessment.question.substring(0, 60)}..." - User: ${assessment.user_score}, Sup: ${assessment.sup_score}`);
                     });
                     
                     // Populate form fields
                     const questions = document.querySelectorAll('.question');
+                    console.log(`🔍 Found ${questions.length} question elements in DOM`);
+                    
+                    if (questions.length === 0) {
+                        console.error('❌ No question elements found! Form may not be loaded yet.');
+                        return;
+                    }
+                    
                     questions.forEach((questionDiv, index) => {
-                        const questionText = questionDiv.querySelector('p strong').textContent;
-                        const questionKey = questionText.substring(3, 53); // Remove "1. " and take first 50 chars
+                        const questionNumber = index + 1;
+                        const questionText = questionDiv.querySelector('p strong')?.textContent || 'No text found';
                         
-                        console.log(`Question ${index + 1}: Looking for key "${questionKey}"`);
+                        console.log(`Question ${questionNumber}: "${questionText}"`);
                         
-                        // Find matching assessment
-                        let matchedAssessment = null;
-                        for (const [key, assessment] of Object.entries(assessmentMap)) {
-                            if (key.includes(questionKey) || questionKey.includes(key)) {
-                                matchedAssessment = assessment;
-                                break;
-                            }
+                        // Use index-based matching (questions are in same order)
+                        const matchedAssessment = data.assessments[index];
+                        
+                        if (!matchedAssessment) {
+                            console.log(`❌ No assessment found at index ${index} for question ${questionNumber}`);
                         }
                         
                         if (matchedAssessment) {
-                            console.log(`Found match for question ${index + 1}:`, matchedAssessment);
+                            console.log(`✅ Found match for question ${questionNumber}:`, matchedAssessment);
                             
                             // Get question ID from the first input
                             const scoreInput = questionDiv.querySelector('input[type="number"]');
                             if (scoreInput) {
                                 const questionId = scoreInput.id.split('-')[1];
+                                console.log(`📝 Processing question ${questionNumber} with ID: ${questionId}`);
                                 
                                 // Populate user score and comment
-                                if (matchedAssessment.user_score) {
-                                    document.getElementById(`score-${questionId}`).value = matchedAssessment.user_score;
+                                if (matchedAssessment.user_score !== null && matchedAssessment.user_score !== undefined) {
+                                    const userScoreElement = document.getElementById(`score-${questionId}`);
+                                    if (userScoreElement) {
+                                        userScoreElement.value = matchedAssessment.user_score;
+                                        console.log(`✅ Set user score ${questionId}: ${matchedAssessment.user_score}`);
+                                    } else {
+                                        console.error(`❌ Element score-${questionId} not found`);
+                                    }
                                 }
                                 
                                 if (matchedAssessment.user_comment) {
@@ -594,10 +615,15 @@
                                 }
                                 
                                 // Populate supervisor score and comment if user has permission
-                                if (matchedAssessment.sup_score) {
+                                if (matchedAssessment.sup_score !== null && matchedAssessment.sup_score !== undefined) {
                                     const supScoreInput = document.getElementById(`sup-score-${questionId}`);
-                                    if (!supScoreInput.disabled) {
+                                    if (supScoreInput && !supScoreInput.disabled) {
                                         supScoreInput.value = matchedAssessment.sup_score;
+                                        console.log(`✅ Set sup score ${questionId}: ${matchedAssessment.sup_score}`);
+                                    } else if (supScoreInput && supScoreInput.disabled) {
+                                        console.log(`⚠️ Sup score input ${questionId} is disabled`);
+                                    } else {
+                                        console.error(`❌ Element sup-score-${questionId} not found`);
                                     }
                                 }
                                 
@@ -609,8 +635,6 @@
                                     }
                                 }
                             }
-                        } else {
-                            console.log(`No match found for question ${index + 1}`);
                         }
                     });
                     
@@ -753,14 +777,9 @@
                 }
                 
                 document.getElementById('form-message').innerHTML = '<div class="status-message success">✅ Đánh giá đã được gửi thành công!</div>';
-                questionInputs.forEach(inputGroup => {
-                    const questionId = inputGroup.querySelector('input[type="number"]').id.split('-')[1];
-                    inputGroup.querySelector(`#score-${questionId}`).value = '';
-                    inputGroup.querySelector(`#sup-score-${questionId}`).value = '';
-                    inputGroup.querySelector(`#user-comment-${questionId}`).value = '';
-                    const supCommentInput = inputGroup.querySelector(`#sup-comment-${questionId}`);
-                    if (!supCommentInput.disabled) supCommentInput.value = '';
-                });
+                
+                // Không reset form nữa, thay vào đó reload dữ liệu mới
+                await loadExistingDataIntoForm();
                 updateTotalScore();
                 loadLastAssessment();
             } catch (error) {
@@ -773,9 +792,30 @@
         async function init() {
             debugLog('Khởi tạo trang');
             const isOpen = await checkAssessmentPeriod();
-            if (isOpen) {
-                await loadQuestions();
+            
+            // Always load questions first
+            await loadQuestions();
+            
+            // Wait a bit to ensure DOM is ready, then load existing data
+            setTimeout(async () => {
+                await loadExistingDataIntoForm();
+            }, 100);
+            
+            // Only enable form submission if assessment period is open
+            if (!isOpen) {
+                // Disable all input fields if assessment period is closed
+                setTimeout(() => {
+                    const inputs = document.querySelectorAll('#assessment-form input, #assessment-form textarea');
+                    inputs.forEach(input => {
+                        if (!input.disabled) {
+                            input.disabled = true;
+                            input.style.backgroundColor = '#f8f9fa';
+                            input.style.color = '#6c757d';
+                        }
+                    });
+                }, 200);
             }
+            
             await loadLastAssessment();
             document.getElementById('submit-btn').addEventListener('click', submitAssessment);
         }
