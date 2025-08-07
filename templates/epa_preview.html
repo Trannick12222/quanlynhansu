@@ -19,7 +19,7 @@
 .question-content {
   background-color: white;
   padding: 15px;
-  border-left: 4px solid #0066cc;
+  border-left: 4px solid #16a34a;
   margin-bottom: 15px;
   border-radius: 4px;
   font-size: 14px;
@@ -191,7 +191,7 @@
             <p class="highlight">Năm: ${data.assessments[0].year}, Tháng: ${data.assessments[0].month}</p>
             ${data.assessments.map((a, index) => `
               <div class="assessment-entry">
-                <div style="font-weight: bold; color: #0066cc; margin-bottom: 10px; font-size: 16px;">
+                <div style="font-weight: bold; color: #16a34a; margin-bottom: 10px; font-size: 16px;">
                   📋 Câu ${index + 1}
                 </div>
                 <div class="question-content">
@@ -201,16 +201,16 @@
                 <div class="score-grid">
                   <div class="score-item self-score">
                     <strong>Điểm tự chấm</strong><br>
-                    <span style="font-size: 24px; font-weight: bold; color: #28a745;">${a.user_score || 'N/A'}</span>
+                    <span style="font-size: 24px; font-weight: bold; color: #16a34a;">${a.user_score || 'N/A'}</span>
                   </div>
                   <div class="score-item sup-score">
                     <strong>Điểm tổ trưởng</strong><br>
-                    <span style="font-size: 24px; font-weight: bold; color: #856404;">${a.sup_score || 'Chưa chấm'}</span>
+                    <span style="font-size: 24px; font-weight: bold; color: #15803d;">${a.sup_score || 'Chưa chấm'}</span>
                   </div>
                 </div>
                 <div class="comment-grid">
                   <div class="comment-item self-comment">
-                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #155724;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #15803d;">
                       💭 Ý kiến cá nhân:
                     </div>
                     <div style="font-size: 15px; line-height: 1.6;">
@@ -218,7 +218,7 @@
                     </div>
                   </div>
                   <div class="comment-item sup-comment">
-                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #856404;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #15803d;">
                       👥 Ý kiến tổ trưởng:
                     </div>
                     <div style="font-size: 15px; line-height: 1.6;">

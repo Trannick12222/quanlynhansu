@@ -1,55 +1,166 @@
 <!DOCTYPE html>
-
 <html lang="vi">
 <head>
 <meta charset="utf-8"/>
-<title>Phân Lớp Học Sinh</title>
+<title>👶 Phân Lớp Học Sinh - Trường Mầm Non Hoa Hướng Dương</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-<link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250716" rel="stylesheet"/>
+
+<!-- TailwindCSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'neutral': {
+            'primary': '#16a34a',
+            'secondary': '#6b7280',
+            'accent': '#8b9aa8',
+            'muted': '#94a3b8',
+            'light': '#cbd5e1',
+            'lighter': '#e2e8f0',
+            'lightest': '#f1f5f9'
+          },
+          'background': {
+            'primary': '#f8fafc',
+            'secondary': '#f1f5f9',
+            'muted': '#e2e8f0',
+            'card': '#ffffff'
+          }
+        },
+        fontFamily: {
+          'system': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 </head>
-<body><div class="container-fluid mt-4"><div class="card"><div class="card-body">
-<div class="container-fluid py-5">
-<div class="header">
-<h4><i class="bi bi-list-ul"></i> Danh sách học sinh theo lớp</h4>
+<body class="bg-background-primary min-h-screen font-system">
+
+<style>
+.shadow-soft { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+.shadow-soft-lg { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+</style>
+
+<div class="container mx-auto p-4 max-w-full">
+  <div class="bg-white rounded-xl shadow-soft-lg border border-neutral-lighter overflow-hidden">
+    <!-- Header Section -->
+    <div class="bg-neutral-primary p-6 text-white">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-users text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-semibold">Phân Lớp Học Sinh</h1>
+            <p class="text-white/80 text-sm">Danh sách học sinh theo lớp</p>
+          </div>
+        </div>
+        <div class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+          #PhanLop
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-6">
+      <!-- Class Filter Section -->
+      <div class="bg-background-secondary/50 p-6 rounded-xl border border-neutral-lighter mb-6">
+        <label class="block text-neutral-secondary font-system font-semibold text-sm mb-3" for="selectClass">
+          <span class="mr-2">🏷️</span>Chọn Mã Lớp:
+        </label>
+        <select class="w-full max-w-md p-3 border border-neutral-light rounded-lg focus:border-neutral-primary focus:outline-none transition-colors duration-200 font-system bg-white" 
+                id="selectClass" onchange="filterByClass()">
+          <option value="All">🏠 -- Tất cả học sinh --</option>
+        </select>
+      </div>
+      
+      <!-- Students Table -->
+      <div class="bg-white rounded-xl shadow-soft border border-neutral-lighter overflow-hidden">
+        <div class="text-center text-xs text-neutral-muted py-2 bg-background-secondary border-b border-neutral-lighter">
+          <i class="fas fa-arrows-alt-h mr-1"></i>Cuộn ngang để xem tất cả thông tin 👆
+        </div>
+        <div class="overflow-x-auto">
+          <div class="min-w-max">
+            <table class="w-full">
+              <thead class="bg-neutral-lightest">
+                <tr>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-16 border-b border-neutral-lighter">STT</th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-28 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('ma_hs')">
+                    <span class="mr-1">🏷️</span>Mã HS 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-48 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('ho_va_ten')">
+                    <span class="mr-1">👶</span>Họ và Tên 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-40 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('ma_lop')">
+                    <span class="mr-1">🏠</span>Mã Lớp 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-48 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('ten_lop')">
+                    <span class="mr-1">🏫</span>Tên Lớp 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-32 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('ngay_sinh')">
+                    <span class="mr-1">🎂</span>Ngày Sinh 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-28 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('gioi_tinh')">
+                    <span class="mr-1">♂️♀️</span>Giới Tính 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                  <th class="px-4 py-3 text-neutral-secondary font-system font-semibold text-sm text-center min-w-40 border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                      onclick="sortBy('ma_dinh_danh')">
+                    <span class="mr-1">🆔</span>Mã Định Danh 
+                    <i class="fas fa-sort ml-1 opacity-60"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="studentTableBody">
+                <tr>
+                  <td colspan="8" class="px-6 py-12 text-center text-neutral-muted">
+                    <div class="flex flex-col items-center space-y-4">
+                      <span class="text-4xl">👶</span>
+                      <div class="font-system text-sm">Đang tải dữ liệu học sinh...</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- Dropdown chọn Mã Lớp -->
-<div class="mb-4">
-<label class="form-label fw-semibold" for="selectClass">Chọn Mã Lớp</label>
-<select class="form-select w-50" id="selectClass" onchange="filterByClass()">
-<option value="All">-- Tất cả học sinh --</option>
-</select>
-</div>
-<!-- Bảng thông tin học sinh -->
-<div class="table-responsive">
-<table class="table table-bordered table-striped">
-<thead class="table-light text-center">
-<tr>
-<th>STT</th>
-<th onclick="sortBy('ma_hs')">Mã HS</th>
-<th onclick="sortBy('ho_va_ten')">Họ và Tên</th>
-<th onclick="sortBy('ma_lop')">Mã Lớp</th>
-<th onclick="sortBy('ten_lop')">Tên Lớp</th>
-<th onclick="sortBy('ngay_sinh')">Ngày Sinh</th>
-<th onclick="sortBy('gioi_tinh')">Giới Tính</th>
-<th onclick="sortBy('ma_dinh_danh')">Mã Định Danh</th>
-</tr>
-</thead>
-<tbody id="studentTableBody">
-<!-- Dữ liệu sẽ được render bằng JavaScript -->
-</tbody>
-</table>
-</div>
-</div>
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     let allStudents = [];
     let classList = [];
     let currentSort = {
       key: null,
-      direction: 'asc' // or 'desc'
+      direction: 'asc'
     };
 
     function sortBy(columnKey) {
@@ -64,7 +175,6 @@
         let valA = a[columnKey] || "";
         let valB = b[columnKey] || "";
 
-        // Chuyển ngày thành Date để so sánh nếu là 'ngay_sinh'
         if (columnKey === 'ngay_sinh') {
           valA = new Date(valA);
           valB = new Date(valB);
@@ -80,6 +190,7 @@
 
       renderStudents(sorted);
     }
+    
     function populateClassDropdown() {
       const select = document.getElementById("selectClass");
       classList.forEach(cls => {
@@ -108,59 +219,59 @@
         `).join("");
 
         return `
-          <tr data-ma-hs="${s.ma_hs}">
-            <td>${index + 1}</td>
-            <td>${s.ma_hs}</td>
-            <td>${s.ho_va_ten}</td>
-            <td>
-              <select class="form-select form-select-sm editable-ma-lop" onchange="updateStudentClass(this)"data-old-value="${s.ma_lop}">
+          <tr class="hover:bg-neutral-lighter/30 transition-colors duration-200 border-b border-neutral-lighter" data-ma-hs="${s.ma_hs}">
+            <td class="px-4 py-3 font-system font-semibold text-neutral-muted text-center min-w-16">${index + 1}</td>
+            <td class="px-4 py-3 font-system text-neutral-secondary text-center font-semibold min-w-28">${s.ma_hs}</td>
+            <td class="px-4 py-3 font-system text-neutral-secondary min-w-48">${s.ho_va_ten}</td>
+            <td class="px-4 py-3 min-w-40">
+              <select class="w-full p-2 border border-neutral-light rounded-lg focus:border-neutral-primary focus:outline-none transition-colors duration-200 font-system text-sm bg-white editable-ma-lop" 
+                      onchange="updateStudentClass(this)" data-old-value="${s.ma_lop}">
                 ${options}
               </select>
             </td>
-            <td class="ten-lop-cell">${s.ten_lop || ""}</td>
-            <td>${s.ngay_sinh || ""}</td>
-            <td>${s.gioi_tinh || ""}</td>
-            <td>${s.ma_dinh_danh || ""}</td>
+            <td class="px-4 py-3 font-system text-neutral-secondary min-w-48 ten-lop-cell">${s.ten_lop || ""}</td>
+            <td class="px-4 py-3 font-system text-neutral-secondary text-center min-w-32">${s.ngay_sinh || ""}</td>
+            <td class="px-4 py-3 font-system text-neutral-secondary text-center min-w-28">${s.gioi_tinh === 'Nữ' ? '👧 Nữ' : '👦 ' + (s.gioi_tinh || '')}</td>
+            <td class="px-4 py-3 font-system text-neutral-secondary text-center min-w-40">${s.ma_dinh_danh || ""}</td>
           </tr>
         `;
       }).join("");
     }
 
     async function updateStudentClass(selectEl) {
-    const newMaLop = selectEl.value;
-    const oldMaLop = selectEl.dataset.oldValue;
-    const row = selectEl.closest("tr");
-    const ma_hs = row.dataset.maHs;
+      const newMaLop = selectEl.value;
+      const oldMaLop = selectEl.dataset.oldValue;
+      const row = selectEl.closest("tr");
+      const ma_hs = row.dataset.maHs;
 
-    const lop = classList.find(c => c.ma_lop === newMaLop);
-    if (!lop) {
-      alert("❌ Mã lớp không hợp lệ!");
-      selectEl.value = oldMaLop; // reset nếu không hợp lệ
-      return;
+      const lop = classList.find(c => c.ma_lop === newMaLop);
+      if (!lop) {
+        alert("❌ Mã lớp không hợp lệ!");
+        selectEl.value = oldMaLop;
+        return;
+      }
+
+      const confirmChange = confirm(`Bạn có chắc muốn đổi mã lớp của học sinh ${ma_hs} thành ${newMaLop} không?`);
+      if (!confirmChange) {
+        selectEl.value = oldMaLop;
+        return;
+      }
+
+      const res = await fetch("/api/update-student-class", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ma_hs, ma_lop: newMaLop })
+      });
+
+      if (res.ok) {
+        alert(`✅ Đã cập nhật lớp cho ${ma_hs} thành công`);
+        await loadData();
+        filterByClass();
+      } else {
+        alert("❌ Không thể cập nhật vào cơ sở dữ liệu.");
+        selectEl.value = oldMaLop;
+      }
     }
-
-    const confirmChange = confirm(`Bạn có chắc muốn đổi mã lớp của học sinh ${ma_hs} thành ${newMaLop} không?`);
-    if (!confirmChange) {
-      // Khôi phục lại giá trị cũ nếu người dùng cancel
-      selectEl.value = oldMaLop;
-      return;
-    }
-
-    const res = await fetch("/api/update-student-class", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ma_hs, ma_lop: newMaLop })
-    });
-
-    if (res.ok) {
-      alert(`✅ Đã cập nhật lớp cho ${ma_hs} thành công`);
-      await loadData();
-      filterByClass();
-    } else {
-      alert("❌ Không thể cập nhật vào cơ sở dữ liệu.");
-      selectEl.value = oldMaLop; // reset lại nếu lỗi cập nhật
-    }
-  }
 
     async function loadData() {
       const [studentsRes, classesRes] = await Promise.all([
@@ -170,7 +281,6 @@
       allStudents = await studentsRes.json();
       classList = await classesRes.json();
       
-      // Làm mới dropdown mã lớp
       const select = document.getElementById("selectClass");
       const currentSelected = select.value || "All";
       select.innerHTML = `<option value="All">-- Tất cả học sinh --</option>`;
@@ -185,8 +295,7 @@
       filterByClass();
     }
 
-
     window.onload = loadData;
-  </script>
-</div></div></div></body>
+</script>
+</body>
 </html>

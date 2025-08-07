@@ -1,143 +1,83 @@
 <!DOCTYPE html>
-
 <html lang="vi">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Xuất Dữ Liệu</title>
-<link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250716" rel="stylesheet"/>
+<title>🌸 Xuất Dữ Liệu - Trường Mầm Non Hoa Hướng Dương</title>
+
+<!-- TailwindCSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'kindergarten': {
+            'pink': '#d1fae5',
+            'yellow': '#f0fdf4',
+            'blue': '#ecfdf5',
+            'green': '#16a34a',
+            'orange': '#15803d',
+            'purple': '#166534',
+            'coral': '#14532d'
+          },
+          'cute': {
+            'primary': '#16a34a',
+            'secondary': '#15803d', 
+            'success': '#16a34a',
+            'warning': '#fef3c7',
+            'danger': '#dc2626',
+            'info': '#d1fae5',
+            'light': '#FFF8DC',
+            'dark': '#4A4A4A'
+          }
+        },
+        fontFamily: {
+          'cute': ['Fredoka', 'Comic Sans MS', 'cursive', 'sans-serif'],
+          'inter': ['Inter', 'system-ui', 'sans-serif']
+        },
+        animation: {
+          'bounce-slow': 'bounce 2s infinite',
+          'wiggle': 'wiggle 1s ease-in-out infinite',
+          'float': 'float 3s ease-in-out infinite',
+          'pulse-slow': 'pulse 3s infinite'
+        },
+        keyframes: {
+          wiggle: {
+            '0%, 100%': { transform: 'rotate(-3deg)' },
+            '50%': { transform: 'rotate(3deg)' },
+          },
+          float: {
+            '0%, 100%': { transform: 'translateY(0px)' },
+            '50%': { transform: 'translateY(-10px)' },
+          }
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 <style>
-.nav {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-top: 15px;
-}
+.font-cute { font-family: 'Fredoka', 'Comic Sans MS', cursive, sans-serif; }
+.shadow-cute { box-shadow: 0 10px 25px -5px rgba(22, 163, 74, 0.3), 0 4px 6px -2px rgba(22, 163, 74, 0.05); }
+.shadow-cute-lg { box-shadow: 0 20px 40px -12px rgba(22, 163, 74, 0.4), 0 8px 16px -4px rgba(22, 163, 74, 0.1); }
+.gradient-cute { background: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #14532d 100%); }
+.gradient-cute-blue { background: linear-gradient(135deg, #15803d 0%, #16a34a 100%); }
+.gradient-cute-pink { background: linear-gradient(135deg, #16a34a 0%, #d1fae5 100%); }
+.gradient-cute-yellow { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); }
 
-.nav a {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white !important;
-    padding: 12px 20px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.nav a:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-}
-
-.nav a:active {
-    transform: translateY(0);
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.header .school-logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 2px solid #667eea;
-    margin-right: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.header-content h1 {
-    color: #2d3748;
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0 0 5px 0;
-}
-
-.header-content p {
-    color: #6b7280;
-    font-size: 14px;
-    margin: 0;
-}
-
-.form-group {
-    margin: 20px 0;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #667eea;
-}
-
-.form-group label {
-    font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 8px;
-    display: block;
-}
-
-.form-select {
-    padding: 10px 15px;
-    border: 2px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-}
-
-.form-select:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.table-wrapper {
-    margin-top: 20px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.table {
-    margin: 0;
-}
-
-.table th {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    text-align: center;
-    padding: 12px 8px;
-    font-size: 13px;
-}
-
-.table td {
-    padding: 10px 8px;
-    font-size: 13px;
-    vertical-align: middle;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.table tbody tr:hover {
-    background-color: #f7fafc;
-}
-
-#info-title {
-    color: #2d3748;
-    font-size: 20px;
-    font-weight: 600;
-    margin: 25px 0;
-    padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 8px;
-    text-align: center;
-}
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #d1fae5; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 10px; border: 2px solid #d1fae5; }
+::-webkit-scrollbar-thumb:hover { background: #15803d; }
 
 /* PDF Export specific styles */
 #pdf-export {
@@ -190,95 +130,151 @@
 }
 </style>
 </head>
-<body><div class="container-fluid mt-4"><div class="card"><div class="card-body">
-<div class="container-fluid">
-    
-    <div class="header">
-        <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
-             alt="Logo Trường Mầm Non Hoa Hướng Dương" 
-             class="school-logo">
-        <div class="header-content">
-            <h1>📤 Xuất Dữ Liệu</h1>
-            <p>Trường Mầm Non Hoa Hướng Dương</p>
+<body class="bg-gradient-to-br from-kindergarten-pink/20 via-kindergarten-blue/20 to-kindergarten-green/20 min-h-screen font-inter">
+<div class="container mx-auto p-4 max-w-full">
+  <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute-lg border border-white/60 overflow-hidden">
+    <div class="p-6">
+      <!-- Header Section -->
+      <div class="gradient-cute p-6 rounded-2xl mb-8 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"></div>
+        <div class="relative z-10 flex items-center justify-center space-x-6">
+          <div class="w-20 h-20 rounded-full border-4 border-white/30 shadow-cute-lg overflow-hidden animate-float">
+            <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
+                 alt="🌸" 
+                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+          </div>
+          <div>
+            <h1 class="text-white font-cute font-bold text-3xl leading-tight mb-2 animate-pulse-slow">
+              📤 XUẤT DỮ LIỆU
+            </h1>
+            <p class="text-white/90 text-sm font-semibold tracking-wider font-cute animate-bounce-slow">
+              ✨ TRƯỜNG MẦM NON HOA HƯỚNG DƯƠNG ✨
+            </p>
+          </div>
         </div>
-    </div>
+        <!-- Decorative elements -->
+        <div class="absolute top-2 left-2 text-white/20 text-2xl animate-spin-slow">🌟</div>
+        <div class="absolute top-4 right-4 text-white/20 text-xl animate-bounce">🦋</div>
+        <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white/20 text-lg animate-wiggle">🌈</div>
+      </div>
     
-    <div class="nav">
-        <a href="#" onclick="exportToPDF()">📄 Xuất file PDF</a>
-        <a href="#" onclick="exportToExcel()">📊 Xuất File Excel</a>
-        <a href="#" onclick="exportData()">📤 Xuất File CSV</a>
-        <a href="#" onclick="printData()">🖨️ In Dữ Liệu</a>
-    </div>
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4 mb-8">
+        <button onclick="exportToPDF()" class="px-6 py-3 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-xl font-cute font-bold hover:shadow-cute transition-all duration-300 group hover:from-red-500 hover:to-red-600">
+          <i class="fas fa-file-pdf group-hover:animate-bounce mr-2"></i>Xuất file PDF
+        </button>
+        <button onclick="exportToExcel()" class="px-6 py-3 bg-gradient-to-r from-kindergarten-green to-cute-success text-white rounded-xl font-cute font-bold hover:shadow-cute transition-all duration-300 group">
+          <i class="fas fa-file-excel group-hover:animate-bounce mr-2"></i>Xuất File Excel
+        </button>
 
-    <div class="form-group">
-        <label for="deptSelect">Chọn Thông Tin:</label>
-            <select class="form-select form-select-sm" id="deptSelect" style="width: 250px;" onchange="switchDept()">
-                <option value="">-- Chọn --</option>
-                <option value="HS">👧 Học Sinh</option>
-                <option value="GV">👩‍🏫 Giáo Viên</option>
+        <button onclick="printData()" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-cute font-bold hover:shadow-cute hover:from-blue-600 hover:to-blue-700 transition-all duration-300 group">
+          <i class="fas fa-print group-hover:animate-wiggle mr-2"></i>In Dữ Liệu
+        </button>
+      </div>
+
+      <!-- Form Group -->
+      <div class="bg-gradient-to-r from-cute-light/50 to-white/50 p-6 rounded-2xl border-l-4 border-cute-primary shadow-cute mb-8">
+        <label for="deptSelect" class="block text-gray-700 font-cute font-bold text-lg mb-4">
+          <span class="mr-2">🎯</span>Chọn Thông Tin:
+        </label>
+        <select class="w-full max-w-xs p-4 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute font-semibold bg-white shadow-cute" 
+                id="deptSelect" onchange="switchDept()">
+          <option value="">-- Chọn loại dữ liệu --</option>
+          <option value="HS">👶 Học Sinh</option>
+          <option value="GV">👩‍🏫 Giáo Viên</option>
         </select>
-    </div>
+      </div>
 
-    <div id="preview">
-        <h2 id="info-title" style="text-align:center;">THÔNG TIN <span id="dept-name"></span></h2>
-        <div class="table-wrapper">
-            <table class="table" id="table_hs" style="display: none;">
-            <thead>
-                <tr>
-                <th>STT</th>
-                <th>Họ và Tên</th>
-                <th>Ngày Sinh</th>
-                <th>Giới Tính</th>
-                <th>Dân Tộc</th>
-                <th>Mã Định Danh</th>
-                <th>Họ Tên Cha</th>
-                <th>Ngành Nghề Cha</th>
-                <th>Họ Tên Mẹ</th>
-                <th>Ngành Nghề Mẹ</th>
-                <th>Địa Chỉ</th>
-                <th>Số CMND Cha Mẹ</th>
-                <th>Số Điện Thoại Cha Mẹ</th>
-                </tr>
+      <!-- Preview Section -->
+      <div id="preview">
+        <div class="gradient-cute-blue p-4 rounded-2xl mb-6 text-center">
+          <h2 class="text-white font-cute font-bold text-2xl" id="info-title">
+            🌟 THÔNG TIN <span id="dept-name-1"></span> 🌟
+          </h2>
+        </div>
+        
+        <!-- Student Table -->
+        <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-cute-lg border border-white/60 overflow-x-auto mb-6" style="display: none;" id="table_hs_wrapper">
+          <div class="text-center text-xs text-gray-500 font-cute py-2 bg-gradient-to-r from-kindergarten-pink/10 to-kindergarten-blue/10">
+            <i class="fas fa-arrows-alt-h mr-1"></i>Cuộn ngang để xem tất cả thông tin 👆
+          </div>
+          <div class="min-w-max">
+            <table class="w-full" id="table_hs">
+            <thead class="gradient-cute">
+              <tr>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-16">STT</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-48">Họ và Tên</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Ngày Sinh</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-28">Giới Tính</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-24">Dân Tộc</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-36">Mã Định Danh</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-40">Họ Tên Cha</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-40">Ngành Nghề Cha</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-40">Họ Tên Mẹ</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-40">Ngành Nghề Mẹ</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-60">Địa Chỉ</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-36">Số CMND Cha Mẹ</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-40">Số Điện Thoại Cha Mẹ</th>
+              </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colspan="13">Chưa có dữ liệu</td>
-                </tr>
+              <tr>
+                <td colspan="13" class="px-6 py-12 text-center text-gray-500">
+                  <div class="flex flex-col items-center space-y-4">
+                    <span class="text-6xl animate-bounce">👶</span>
+                    <div class="font-cute text-lg">Chưa có dữ liệu học sinh</div>
+                  </div>
+                </td>
+              </tr>
             </tbody>
             </table>
+          </div>
         </div>
 
-        <div class="table-wrapper">
-            <table class="table" id="table_gv" style="display: none;">
-                <thead>
-                    <tr>
-                    <th>STT</th>
-                    <th>Mã Giáo Viên</th>
-                    <th>Họ và Tên</th>
-                    <th>Tên Gọi</th>
-                    <th>Đội</th>
-                    <th>Ngày Sinh</th>
-                    <th>Quê Quán</th>
-                    <th>CCCD</th>
-                    <th>Ngày Cấp CCCD</th>
-                    <th>Mã Số Thuế</th>
-                    <th>Số CMND</th>
-                    <th>Số BHXH</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Số Tài Khoản</th>
-                    <th>Email</th>
-                    <th>Nhóm Máu</th>
-                    <th>Địa Chỉ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="17">Chưa có dữ liệu</td>
-                    </tr>
-                </tbody>
+        <!-- Teacher Table -->
+        <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-cute-lg border border-white/60 overflow-x-auto" style="display: none;" id="table_gv_wrapper">
+          <div class="text-center text-xs text-gray-500 font-cute py-2 bg-gradient-to-r from-kindergarten-green/10 to-kindergarten-yellow/10">
+            <i class="fas fa-arrows-alt-h mr-1"></i>Cuộn ngang để xem tất cả thông tin 👆
+          </div>
+          <div class="min-w-max">
+            <table class="w-full" id="table_gv">
+            <thead class="gradient-cute">
+              <tr>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-16">STT</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Mã Giáo Viên</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-48">Họ và Tên</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Tên Gọi</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Đội</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Ngày Sinh</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-48">Quê Quán</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-36">CCCD</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-36">Ngày Cấp CCCD</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Mã Số Thuế</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Số CMND</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-32">Số BHXH</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-36">Số Điện Thoại</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-40">Số Tài Khoản</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-48">Email</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-28">Nhóm Máu</th>
+                <th class="px-4 py-3 text-white font-cute font-bold text-sm text-center min-w-60">Địa Chỉ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="17" class="px-6 py-12 text-center text-gray-500">
+                  <div class="flex flex-col items-center space-y-4">
+                    <span class="text-6xl animate-bounce">👩‍🏫</span>
+                    <div class="font-cute text-lg">Chưa có dữ liệu giáo viên</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
             </table>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div id="pdf-export" style="display:none; font-family: 'Times New Roman', Times, serif; font-size: 13px; padding: 20px;">
@@ -308,90 +304,161 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
+        console.log("🚀 Export Data Script Loaded - Version 5.1 - ExcelJS Fixed Button Issue!");
+        console.log("🎨 New styling features:", {
+            schoolTitle: "Times New Roman 18pt, white on blue",
+            headers: "Arial 12pt, white on dark blue", 
+            dataRows: "Arial 11pt with borders",
+            summary: "Enhanced with colors and borders"
+        });
         async function switchDept() {
+            console.log("🔄 switchDept called");
             const dept = document.getElementById("deptSelect").value;
+            console.log("📋 Selected dept:", dept);
+            
             const containerHS = document.getElementById("table_hs");
             const containerGV = document.getElementById("table_gv");
-            containerHS.style.display = (dept === "HS") ? "block" : "none";
-            containerGV.style.display = (dept === "GV") ? "block" : "none";
             
-            document.getElementById("dept-name").textContent =
-                dept === "HS" ? "HỌC SINH" :
-                dept === "GV" ? "GIÁO VIÊN" : "";
-                
-            await fetchAndRenderDept(dept);
+            if (!containerHS || !containerGV) {
+                console.error("❌ Table containers not found!");
+                return;
             }
+            
+            const wrapperHS = document.getElementById("table_hs_wrapper");
+            const wrapperGV = document.getElementById("table_gv_wrapper");
+            
+            if (wrapperHS) wrapperHS.style.display = (dept === "HS") ? "block" : "none";
+            if (wrapperGV) wrapperGV.style.display = (dept === "GV") ? "block" : "none";
+            
+            containerHS.style.display = (dept === "HS") ? "table" : "none";
+            containerGV.style.display = (dept === "GV") ? "table" : "none";
+            
+            console.log("👁️ Table visibility - HS:", containerHS.style.display, "GV:", containerGV.style.display);
+            
+            // Update both dept name elements
+            const deptNameEl1 = document.getElementById("dept-name-1");
+            const deptNameEl2 = document.getElementById("dept-name");
+            const deptText = dept === "HS" ? "HỌC SINH" : dept === "GV" ? "GIÁO VIÊN" : "";
+            
+            if (deptNameEl1) {
+                deptNameEl1.textContent = deptText;
+                console.log("📝 Dept name 1 updated:", deptNameEl1.textContent);
+            }
+            if (deptNameEl2) {
+                deptNameEl2.textContent = deptText;
+                console.log("📝 Dept name 2 updated:", deptNameEl2.textContent);
+            }
+                
+            if (dept) {
+                await fetchAndRenderDept(dept);
+            }
+        }
 
         async function fetchAndRenderDept(dept) {
+            console.log("🌐 Fetching data for dept:", dept);
             try {
-                const res = await fetch(`/api/employees?dept=${dept}`);
+                const url = `/api/employees?dept=${dept}`;
+                console.log("📡 API URL:", url);
+                
+                const res = await fetch(url);
+                console.log("📊 Response status:", res.status);
+                
                 const result = await res.json();
-                console.log(result); // Debug API response
+                console.log("📋 API result:", result);
+                
                 const rows = result.rows || [];
+                console.log("📝 Rows count:", rows.length);
+                
                 if (dept === "HS") {
+                    console.log("🎓 Rendering HS table");
                     renderTable("table_hs", rows);
                 } else if (dept === "GV") {
+                    console.log("👩‍🏫 Rendering GV table");
                     renderTable("table_gv", rows);
                 }
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('❌ Error fetching data:', error);
                 const tableId = dept === "HS" ? "table_hs" : "table_gv";
-                const table = document.getElementById(tableId).querySelector("tbody");
-                table.innerHTML = `<tr><td colspan="${dept === "HS" ? 13 : 17}">Lỗi khi tải dữ liệu</td></tr>`;
+                const table = document.getElementById(tableId);
+                if (table) {
+                    const tbody = table.querySelector("tbody");
+                    if (tbody) {
+                        tbody.innerHTML = `<tr><td colspan="${dept === "HS" ? 13 : 17}">Lỗi khi tải dữ liệu: ${error.message}</td></tr>`;
+                    }
+                }
             }
         }
 
         function renderTable(tableId, rows) {
-            const table = document.getElementById(tableId).querySelector("tbody");
-            table.innerHTML = "";
-            if (rows.length === 0) {
-                table.innerHTML = `<tr><td colspan="${tableId === "table_hs" ? 13 : 17}">Chưa có dữ liệu</td></tr>`;
+            console.log("🎨 renderTable called with:", tableId, "rows:", rows.length);
+            
+            const table = document.getElementById(tableId);
+            if (!table) {
+                console.error("❌ Table not found:", tableId);
                 return;
             }
+            
+            const tbody = table.querySelector("tbody");
+            if (!tbody) {
+                console.error("❌ Tbody not found in table:", tableId);
+                return;
+            }
+            
+            console.log("✅ Table and tbody found, clearing content");
+            tbody.innerHTML = "";
+            
+            if (rows.length === 0) {
+                console.log("📭 No data, showing empty message");
+                tbody.innerHTML = `<tr><td colspan="${tableId === "table_hs" ? 13 : 17}">Chưa có dữ liệu</td></tr>`;
+                return;
+            }
+            
+            console.log("📝 Rendering", rows.length, "rows");
             rows.forEach((row, idx) => {
                 const tr = document.createElement("tr");
+                tr.className = "hover:bg-kindergarten-pink/10 transition-colors duration-200 border-b border-gray-100";
                 tr.innerHTML = generateRowHtml(tableId, row, idx + 1);
-                table.appendChild(tr);
+                tbody.appendChild(tr);
             });
         }
 
         function generateRowHtml(tableId, row, index) {
             if (tableId === "table_hs") {
                 return `
-                <td>${index}</td>
-                <td>${row.ho_va_ten || ""}</td>
-                <td>${formatDate(row.ngay_sinh)}</td>
-                <td>${row.gioi_tinh || ""}</td>
-                <td>${row.dan_toc || ""}</td>
-                <td>${row.ma_dinh_danh || ""}</td>
-                <td>${row.ho_ten_bo || ""}</td>
-                <td>${row.nghe_nghiep_bo || ""}</td>
-                <td>${row.ho_ten_me || ""}</td>
-                <td>${row.nghe_nghiep_me || ""}</td>
-                <td>${row.ho_khau || ""}</td>
-                <td>${row.cccd_bo_me || ""}</td>
-                <td>${row.sdt || ""}</td>
+                <td class="px-4 py-3 font-cute font-semibold text-gray-600 text-center min-w-16">${index}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-48">${row.ho_va_ten || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-32">${formatDate(row.ngay_sinh)}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-28">${row.gioi_tinh === 'Nữ' ? '👧 Nữ' : '👦 ' + (row.gioi_tinh || '')}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-24">${row.dan_toc || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-36">${row.ma_dinh_danh || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-40">${row.ho_ten_bo || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-40">${row.nghe_nghiep_bo || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-40">${row.ho_ten_me || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-40">${row.nghe_nghiep_me || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-60">${row.ho_khau || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-36">${row.cccd_bo_me || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-40">${row.sdt || ""}</td>
                 `;
             }
             if (tableId === "table_gv") {
                 return `
-                <td>${index}</td>
-                <td>${row.ma_gv || ""}</td>
-                <td>${row.ho_va_ten || ""}</td>
-                <td>${row.ten_tk || ""}</td>
-                <td>${row.chuc_vu || ""}</td>
-                <td>${formatDate(row.ngay_sinh)}</td>
-                <td>${row.que_quan || ""}</td>
-                <td>${row.cccd || ""}</td>
-                <td>${formatDate(row.ngay_cap)}</td>
-                <td>${row.mst || ""}</td>
-                <td>${row.cmnd || ""}</td>
-                <td>${row.so_bh || ""}</td>
-                <td>${row.sdt || ""}</td>
-                <td>${row.tk_nh || ""}</td>
-                <td>${row.email || ""}</td>
-                <td>${row.nhom_mau || ""}</td>
-                <td>${row.dia_chi || ""}</td>
+                <td class="px-4 py-3 font-cute font-semibold text-gray-600 text-center min-w-16">${index}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-32">${row.ma_gv || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-48">${row.ho_va_ten || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-32">${row.ten_tk || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-32">${row.chuc_vu || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-32">${formatDate(row.ngay_sinh)}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-48">${row.que_quan || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-36">${row.cccd || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-36">${formatDate(row.ngay_cap)}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-32">${row.mst || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-32">${row.cmnd || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-32">${row.so_bh || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-36">${row.sdt || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-40">${row.tk_nh || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-48">${row.email || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 text-center min-w-28">${row.nhom_mau || ""}</td>
+                <td class="px-4 py-3 font-cute text-gray-700 min-w-60">${row.dia_chi || ""}</td>
                 `;
             }
             return "";
@@ -567,8 +634,9 @@
         function printData() {
             const dept = document.getElementById("deptSelect").value;
             const table = dept === "HS" ? document.getElementById("table_hs") : document.getElementById("table_gv");
+            const wrapper = dept === "HS" ? document.getElementById("table_hs_wrapper") : document.getElementById("table_gv_wrapper");
 
-            if (!dept || table.style.display === "none") {
+            if (!dept || wrapper.style.display === "none") {
                 alert("Vui lòng chọn loại dữ liệu cần in.");
                 return;
             }
@@ -626,78 +694,237 @@
             const table = document.getElementById(tableId);
             const tableRows = table.querySelectorAll('tbody tr');
             
-            if (table.style.display === 'none' || tableRows.length === 0) {
+            const wrapper = dept === 'HS' ? document.getElementById('table_hs_wrapper') : document.getElementById('table_gv_wrapper');
+            if (wrapper.style.display === 'none' || tableRows.length === 0) {
                 alert("Vui lòng chọn và tải dữ liệu trước khi xuất Excel.");
                 return;
             }
             
+            const button = event.target; // Save button reference
             try {
                 // Show loading state
-                event.target.innerHTML = '⏳ Đang xuất...';
-                event.target.style.pointerEvents = 'none';
+                button.innerHTML = '⏳ Đang xuất...';
+                button.style.pointerEvents = 'none';
                 
-                // Use SheetJS library for client-side Excel generation
-                if (typeof XLSX === 'undefined') {
-                    // Load SheetJS library dynamically
+                // Use ExcelJS library for client-side Excel generation with full styling support
+                if (typeof ExcelJS === 'undefined') {
+                    console.log("📦 Loading ExcelJS library...");
+                    // Load ExcelJS library dynamically - supports full styling
                     const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js';
                     document.head.appendChild(script);
                     
-                    await new Promise((resolve) => {
-                        script.onload = resolve;
+                    await new Promise((resolve, reject) => {
+                        script.onload = () => {
+                            console.log("✅ ExcelJS library loaded successfully!");
+                            resolve();
+                        };
+                        script.onerror = () => {
+                            console.error("❌ Failed to load ExcelJS library!");
+                            reject(new Error("Failed to load ExcelJS library"));
+                        };
+                        // Timeout after 10 seconds
+                        setTimeout(() => {
+                            reject(new Error("ExcelJS library load timeout"));
+                        }, 10000);
                     });
                 }
                 
+                // Verify ExcelJS is available
+                if (typeof ExcelJS === 'undefined') {
+                    throw new Error("ExcelJS library is not available");
+                }
+                console.log("📚 ExcelJS library ready - supports full styling!");
+                
                 // Prepare data
                 const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
-                const data = [headers];
+                const dataRows = [];
                 
                 Array.from(tableRows).forEach(row => {
                     const rowData = Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim());
                     if (rowData.length > 0 && !rowData[0].includes('Chưa có dữ liệu')) {
-                        data.push(rowData);
+                        dataRows.push(rowData);
                     }
                 });
                 
-                // Create workbook
-                const wb = XLSX.utils.book_new();
-                const ws = XLSX.utils.aoa_to_sheet(data);
+                // Create workbook with ExcelJS for full styling support
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet(dept === 'HS' ? 'Danh Sách Học Sinh' : 'Danh Sách Giáo Viên');
+                
+                console.log("🎨 Creating Excel with ExcelJS - full styling support!");
+                
+                // Add school header information
+                worksheet.addRow(['TRƯỜNG MẦM NON HOA HƯỚNG DƯƠNG']);
+                worksheet.addRow(['HỆ THỐNG QUẢN LÝ NHÂN SỰ']);
+                worksheet.addRow([]);
+                worksheet.addRow([`BÁO CÁO: ${dept === 'HS' ? 'DANH SÁCH HỌC SINH' : 'DANH SÁCH GIÁO VIÊN'}`]);
+                worksheet.addRow([`Ngày xuất: ${new Date().toLocaleDateString('vi-VN')}`]);
+                worksheet.addRow([`Thời gian: ${new Date().toLocaleTimeString('vi-VN')}`]);
+                worksheet.addRow([]);
+                
+                // Add headers
+                const headerRow = worksheet.addRow(headers);
+                const headerRowIndex = 8; // 1-indexed
+                
+                // Add data rows
+                dataRows.forEach(rowData => {
+                    worksheet.addRow(rowData);
+                });
+                
+                // Add summary
+                worksheet.addRow([]);
+                worksheet.addRow(['THỐNG KÊ TỔNG HỢP']);
+                worksheet.addRow([`Tổng số ${dept === 'HS' ? 'học sinh' : 'giáo viên'}: ${dataRows.length}`]);
+                worksheet.addRow([`Xuất bởi: ${document.querySelector('.user-name')?.textContent || 'Admin'}`]);
+                worksheet.addRow([`Hệ thống: Quản lý nhân sự - Trường Mầm Non Hoa Hướng Dương`]);
+                
+                console.log("📊 Added all data to worksheet, now applying styling...");
+                
+                // Apply ExcelJS styling - much more powerful than SheetJS
+                
+                // Style school title (Row 1)
+                const schoolTitleCell = worksheet.getCell('A1');
+                schoolTitleCell.font = { name: 'Times New Roman', size: 18, bold: true, color: { argb: 'FFFFFFFF' } };
+                schoolTitleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2E5090' } };
+                schoolTitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                schoolTitleCell.border = {
+                    top: { style: 'thick' }, bottom: { style: 'thick' },
+                    left: { style: 'thick' }, right: { style: 'thick' }
+                };
+                worksheet.mergeCells(`A1:${String.fromCharCode(64 + headers.length)}1`);
+                
+                // Style subtitle (Row 2)
+                const subtitleCell = worksheet.getCell('A2');
+                subtitleCell.font = { name: 'Times New Roman', size: 14, bold: true, color: { argb: 'FFFFFFFF' } };
+                subtitleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4472C4' } };
+                subtitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                subtitleCell.border = {
+                    top: { style: 'medium' }, bottom: { style: 'medium' },
+                    left: { style: 'thick' }, right: { style: 'thick' }
+                };
+                worksheet.mergeCells(`A2:${String.fromCharCode(64 + headers.length)}2`);
+                
+                // Style report title (Row 4)
+                const reportTitleCell = worksheet.getCell('A4');
+                reportTitleCell.font = { name: 'Times New Roman', size: 16, bold: true, color: { argb: 'FFC5504B' } };
+                reportTitleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFF2CC' } };
+                reportTitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                reportTitleCell.border = {
+                    top: { style: 'medium', color: { argb: 'FFC5504B' } },
+                    bottom: { style: 'medium', color: { argb: 'FFC5504B' } },
+                    left: { style: 'medium', color: { argb: 'FFC5504B' } },
+                    right: { style: 'medium', color: { argb: 'FFC5504B' } }
+                };
+                worksheet.mergeCells(`A4:${String.fromCharCode(64 + headers.length)}4`);
+                
+                console.log("✨ Applied header styling with ExcelJS!");
+                
+                // Style date/time info (Rows 5-6)
+                ['A5', 'A6'].forEach(cellAddr => {
+                    const cell = worksheet.getCell(cellAddr);
+                    cell.font = { name: 'Arial', size: 11, italic: true, color: { argb: 'FF666666' } };
+                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
+                });
+                
+                // Style column headers (Row 8)
+                headers.forEach((header, colIndex) => {
+                    const cell = worksheet.getCell(headerRowIndex, colIndex + 1);
+                    cell.font = { name: 'Arial', size: 12, bold: true, color: { argb: 'FFFFFFFF' } };
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2E5090' } };
+                    cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+                    cell.border = {
+                        top: { style: 'medium' }, bottom: { style: 'medium' },
+                        left: { style: 'medium' }, right: { style: 'medium' }
+                    };
+                });
+                
+                // Style data rows with alternating colors
+                dataRows.forEach((rowData, rowIndex) => {
+                    const actualRowIndex = headerRowIndex + 1 + rowIndex;
+                    const isEvenRow = rowIndex % 2 === 0;
+                    const fillColor = isEvenRow ? 'FFF8F9FA' : 'FFFFFFFF';
+                    
+                    rowData.forEach((cellData, colIndex) => {
+                        const cell = worksheet.getCell(actualRowIndex, colIndex + 1);
+                        cell.font = { name: 'Arial', size: 11, color: { argb: 'FF333333' } };
+                        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: fillColor } };
+                        cell.alignment = { 
+                            horizontal: colIndex === 0 ? 'center' : 'left', 
+                            vertical: 'middle',
+                            wrapText: true 
+                        };
+                        cell.border = {
+                            top: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+                            bottom: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+                            left: { style: 'thin', color: { argb: 'FFCCCCCC' } },
+                            right: { style: 'thin', color: { argb: 'FFCCCCCC' } }
+                        };
+                    });
+                });
+                
+                console.log("🎨 Applied data row styling with alternating colors!");
                 
                 // Set column widths
-                const colWidths = headers.map((_, index) => {
-                    let maxLength = 0;
-                    data.forEach(row => {
-                        if (row[index] && row[index].length > maxLength) {
-                            maxLength = row[index].length;
+                headers.forEach((header, index) => {
+                    let maxLength = header.length;
+                    dataRows.forEach(row => {
+                        if (row[index] && row[index].toString().length > maxLength) {
+                            maxLength = row[index].toString().length;
                         }
                     });
-                    return { wch: Math.min(Math.max(maxLength + 2, 10), 50) };
+                    const width = Math.min(Math.max(maxLength + 3, 12), 60);
+                    worksheet.getColumn(index + 1).width = width;
                 });
-                ws['!cols'] = colWidths;
                 
-                // Add worksheet to workbook
-                const sheetName = dept === 'HS' ? 'Danh Sách Học Sinh' : 'Danh Sách Giáo Viên';
-                XLSX.utils.book_append_sheet(wb, ws, sheetName);
+                // Set row heights
+                worksheet.getRow(1).height = 35; // School name
+                worksheet.getRow(2).height = 25; // Subtitle
+                worksheet.getRow(4).height = 30; // Report title
+                worksheet.getRow(5).height = 18; // Date
+                worksheet.getRow(6).height = 18; // Time
+                worksheet.getRow(headerRowIndex).height = 35; // Headers
+                
+                // Set data row heights
+                for (let i = 0; i < dataRows.length; i++) {
+                    worksheet.getRow(headerRowIndex + 1 + i).height = 22;
+                }
                 
                 // Generate filename
                 const now = new Date();
-                const dateStr = now.toISOString().slice(0,10).replace(/-/g, '');
-                const timeStr = now.toTimeString().slice(0,5).replace(/:/g, '');
-                const filename = `danh_sach_${dept === 'HS' ? 'hoc_sinh' : 'giao_vien'}_${dateStr}_${timeStr}.xlsx`;
+                const dateStr = now.toLocaleDateString('vi-VN').replace(/\//g, '-');
+                const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false }).replace(/:/g, '');
+                const typeStr = dept === 'HS' ? 'HocSinh' : 'GiaoVien';
+                const filename = `BaoCao_${typeStr}_${dateStr}_${timeStr}.xlsx`;
                 
-                // Save file
-                XLSX.writeFile(wb, filename);
+                // Save file with ExcelJS
+                console.log("💾 Saving Excel file with ExcelJS enhanced formatting:", filename);
+                const buffer = await workbook.xlsx.writeBuffer();
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                window.URL.revokeObjectURL(url);
                 
-                // Show success message
-                alert(`✅ Đã xuất thành công file Excel: ${filename}`);
+                console.log("✨ ExcelJS styling applied successfully!");
+                
+                // Show simple success message
+                const successMsg = `✅ Xuất Excel thành công!\n\n` +
+                    `📁 File: ${filename}\n` +
+                    `📊 Loại dữ liệu: ${dept === 'HS' ? 'Học sinh' : 'Giáo viên'}\n` +
+                    `📈 Số bản ghi: ${dataRows.length}\n` +
+                    `⏰ Thời gian: ${now.toLocaleString('vi-VN')}`;
+                
+                alert(successMsg);
                 
             } catch (error) {
                 console.error('Excel export error:', error);
                 alert(`❌ Lỗi xuất Excel: ${error.message}`);
             } finally {
                 // Restore button state
-                event.target.innerHTML = '📊 Xuất File Excel';
-                event.target.style.pointerEvents = 'auto';
+                button.innerHTML = '📊 Xuất File Excel';
+                button.style.pointerEvents = 'auto';
             }
         }
 
@@ -780,8 +1007,5 @@
             document.getElementById('table_gv').style.display = 'none';
         }
     </script>
-</div>
-</div>
-</div>
 </body>
 </html>

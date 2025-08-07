@@ -1,61 +1,150 @@
 <!DOCTYPE html>
-
 <html lang="vi">
 <head>
 <meta charset="utf-8"/>
-<title>Danh Sách Lớp</title>
+<title>🏠 Danh Sách Lớp - Trường Mầm Non Hoa Hướng Dương</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-<!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
-<!-- Animate.css -->
-<link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250716" rel="stylesheet"/>
+
+<!-- TailwindCSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'neutral': {
+            'primary': '#16a34a',
+            'secondary': '#6b7280',
+            'accent': '#8b9aa8',
+            'muted': '#94a3b8',
+            'light': '#cbd5e1',
+            'lighter': '#e2e8f0',
+            'lightest': '#f1f5f9'
+          },
+          'background': {
+            'primary': '#f8fafc',
+            'secondary': '#f1f5f9',
+            'muted': '#e2e8f0',
+            'card': '#ffffff'
+          }
+        },
+        fontFamily: {
+          'system': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
 </head>
-<body><div class="container-fluid mt-4"><div class="card"><div class="card-body">
-<div class="container-fluid py-5">
-<div class="card card-custom animate__animated animate__fadeIn">
-<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-<h5 class="mb-0"><i class="bi bi-collection-fill me-2"></i>Quản Lý Danh Sách Lớp</h5>
-<span class="badge bg-light text-primary">#LopHoc</span>
+<body class="bg-background-primary min-h-screen font-system">
+
+<style>
+.shadow-soft { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); }
+.shadow-soft-lg { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+</style>
+
+<div class="container mx-auto p-4 max-w-6xl">
+  <div class="bg-white rounded-xl shadow-soft-lg border border-neutral-lighter overflow-hidden">
+    <!-- Header Section -->
+    <div class="bg-neutral-primary p-6 text-white">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+            <i class="fas fa-school text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-semibold">Quản Lý Danh Sách Lớp</h1>
+            <p class="text-white/80 text-sm">Trường Mầm Non Hoa Hướng Dương</p>
+          </div>
+        </div>
+        <div class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+          #LopHoc
+        </div>
+      </div>
+    </div>
+    
+    <div class="p-6">
+      <!-- Add Class Form -->
+      <div class="bg-background-secondary/50 p-6 rounded-xl border border-neutral-lighter mb-6">
+        <form class="space-y-4" id="form-add-class">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-neutral-secondary font-system font-semibold text-sm mb-2" for="ma_lop">
+                <span class="mr-2">🏷️</span>Mã Lớp
+              </label>
+              <input class="w-full p-3 border border-neutral-light rounded-lg focus:border-neutral-primary focus:outline-none transition-colors duration-200 font-system" 
+                     id="ma_lop" placeholder="VD: L01" type="text"/>
+            </div>
+            <div>
+              <label class="block text-neutral-secondary font-system font-semibold text-sm mb-2" for="ten_lop">
+                <span class="mr-2">🏠</span>Tên Lớp
+              </label>
+              <input class="w-full p-3 border border-neutral-light rounded-lg focus:border-neutral-primary focus:outline-none transition-colors duration-200 font-system" 
+                     id="ten_lop" placeholder="VD: Mầm Non A" type="text"/>
+            </div>
+            <div class="flex items-end">
+              <button class="w-full px-6 py-3 bg-neutral-primary hover:bg-neutral-secondary text-white rounded-lg font-system font-semibold transition-colors duration-200" 
+                      type="submit">
+                <i class="fas fa-plus mr-2"></i>Thêm Lớp
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Classes Table -->
+      <div class="bg-white rounded-xl shadow-soft border border-neutral-lighter overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-neutral-lightest">
+              <tr>
+                <th class="px-6 py-4 text-neutral-secondary font-system font-semibold text-sm text-center border-b border-neutral-lighter">STT</th>
+                <th class="px-6 py-4 text-neutral-secondary font-system font-semibold text-sm text-center border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                    onclick="sortTableByColumn(0)">
+                  <span class="mr-2">🏷️</span>Mã Lớp 
+                  <i class="fas fa-sort ml-2 opacity-60"></i>
+                </th>
+                <th class="px-6 py-4 text-neutral-secondary font-system font-semibold text-sm text-center border-b border-neutral-lighter cursor-pointer hover:bg-neutral-light/50 transition-colors duration-200" 
+                    onclick="sortTableByColumn(1)">
+                  <span class="mr-2">🏠</span>Tên Lớp 
+                  <i class="fas fa-sort ml-2 opacity-60"></i>
+                </th>
+                <th class="px-6 py-4 text-neutral-secondary font-system font-semibold text-sm text-center border-b border-neutral-lighter">
+                  <span class="mr-2">⚙️</span>Hành Động
+                </th>
+              </tr>
+            </thead>
+            <tbody id="class-table-body">
+              <tr>
+                <td colspan="4" class="px-6 py-12 text-center text-neutral-muted">
+                  <div class="flex flex-col items-center space-y-4">
+                    <span class="text-4xl">🏠</span>
+                    <div class="font-system text-sm">Đang tải dữ liệu lớp học...</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="card-body">
-<form class="row g-3 align-items-center mb-4" id="form-add-class">
-<div class="col-md-4">
-<label class="form-label fw-semibold" for="ma_lop">Mã Lớp</label>
-<input class="form-control" id="ma_lop" placeholder="VD: L01" type="text"/>
-</div>
-<div class="col-md-5">
-<label class="form-label fw-semibold" for="ten_lop">Tên Lớp</label>
-<input class="form-control" id="ten_lop" placeholder="VD: Mầm Non A" type="text"/>
-</div>
-<div class="col-md-3 d-grid pt-2">
-<button class="btn btn-success mt-4" type="submit">
-<i class="bi bi-plus-circle-fill me-1"></i>Thêm Lớp
-          </button>
-</div>
-</form>
-<div class="table-responsive">
-<table class="table table-hover table-bordered align-middle">
-<thead class="table-light text-center">
-<tr>
-<th>STT</th>
-<th onclick="sortTableByColumn(0)">Mã Lớp <i class="bi bi-arrow-down-up"></i></th>
-<th onclick="sortTableByColumn(1)">Tên Lớp <i class="bi bi-arrow-down-up"></i></th>
-<th>Hành Động</th>
-</tr>
-</thead>
-<tbody class="text-center" id="class-table-body">
-<!-- Dữ liệu sẽ render tại đây -->
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<hr class="my-4"/>
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     document.getElementById('form-add-class').onsubmit = async function(e) {
       e.preventDefault();
@@ -74,29 +163,34 @@
         console.log('✅ Thành công');
         document.getElementById('form-add-class').reset();
         document.getElementById('ma_lop').readOnly = false;
-        document.querySelector('#form-add-class button[type="submit"]').innerHTML = '<i class="bi bi-plus-circle-fill me-1"></i>Thêm Lớp';
+        document.querySelector('#form-add-class button[type="submit"]').innerHTML = '<i class="fas fa-plus mr-2"></i>Thêm Lớp';
         document.getElementById('form-add-class').dataset.editing = "false";
         await reloadClassTable();
       } else {
         console.error('❌ Lỗi khi gửi dữ liệu');
       }
     };
+    
     window.onload = async () => {
       const res = await fetch('/api/classes');
       const data = await res.json();
       const tbody = document.getElementById('class-table-body');
       tbody.innerHTML = data.map((row, index) => `
-        <tr>
-          <td class="text-center">${index + 1}</td>
-          <td class="text-center">${row.ma_lop}</td>
-          <td>${row.ten_lop}</td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-outline-primary me-1" onclick="editClass('${row.ma_lop}', '${row.ten_lop}')">
-              <i class="bi bi-pencil"></i> Sửa
-            </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteClass('${row.ma_lop}')">
-              <i class="bi bi-trash"></i> Xóa
-            </button>
+        <tr class="hover:bg-neutral-lighter/30 transition-colors duration-200 border-b border-neutral-lighter">
+          <td class="px-6 py-4 font-system font-semibold text-neutral-muted text-center">${index + 1}</td>
+          <td class="px-6 py-4 font-system text-neutral-secondary text-center font-semibold">${row.ma_lop}</td>
+          <td class="px-6 py-4 font-system text-neutral-secondary">${row.ten_lop}</td>
+          <td class="px-6 py-4 text-center">
+            <div class="flex justify-center space-x-2">
+              <button class="px-3 py-2 bg-neutral-accent hover:bg-neutral-muted text-white rounded-lg transition-colors duration-200" 
+                      onclick="editClass('${row.ma_lop}', '${row.ten_lop}')">
+                <i class="fas fa-edit mr-1"></i>Sửa
+              </button>
+              <button class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200" 
+                      onclick="deleteClass('${row.ma_lop}')">
+                <i class="fas fa-trash mr-1"></i>Xóa
+              </button>
+            </div>
           </td>
         </tr>
       `).join("");
@@ -105,9 +199,9 @@
     function editClass(ma_lop, ten_lop) {
       console.log('✏️ Đang sửa lớp:', ma_lop);
       document.getElementById('ma_lop').value = ma_lop;
-      document.getElementById('ma_lop').readOnly = true;  // Không cho sửa mã lớp
+      document.getElementById('ma_lop').readOnly = true;
       document.getElementById('ten_lop').value = ten_lop;
-      document.querySelector('#form-add-class button[type="submit"]').innerHTML = '<i class="bi bi-save2"></i> Cập Nhật';
+      document.querySelector('#form-add-class button[type="submit"]').innerHTML = '<i class="fas fa-save mr-2"></i>Cập Nhật';
       document.getElementById('form-add-class').dataset.editing = "true";
     }
 
@@ -149,21 +243,26 @@
       const res = await fetch('/api/classes');
       const data = await res.json();
       const tbody = document.getElementById('class-table-body');
-      tbody.innerHTML = data.map(row => `
-        <tr>
-          <td class="text-center">${row.ma_lop}</td>
-          <td>${row.ten_lop}</td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-outline-primary me-1" onclick="editClass('${row.ma_lop}', '${row.ten_lop}')">
-              <i class="bi bi-pencil"></i> Sửa
-            </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="deleteClass('${row.ma_lop}')">
-              <i class="bi bi-trash"></i> Xóa
-            </button>
+      tbody.innerHTML = data.map((row, index) => `
+        <tr class="hover:bg-neutral-lighter/30 transition-colors duration-200 border-b border-neutral-lighter">
+          <td class="px-6 py-4 font-system font-semibold text-neutral-muted text-center">${index + 1}</td>
+          <td class="px-6 py-4 font-system text-neutral-secondary text-center font-semibold">${row.ma_lop}</td>
+          <td class="px-6 py-4 font-system text-neutral-secondary">${row.ten_lop}</td>
+          <td class="px-6 py-4 text-center">
+            <div class="flex justify-center space-x-2">
+              <button class="px-3 py-2 bg-neutral-accent hover:bg-neutral-muted text-white rounded-lg transition-colors duration-200" 
+                      onclick="editClass('${row.ma_lop}', '${row.ten_lop}')">
+                <i class="fas fa-edit mr-1"></i>Sửa
+              </button>
+              <button class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200" 
+                      onclick="deleteClass('${row.ma_lop}')">
+                <i class="fas fa-trash mr-1"></i>Xóa
+              </button>
+            </div>
           </td>
         </tr>
       `).join("");
     }
-  </script>
-</div></div></div></body>
+</script>
+</body>
 </html>

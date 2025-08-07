@@ -3,375 +3,102 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🏫 Dashboard - Trường Mầm Non Hoa Hướng Dương</title>
+  <title>🌸 Dashboard - Trường Mầm Non Hoa Hướng Dương</title>
   
-  <!-- Inter Font -->
+  <!-- TailwindCSS -->
+  <link href="{{ url_for('static', filename='css/employee-dashboard.css') }}" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'neutral': {
+              'primary': '#14532d',
+              'secondary': '#166534',
+              'accent': '#15803d',
+              'muted': '#16a34a',
+              'light': '#dcfce7',
+              'lighter': '#f0fdf4',
+              'lightest': '#f7fee7'
+            },
+            'background': {
+              'primary': '#f9fafb',
+              'secondary': '#f4f6f8',
+              'muted': '#e5e7eb',
+              'card': '#ffffff'
+            },
+            'kindergarten': {
+              'pink': '#dcfce7',
+              'yellow': '#f0fdf4',
+              'blue': '#14532d',
+              'green': '#166534',
+              'orange': '#15803d',
+              'purple': '#16a34a',
+              'coral': '#22c55e'
+            },
+            'cute': {
+              'primary': '#14532d',
+              'secondary': '#166534'
+            }
+          },
+          fontFamily: {
+            'system': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            'cute': ['Inter', 'Fredoka', 'Comic Sans MS', 'cursive', 'sans-serif']
+          },
+          animation: {
+            'bounce-slow': 'bounce 2s infinite',
+            'wiggle': 'wiggle 1s ease-in-out infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s infinite'
+          },
+          keyframes: {
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-3deg)' },
+              '50%': { transform: 'rotate(3deg)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   
-  <!-- Custom CSS -->
-  <link href="{{ url_for('static_files', filename='css/modern.css') }}" rel="stylesheet">
-  
+  <!-- Custom CSS for additional cute styles -->
   <style>
-    body {
-      font-family: 'Inter', var(--font-family-sans);
-      background: var(--bg-secondary);
-    }
+    .shadow-neutral { box-shadow: 0 4px 20px rgba(20, 83, 45, 0.08); }
+    .shadow-neutral-lg { box-shadow: 0 10px 30px rgba(20, 83, 45, 0.12); }
+    .shadow-cute { box-shadow: 0 10px 25px -5px rgba(20, 83, 45, 0.15), 0 4px 6px -2px rgba(20, 83, 45, 0.05); }
+    .shadow-cute-lg { box-shadow: 0 20px 40px -12px rgba(20, 83, 45, 0.2), 0 8px 16px -4px rgba(20, 83, 45, 0.08); }
+    .bg-neutral-gradient { background: linear-gradient(135deg, #14532d 0%, #15803d 100%); }
+    .bg-muted-gradient { background: linear-gradient(135deg, #f4f6f8 0%, #e5e7eb 100%); }
+    .gradient-cute { background: linear-gradient(135deg, #14532d 0%, #166534 50%, #15803d 100%); }
+    .gradient-cute-blue { background: linear-gradient(135deg, #16a34a 0%, #14532d 100%); }
     
-    .app-container {
-      display: flex;
-      min-height: 100vh;
-    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     
-    /* Sidebar Styles */
-    .sidebar {
-      width: 280px;
-      background: var(--bg-primary);
-      border-right: 1px solid var(--gray-200);
-      box-shadow: var(--shadow);
-      transition: transform var(--transition-normal);
-      z-index: 100;
-    }
-    
-    .sidebar-header {
-      padding: var(--spacing-xl) var(--spacing-lg);
-      border-bottom: 1px solid var(--gray-200);
-      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-      color: white;
-      text-align: center;
-    }
-    
-    .sidebar-logo {
-      margin-bottom: var(--spacing-sm);
-      display: flex;
-      justify-content: center;
-    }
-    
-    .sidebar-logo img {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-    
-    .sidebar-logo img:hover {
-      transform: scale(1.05);
-      border-color: rgba(255, 255, 255, 0.5);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    }
-    
-    .sidebar-title {
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      margin-bottom: var(--spacing-xs);
-      line-height: 1.2;
-    }
-    
-    .sidebar-subtitle {
-      font-size: var(--text-xs);
-      opacity: 0.9;
-      font-weight: var(--font-medium);
-      letter-spacing: 0.5px;
-    }
-    
-    .sidebar-nav {
-      padding: var(--spacing-lg) 0;
-    }
-    
-    .nav-section {
-      margin-bottom: var(--spacing-lg);
-    }
-    
-    .nav-section-title {
-      padding: 0 var(--spacing-lg) var(--spacing-sm);
-      font-size: var(--text-xs);
-      font-weight: var(--font-semibold);
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .nav-item {
-      margin-bottom: var(--spacing-xs);
-    }
-    
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      padding: var(--spacing-sm) var(--spacing-lg);
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: var(--text-sm);
-      font-weight: var(--font-medium);
-      transition: all var(--transition-fast);
-      border-left: 3px solid transparent;
+    /* Loading animation */
+    .loading {
       position: relative;
+      opacity: 0.7;
     }
     
-    .nav-link:hover {
-      background: var(--gray-50);
-      color: var(--primary-color);
-      border-left-color: var(--primary-color);
-      text-decoration: none;
-      transform: translateX(2px);
-    }
-    
-    .nav-link.active {
-      background: var(--bg-accent);
-      color: var(--primary-color);
-      border-left-color: var(--primary-color);
-      font-weight: var(--font-semibold);
-    }
-    
-    .nav-link.active::after {
-      content: '';
-      position: absolute;
-      right: var(--spacing-lg);
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 4px;
-      background: var(--primary-color);
-      border-radius: 50%;
-    }
-    
-    .nav-link i {
-      font-size: var(--text-base);
-      width: 20px;
-      text-align: center;
-    }
-    
-    .nav-link.text-danger {
-      color: var(--error-color);
-      margin-top: var(--spacing-lg);
-    }
-    
-    .nav-link.text-danger:hover {
-      background: #fee2e2;
-      color: #dc2626;
-      border-left-color: var(--error-color);
-    }
-    
-    /* Main Content */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .topbar {
-      background: var(--bg-primary);
-      border-bottom: 1px solid var(--gray-200);
-      padding: var(--spacing-md) var(--spacing-xl);
-      display: flex;
-      align-items: center;
-      justify-content: between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-lg);
-    }
-    
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      font-size: var(--text-xl);
-      color: var(--text-secondary);
-      cursor: pointer;
-      padding: var(--spacing-xs);
-      border-radius: var(--border-radius);
-      transition: all var(--transition-fast);
-    }
-    
-    .mobile-menu-btn:hover {
-      background: var(--gray-100);
-      color: var(--text-primary);
-    }
-    
-    .topbar-title {
-      font-size: var(--text-xl);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-      margin: 0;
-    }
-    
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-md);
-      margin-left: auto;
-    }
-    
-    .btn-topbar {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-      padding: var(--spacing-xs) var(--spacing-sm);
-      font-size: var(--text-sm);
-      border: 1px solid var(--gray-300);
-      border-radius: var(--border-radius);
-      background: var(--bg-primary);
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: all var(--transition-fast);
-    }
-    
-    .btn-topbar:hover {
-      background: var(--gray-50);
-      border-color: var(--gray-400);
-      color: var(--text-primary);
-      text-decoration: none;
-    }
-    
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      padding: var(--spacing-sm) var(--spacing-md);
-      background: var(--bg-accent);
-      border-radius: var(--border-radius-lg);
-      border: 1px solid rgba(37, 99, 235, 0.2);
-    }
-    
-    .user-avatar {
-      width: 32px;
-      height: 32px;
-      background: var(--primary-color);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: var(--text-sm);
-      font-weight: var(--font-semibold);
-    }
-    
-    .user-details {
-      font-size: var(--text-sm);
-    }
-    
-    .user-name {
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-      display: block;
-    }
-    
-    .user-role {
-      color: var(--text-tertiary);
-      font-size: var(--text-xs);
-    }
-    
-    /* Content Area */
-    .content-area {
-      flex: 1;
-      padding: var(--spacing-lg);
-      overflow-y: auto;
-    }
-    
-    .content-frame {
-      width: 100%;
-      height: calc(100vh - 120px);
-      border: none;
-      border-radius: var(--border-radius-lg);
-      background: var(--bg-primary);
-      box-shadow: var(--shadow);
-      transition: all var(--transition-normal);
-    }
-    
-    .content-frame:hover {
-      box-shadow: var(--shadow-md);
-    }
-    
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        transform: translateX(-100%);
-        z-index: 200;
-      }
-      
-      .sidebar.mobile-open {
-        transform: translateX(0);
-      }
-      
-      .mobile-menu-btn {
-        display: block;
-      }
-      
-      .topbar {
-        padding: var(--spacing-sm) var(--spacing-md);
-      }
-      
-      .topbar-title {
-        font-size: var(--text-lg);
-      }
-      
-      .topbar-actions {
-        gap: var(--spacing-sm);
-      }
-      
-      .btn-topbar {
-        padding: var(--spacing-xs);
-        font-size: var(--text-xs);
-      }
-      
-      .btn-topbar span {
-        display: none;
-      }
-      
-      .user-details {
-        display: none;
-      }
-      
-      .content-area {
-        padding: var(--spacing-md);
-      }
-      
-      .content-frame {
-        height: calc(100vh - 100px);
-      }
-    }
-    
-    /* Mobile Overlay */
-    .mobile-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 150;
-    }
-    
-    .mobile-overlay.show {
-      display: block;
-    }
-    
-    /* Loading States */
-    .content-frame.loading {
-      background: var(--gray-100);
-      position: relative;
-    }
-    
-    .content-frame.loading::after {
+    .loading::before {
       content: '';
       position: absolute;
       top: 50%;
@@ -379,226 +106,308 @@
       transform: translate(-50%, -50%);
       width: 40px;
       height: 40px;
-      border: 3px solid var(--gray-300);
-      border-top: 3px solid var(--primary-color);
+      border: 4px solid #f4f6f8;
+      border-top: 3px solid #16a34a;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      z-index: 1000;
     }
     
     @keyframes spin {
       0% { transform: translate(-50%, -50%) rotate(0deg); }
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
+    
+    /* Cute hover effects */
+    .hover-float:hover {
+      transform: translateY(-2px);
+      transition: transform 0.3s ease;
+    }
+    
+    /* Active nav link pulse */
+    .nav-link.active {
+      animation: gentle-pulse 2s infinite;
+    }
+    
+    @keyframes gentle-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.9; }
+    }
   </style>
+  
 </head>
 
-<body>
-  <div class="app-container">
+<body class="employee-dashboard bg-background-primary min-h-screen font-system">
+  <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">
-          <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
-               alt="Logo Trường Mầm Non Hoa Hướng Dương">
+    <aside class="w-80 bg-white/95 backdrop-blur-sm shadow-neutral-lg transform transition-transform duration-300 ease-in-out z-50 fixed lg:relative lg:transform-none -translate-x-full lg:translate-x-0" id="sidebar">
+      <!-- Header -->
+      <div class="bg-neutral-gradient p-6 text-center shadow-lg relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"></div>
+        <div class="relative z-10">
+          <div class="mb-4 flex justify-center">
+            <div class="w-20 h-20 rounded-full border-4 border-white/30 shadow-neutral overflow-hidden animate-float">
+              <img src="{{ url_for('static_files', filename='mnhhd.jpg') }}" 
+                   alt="🌸" 
+                   class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+            </div>
+          </div>
+          <h2 class="text-white font-system font-bold text-xl leading-tight mb-2">
+            🌸 TRƯỜNG MẦM NON<br>
+            🌻 HOA HƯỚNG DƯƠNG 🌻
+          </h2>
+          <p class="text-white/90 text-xs font-semibold tracking-wider font-system">
+            ✨ HỆ THỐNG QUẢN LÝ NHÂN SỰ ✨
+          </p>
         </div>
-        <h2 class="sidebar-title">TRƯỜNG MẦM NON<br>HOA HƯỚNG DƯƠNG</h2>
-        <p class="sidebar-subtitle">HỆ THỐNG QUẢN LÝ NHÂN SỰ</p>
+        <!-- Decorative elements -->
+        <div class="absolute top-2 left-2 text-white/20 text-2xl animate-spin-slow">🌟</div>
+        <div class="absolute top-4 right-4 text-white/20 text-xl animate-bounce">🦋</div>
+        <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white/20 text-lg animate-wiggle">🌈</div>
       </div>
       
-      <nav class="sidebar-nav">
+      <nav class="p-4 space-y-2 h-[calc(100vh-200px)] lg:max-h-[calc(100vh-200px)] overflow-y-auto">
         <!-- Main Section -->
-        <div class="nav-section">
-          <div class="nav-section-title">Chính</div>
-          <div class="nav-item">
-            <a class="nav-link active" data-page="/employees" href="#">
-              <i class="fas fa-home"></i>
-              <span>Trang Chủ</span>
-            </a>
+        <div class="mb-6">
+          <div class="flex items-center mb-3 text-gray-500 font-cute text-sm">
+            <span class="mr-2">🏠</span>
+            <span class="uppercase tracking-wider font-semibold">Trang Chính</span>
           </div>
+          <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute group bg-gradient-to-r from-cute-primary/10 to-cute-secondary/10 border-l-4 border-cute-primary" 
+             data-page="/employees" href="#">
+            <span class="text-2xl mr-3 group-hover:animate-bounce">🏡</span>
+            <span class="font-cute font-semibold text-gray-700 group-hover:text-cute-primary">Trang Chủ</span>
+          </a>
         </div>
         
         <!-- EPA Section -->
         {% if session['role'] == 'user' or session['role'] == 'supervisor' %}
-        <div class="nav-section">
-          <div class="nav-section-title">Đánh Giá EPA</div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/user-epa-score" href="#">
-              <i class="fas fa-star"></i>
-              <span>Đánh Giá Cá Nhân</span>
-            </a>
+        <div class="mb-6">
+          <div class="flex items-center mb-3 text-gray-500 font-cute text-sm">
+            <span class="mr-2">⭐</span>
+            <span class="uppercase tracking-wider font-semibold">Đánh Giá EPA</span>
           </div>
+          <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-yellow/20 hover:to-kindergarten-orange/20 group" 
+             data-page="/user-epa-score" href="#">
+            <span class="text-2xl mr-3 group-hover:animate-bounce">🌟</span>
+            <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-orange">Đánh Giá Cá Nhân</span>
+          </a>
         </div>
         {% endif %}
         
         <!-- Admin Section -->
         {% if session['role'] == 'admin' or session['user'] == 'kimnhung' %}
-        <div class="nav-section">
-          <div class="nav-section-title">Quản Lý</div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/users" href="#">
-              <i class="fas fa-users-cog"></i>
-              <span>Tài Khoản</span>
-            </a>
+        <div class="mb-6">
+          <div class="flex items-center mb-3 text-gray-500 font-cute text-sm">
+            <span class="mr-2">👑</span>
+            <span class="uppercase tracking-wider font-semibold">Quản Lý</span>
           </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/classes" href="#">
-              <i class="fas fa-school"></i>
-              <span>Danh Sách Lớp</span>
+          <div class="space-y-2">
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-blue/20 hover:to-kindergarten-purple/20 group" 
+               data-page="/users" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-wiggle">👥</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-blue">Tài Khoản</span>
             </a>
-          </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/assign-classes" href="#">
-              <i class="fas fa-user-plus"></i>
-              <span>Phân Lớp</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-green/20 hover:to-kindergarten-blue/20 group" 
+               data-page="/classes" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">🏫</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-green">Danh Sách Lớp</span>
             </a>
-          </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/assign-teachers" href="#">
-              <i class="fas fa-chalkboard-teacher"></i>
-              <span>Phân Công GV</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-purple/20 hover:to-kindergarten-pink/20 group" 
+               data-page="/assign-classes" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">👶</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-purple">Phân Lớp</span>
+            </a>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-coral/20 hover:to-kindergarten-yellow/20 group" 
+               data-page="/assign-teachers" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-wiggle">👩‍🏫</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-coral">Phân Công GV</span>
             </a>
           </div>
         </div>
         
-        <div class="nav-section">
-          <div class="nav-section-title">Đánh Giá & Báo Cáo</div>
-          <div class="nav-item">
+        <div class="mb-6">
+          <div class="flex items-center mb-3 text-gray-500 font-cute text-sm">
+            <span class="mr-2">📊</span>
+            <span class="uppercase tracking-wider font-semibold">Đánh Giá & Báo Cáo</span>
+          </div>
+          <div class="space-y-2">
             {% if session['role'] == 'supervisor' %}
-            <a class="nav-link" data-page="/sup-epa-score" href="#">
-              <i class="fas fa-users-cog"></i>
-              <span>Chấm Điểm Tổ Viên</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-blue/20 hover:to-kindergarten-green/20 group" 
+               data-page="/sup-epa-score" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">✅</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-blue">Chấm Điểm Tổ Viên</span>
             </a>
             {% else %}
-            <a class="nav-link" data-page="/data_epa" href="#">
-              <i class="fas fa-chart-line"></i>
-              <span>Đánh Giá GV</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-blue/20 hover:to-kindergarten-green/20 group" 
+               data-page="/data_epa" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">📈</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-blue">Đánh Giá GV</span>
             </a>
             {% endif %}
-          </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/epa_summary" href="#">
-              <i class="fas fa-trophy"></i>
-              <span>Xếp Hạng</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-yellow/20 hover:to-kindergarten-orange/20 group" 
+               data-page="/epa_summary" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">🏆</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-orange">Xếp Hạng</span>
             </a>
-          </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/admin/questions" href="#">
-              <i class="fas fa-question-circle"></i>
-              <span>Câu Hỏi EPA</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-purple/20 hover:to-kindergarten-blue/20 group" 
+               data-page="/admin/questions" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-wiggle">❓</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-purple">Câu Hỏi EPA</span>
             </a>
-          </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/thoigianmoepa" href="#">
-              <i class="fas fa-clock"></i>
-              <span>Thời Gian EPA</span>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-kindergarten-green/20 hover:to-kindergarten-blue/20 group" 
+               data-page="/thoigianmoepa" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">⏰</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-kindergarten-green">Thời Gian EPA</span>
             </a>
           </div>
         </div>
         
-        <div class="nav-section">
-          <div class="nav-section-title">Hệ Thống</div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/logs" href="#">
-              <i class="fas fa-history"></i>
-              <span>Nhật Ký</span>
-            </a>
+        <div class="mb-6">
+          <div class="flex items-center mb-3 text-gray-500 font-cute text-sm">
+            <span class="mr-2">⚙️</span>
+            <span class="uppercase tracking-wider font-semibold">Hệ Thống</span>
           </div>
-          <div class="nav-item">
-            <a class="nav-link" data-page="/stats" href="#">
-              <i class="fas fa-chart-bar"></i>
-              <span>Thống Kê</span>
+          <div class="space-y-2">
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-gray-200/50 hover:to-gray-300/50 group" 
+               data-page="/logs" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">📚</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-gray-600">Nhật Ký</span>
+            </a>
+            <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-gray-200/50 hover:to-gray-300/50 group" 
+               data-page="/stats" href="#">
+              <span class="text-2xl mr-3 group-hover:animate-bounce">📊</span>
+              <span class="font-cute font-semibold text-gray-700 group-hover:text-gray-600">Thống Kê</span>
             </a>
           </div>
         </div>
         {% endif %}
         
         <!-- Logout -->
-        <div class="nav-section">
-          <div class="nav-item">
-            <a class="nav-link text-danger" href="/logout">
-              <i class="fas fa-sign-out-alt"></i>
-              <span>Đăng Xuất</span>
-            </a>
-          </div>
+        <div class="border-t border-gray-200 pt-4">
+          <a class="nav-link flex items-center p-3 rounded-xl transition-all duration-300 hover:shadow-cute hover:bg-gradient-to-r hover:from-red-100 hover:to-red-200 group" 
+             href="/logout">
+            <span class="text-2xl mr-3 group-hover:animate-wiggle">👋</span>
+            <span class="font-cute font-semibold text-red-500 group-hover:text-red-600">Đăng Xuất</span>
+          </a>
         </div>
       </nav>
     </aside>
     
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="flex-1 flex flex-col lg:ml-0">
       <!-- Topbar -->
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <i class="fas fa-bars"></i>
-          </button>
-          <h1 class="topbar-title">Dashboard</h1>
-        </div>
-        
-        <div class="topbar-actions">
-          <a class="btn-topbar" href="/dashboard">
-            <i class="fas fa-home"></i>
-            <span>Trang Chủ</span>
-          </a>
-          <button class="btn-topbar" onclick="openChangePassModal()">
-            <i class="fas fa-key"></i>
-            <span>Đổi MK</span>
-          </button>
-          <div class="user-info">
-            <div class="user-avatar">
-              {{ user[0].upper() if user else 'U' }}
+      <header class="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 px-3 sm:px-6 py-4 shadow-cute sticky top-0 z-40">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2 sm:space-x-4">
+            <button class="lg:hidden p-2 rounded-xl bg-gradient-to-r from-cute-primary/10 to-cute-secondary/10 text-cute-primary hover:shadow-cute transition-all duration-300" 
+                    id="mobileMenuBtn">
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <div class="flex items-center space-x-2 sm:space-x-3">
+              <span class="text-2xl sm:text-3xl animate-float">🌸</span>
+              <h1 class="text-lg sm:text-2xl font-cute font-bold bg-gradient-to-r from-cute-primary to-cute-secondary bg-clip-text text-transparent">
+                Dashboard Mầm Non
+              </h1>
             </div>
-            <div class="user-details">
-              <span class="user-name">{{ user or 'Unknown' }}</span>
-              <span class="user-role">{{ role or 'user' }}</span>
+          </div>
+          
+          <div class="flex items-center space-x-1 sm:space-x-3">
+            <a class="btn-cute flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-kindergarten-blue/20 to-kindergarten-green/20 text-kindergarten-blue hover:shadow-cute transition-all duration-300 group" 
+               href="/dashboard">
+              <span class="group-hover:animate-bounce">🏠</span>
+              <span class="hidden sm:inline font-cute font-semibold text-xs sm:text-sm">Trang Chủ</span>
+            </a>
+            <button class="btn-cute flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-kindergarten-yellow/20 to-kindergarten-orange/20 text-kindergarten-orange hover:shadow-cute transition-all duration-300 group" 
+                    onclick="openChangePassModal()">
+              <span class="group-hover:animate-wiggle">🔑</span>
+              <span class="hidden sm:inline font-cute font-semibold text-xs sm:text-sm">Đổi MK</span>
+            </button>
+            <a class="btn-cute flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-red-400/20 to-red-500/20 text-red-500 hover:shadow-cute transition-all duration-300 group" 
+               href="/logout">
+              <span class="group-hover:animate-bounce">👋</span>
+              <span class="hidden sm:inline font-cute font-semibold text-xs sm:text-sm">Đăng Xuất</span>
+            </a>
+            
+            <div class="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4 py-2 bg-gradient-to-r from-cute-primary/10 to-cute-secondary/10 rounded-full border border-cute-primary/20 shadow-cute">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-cute rounded-full flex items-center justify-center text-white font-bold animate-pulse-slow text-xs sm:text-sm">
+                {{ user[0].upper() if user else '🌸' }}
+              </div>
+              <div class="hidden sm:block">
+                <div class="font-cute font-bold text-gray-700 text-xs sm:text-sm">{{ user or 'Unknown' }}</div>
+                <div class="font-cute text-xs text-gray-500">{{ role or 'user' }}</div>
+              </div>
             </div>
           </div>
         </div>
       </header>
       
       <!-- Content Area -->
-      <div class="content-area">
-        <iframe 
-          id="mainFrame" 
-          class="content-frame" 
-          src="/employees"
-          title="Main Content"
-        ></iframe>
+      <div class="flex-1 p-3 sm:p-6 bg-gradient-to-br from-white/50 to-gray-50/50">
+        <div class="h-full bg-white/80 backdrop-blur-lg rounded-xl sm:rounded-3xl shadow-cute-lg border border-white/60 overflow-hidden">
+          <iframe 
+            id="mainFrame" 
+            class="w-full h-full border-0 rounded-xl sm:rounded-3xl"
+            src="/employees"
+            title="Main Content"
+          ></iframe>
+        </div>
       </div>
     </main>
   </div>
   
   <!-- Mobile Overlay -->
-  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <div class="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 hidden transition-opacity duration-300" id="mobileOverlay"></div>
   
   <!-- Change Password Modal -->
-  <div class="modal" id="changePassModal">
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <h3 class="modal-title">Đổi Mật Khẩu</h3>
-        <button class="modal-close" onclick="closeChangePassModal()">
-          <i class="fas fa-times"></i>
-        </button>
+  <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-all duration-300" id="changePassModal">
+    <div class="bg-white/95 backdrop-blur-lg rounded-3xl shadow-cute-lg border border-white/60 w-full max-w-md mx-4 transform transition-all duration-300">
+      <div class="gradient-cute-blue p-6 text-center rounded-t-3xl relative">
+        <div class="absolute top-2 right-2">
+          <button class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors duration-200" 
+                  onclick="closeChangePassModal()">
+            <i class="fas fa-times text-sm"></i>
+          </button>
+        </div>
+        <span class="text-3xl animate-bounce">🔐</span>
+        <h3 class="text-white font-cute font-bold text-xl mt-2">Đổi Mật Khẩu</h3>
       </div>
-      <div class="modal-body">
-        <form id="changePassForm">
-          <div class="form-group">
-            <label class="form-label">Mật khẩu hiện tại</label>
-            <input class="form-control" id="oldPassword" type="password" required>
+      
+      <div class="p-6">
+        <form id="changePassForm" class="space-y-4">
+          <div>
+            <label class="block text-gray-700 font-cute font-semibold mb-2">
+              <span class="mr-2">🔒</span>Mật khẩu hiện tại
+            </label>
+            <input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" 
+                   id="oldPassword" type="password" placeholder="Nhập mật khẩu hiện tại" required>
           </div>
-          <div class="form-group">
-            <label class="form-label">Mật khẩu mới</label>
-            <input class="form-control" id="newPassword" type="password" required>
+          <div>
+            <label class="block text-gray-700 font-cute font-semibold mb-2">
+              <span class="mr-2">🔑</span>Mật khẩu mới
+            </label>
+            <input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" 
+                   id="newPassword" type="password" placeholder="Nhập mật khẩu mới" required>
           </div>
-          <div class="form-group">
-            <label class="form-label">Xác nhận mật khẩu mới</label>
-            <input class="form-control" id="confirmNewPassword" type="password" required>
+          <div>
+            <label class="block text-gray-700 font-cute font-semibold mb-2">
+              <span class="mr-2">✅</span>Xác nhận mật khẩu mới
+            </label>
+            <input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" 
+                   id="confirmNewPassword" type="password" placeholder="Nhập lại mật khẩu mới" required>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeChangePassModal()">Hủy</button>
-        <button class="btn btn-primary" onclick="submitChangePassword()">Đổi Mật Khẩu</button>
+      
+      <div class="p-6 pt-0 flex space-x-3">
+        <button class="flex-1 px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl font-cute font-semibold transition-colors duration-200" 
+                onclick="closeChangePassModal()">
+          <span class="mr-2">❌</span>Hủy
+        </button>
+        <button class="flex-1 px-6 py-3 bg-gradient-cute text-white rounded-xl font-cute font-semibold hover:shadow-cute transition-all duration-300" 
+                onclick="submitChangePassword()">
+          <span class="mr-2">💾</span>Đổi Mật Khẩu
+        </button>
       </div>
     </div>
   </div>
@@ -631,9 +440,15 @@
       iframe.src = safeURL;
       
       // Update active state
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.remove('bg-gradient-to-r', 'from-cute-primary/10', 'to-cute-secondary/10', 'border-l-4', 'border-cute-primary');
+        l.classList.remove('active');
+      });
       const activeLink = document.querySelector(`[data-page="${page}"]`);
-      if (activeLink) activeLink.classList.add('active');
+      if (activeLink) {
+        activeLink.classList.add('active');
+        activeLink.classList.add('bg-gradient-to-r', 'from-cute-primary/10', 'to-cute-secondary/10', 'border-l-4', 'border-cute-primary');
+      }
       
       // Update URL
       updateURL(page);
@@ -649,26 +464,26 @@
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('mobileOverlay');
       
-      sidebar.classList.toggle('mobile-open');
-      overlay.classList.toggle('show');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
     }
 
     function closeMobileMenu() {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('mobileOverlay');
       
-      sidebar.classList.remove('mobile-open');
-      overlay.classList.remove('show');
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
     }
 
     // Modal Management
     function openChangePassModal() {
       document.getElementById('changePassForm').reset();
-      document.getElementById('changePassModal').classList.add('show');
+      document.getElementById('changePassModal').classList.remove('hidden');
     }
 
     function closeChangePassModal() {
-      document.getElementById('changePassModal').classList.remove('show');
+      document.getElementById('changePassModal').classList.add('hidden');
     }
 
     async function submitChangePassword() {
@@ -731,15 +546,40 @@
         }
       });
 
+      // Initialize mobile sidebar state
+      const sidebar = document.getElementById('sidebar');
+      // Sidebar already has -translate-x-full class for mobile in HTML
+      // Just ensure it's properly shown/hidden based on screen size
+      function updateSidebarForScreenSize() {
+        if (window.innerWidth >= 1024) {
+          sidebar.classList.remove('-translate-x-full');
+          document.getElementById('mobileOverlay').classList.add('hidden');
+        } else {
+          // Keep hidden on mobile until menu is clicked
+          if (!sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.add('-translate-x-full');
+          }
+        }
+      }
+      
+      updateSidebarForScreenSize();
+      window.addEventListener('resize', updateSidebarForScreenSize);
+
       // Browser back/forward
       window.addEventListener('popstate', function(e) {
         const page = e.state?.page || getPageFromURL();
         const safeURL = createSafeURL(page);
         document.getElementById('mainFrame').src = safeURL;
         
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => {
+          l.classList.remove('bg-gradient-to-r', 'from-cute-primary/10', 'to-cute-secondary/10', 'border-l-4', 'border-cute-primary');
+          l.classList.remove('active');
+        });
         const activeLink = document.querySelector(`[data-page="${page}"]`);
-        if (activeLink) activeLink.classList.add('active');
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.classList.add('bg-gradient-to-r', 'from-cute-primary/10', 'to-cute-secondary/10', 'border-l-4', 'border-cute-primary');
+        }
       });
 
       // Initialize
@@ -748,7 +588,10 @@
       document.getElementById('mainFrame').src = safeURL;
       
       const activeLink = document.querySelector(`[data-page="${currentPage}"]`);
-      if (activeLink) activeLink.classList.add('active');
+      if (activeLink) {
+        activeLink.classList.add('active');
+        activeLink.classList.add('bg-gradient-to-r', 'from-cute-primary/10', 'to-cute-secondary/10', 'border-l-4', 'border-cute-primary');
+      }
       
       if (!window.location.search) {
         updateURL(currentPage);

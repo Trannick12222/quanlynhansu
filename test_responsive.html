@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Responsive - Employee Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #e0f2fe 100%);
+    }
+    
+    .test-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.15);
+    }
+    
+    .test-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 2px solid #1e3a8a;
+      border-radius: 15px;
+      background: #f0f9ff;
+    }
+    
+    .test-title {
+      color: #1e3a8a;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .color-box {
+      height: 80px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .responsive-test {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .test-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #1e3a8a;
+      box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.1);
+    }
+    
+    .test-button {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 5px;
+    }
+    
+    .test-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .test-container {
+        padding: 15px;
+        margin: 10px;
+      }
+      
+      .test-section {
+        padding: 15px;
+      }
+      
+      .test-title {
+        font-size: 1.25rem;
+      }
+      
+      .color-palette {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      
+      .color-box {
+        height: 60px;
+        font-size: 0.875rem;
+      }
+      
+      .responsive-test {
+        grid-template-columns: 1fr;
+      }
+      
+      .test-button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1 style="text-align: center; color: #1e3a8a; margin-bottom: 30px;">🧪 Test Responsive Design - Navy Blue Theme</h1>
+    
+    <div class="test-section">
+      <div class="test-title">🎨 Color Palette Test</div>
+      <div class="color-palette">
+        <div class="color-box" style="background: #1e3a8a;">#1e3a8a<br>Navy Primary</div>
+        <div class="color-box" style="background: #1e40af;">#1e40af<br>Navy Secondary</div>
+        <div class="color-box" style="background: #1d4ed8;">#1d4ed8<br>Navy Tertiary</div>
+        <div class="color-box" style="background: #2563eb;">#2563eb<br>Navy Accent</div>
+        <div class="color-box" style="background: #3b82f6;">#3b82f6<br>Navy Light</div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <div class="test-title">📱 Responsive Grid Test</div>
+      <div class="responsive-test">
+        <div class="test-card">
+          <h3 style="color: #1e3a8a;">Card 1</h3>
+          <p>This card should stack on mobile and display in grid on desktop.</p>
+          <button class="test-button">Action Button</button>
+        </div>
+        <div class="test-card">
+          <h3 style="color: #1e40af;">Card 2</h3>
+          <p>Test responsive behavior with different screen sizes.</p>
+          <button class="test-button">Another Button</button>
+        </div>
+        <div class="test-card">
+          <h3 style="color: #1d4ed8;">Card 3</h3>
+          <p>Check if buttons become full-width on mobile.</p>
+          <button class="test-button">Full Width on Mobile</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <div class="test-title">🔘 Button Test</div>
+      <div style="text-align: center;">
+        <button class="test-button">👤 Tài Khoản</button>
+        <button class="test-button">📈 Đánh Giá EPA</button>
+        <button class="test-button">🏆 Xếp Hạng</button>
+        <button class="test-button">💾 Xuất Dữ Liệu</button>
+        <button class="test-button">📤 Nhập Excel</button>
+        <button class="test-button">🔄 Cập Nhật DB</button>
+      </div>
+    </div>
+    
+    <div class="test-section">
+      <div class="test-title">📋 Instructions</div>
+      <div style="background: white; padding: 15px; border-radius: 10px; border-left: 4px solid #1e3a8a;">
+        <h4 style="color: #1e3a8a; margin-top: 0;">How to Test:</h4>
+        <ol style="color: #374151;">
+          <li><strong>Desktop (>1024px):</strong> Cards should display in 3 columns, buttons in rows</li>
+          <li><strong>Tablet (768px-1024px):</strong> Cards should display in 2 columns</li>
+          <li><strong>Mobile (<768px):</strong> Cards stack vertically, buttons become full-width</li>
+          <li><strong>Color Consistency:</strong> All elements should use navy blue theme</li>
+          <li><strong>Hover Effects:</strong> Buttons should scale and show shadow on hover</li>
+        </ol>
+        <p style="color: #6b7280; font-style: italic;">
+          Resize your browser window or use developer tools to test different screen sizes.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Simple responsive test
+    function checkScreenSize() {
+      const width = window.innerWidth;
+      let device = '';
+      
+      if (width < 768) {
+        device = 'Mobile';
+      } else if (width < 1024) {
+        device = 'Tablet';
+      } else {
+        device = 'Desktop';
+      }
+      
+      console.log(`Screen width: ${width}px - Device: ${device}`);
+    }
+    
+    window.addEventListener('resize', checkScreenSize);
+    checkScreenSize(); // Initial check
+  </script>
+</body>
+</html>

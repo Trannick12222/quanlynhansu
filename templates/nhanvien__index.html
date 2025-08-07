@@ -3,410 +3,117 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>👥 Quản Lý Nhân Sự - Trường Mầm Non Hoa Hướng Dương</title>
+  <title>🌸 Quản Lý Nhân Sự - Trường Mầm Non Hoa Hướng Dương</title>
   
-  <!-- Inter Font -->
+  <!-- TailwindCSS -->
+  <link href="{{ url_for('static', filename='css/employee-dashboard.css') }}" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'kindergarten': {
+              'pink': '#dcfce7',
+              'yellow': '#f0fdf4',
+              'blue': '#14532d',
+              'green': '#166534',
+              'orange': '#15803d',
+              'purple': '#16a34a',
+              'coral': '#22c55e'
+            },
+            'cute': {
+              'primary': '#14532d',
+              'secondary': '#166534', 
+              'success': '#16a34a',
+              'warning': '#15803d',
+              'danger': '#dc2626',
+              'info': '#22c55e',
+              'light': '#f0fdf4',
+              'dark': '#1e293b'
+            }
+          },
+          fontFamily: {
+            'cute': ['Comic Sans MS', 'cursive', 'sans-serif'],
+            'inter': ['Inter', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            'bounce-slow': 'bounce 2s infinite',
+            'wiggle': 'wiggle 1s ease-in-out infinite',
+            'float': 'float 3s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s infinite'
+          },
+          keyframes: {
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-3deg)' },
+              '50%': { transform: 'rotate(3deg)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   
-  <!-- Custom CSS -->
-  <link href="{{ url_for('static_files', filename='css/modern.css') }}" rel="stylesheet">
-  
   <style>
-    body {
-      font-family: 'Inter', var(--font-family-sans);
-      background: var(--bg-secondary);
-      padding: var(--spacing-lg);
+    .font-cute { font-family: 'Fredoka', 'Comic Sans MS', cursive, sans-serif; }
+    .shadow-cute { box-shadow: 0 10px 25px -5px rgba(20, 83, 45, 0.15), 0 4px 6px -2px rgba(20, 83, 45, 0.05); }
+    .shadow-cute-lg { box-shadow: 0 20px 40px -12px rgba(20, 83, 45, 0.2), 0 8px 16px -4px rgba(20, 83, 45, 0.08); }
+    .gradient-cute { background: linear-gradient(135deg, #14532d 0%, #166534 50%, #15803d 100%); }
+    .gradient-cute-blue { background: linear-gradient(135deg, #16a34a 0%, #14532d 100%); }
+    .gradient-cute-pink { background: linear-gradient(135deg, #14532d 0%, #166534 100%); }
+    .gradient-cute-yellow { background: linear-gradient(135deg, #166534 0%, #15803d 100%); }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #dcfce7; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #14532d; border-radius: 10px; border: 2px solid #dcfce7; }
+    ::-webkit-scrollbar-thumb:hover { background: #166534; }
+    
+    /* Loading animation */
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #dcfce7;
+      border-top: 4px solid #14532d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
     }
     
-    .page-header {
-      background: var(--bg-primary);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-xl);
-      margin-bottom: var(--spacing-xl);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--gray-200);
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
-    .page-title {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-lg);
-    }
-    
-    .page-title h1 {
-      font-size: var(--text-3xl);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-      margin: 0;
-    }
-    
-    .page-title .icon {
-      font-size: var(--text-4xl);
-      color: var(--primary-color);
-    }
-    
-    .action-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--spacing-md);
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: var(--spacing-lg);
-    }
-    
-    .action-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--spacing-sm);
-    }
-    
-    .controls-section {
-      background: var(--bg-primary);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-lg);
-      margin-bottom: var(--spacing-lg);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--gray-200);
-    }
-    
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--spacing-lg);
-      align-items: end;
-    }
-    
-    .form-group {
-      margin-bottom: 0;
-    }
-    
-    .data-section {
-      background: var(--bg-primary);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--gray-200);
-      overflow: hidden;
-    }
-    
-    .section-header {
-      padding: var(--spacing-lg);
-      background: var(--gray-50);
-      border-bottom: 1px solid var(--gray-200);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-sm);
-      font-size: var(--text-lg);
-      font-weight: var(--font-semibold);
-      color: var(--text-primary);
-      margin: 0;
-    }
-    
-    .table-wrapper {
-      overflow-x: auto;
-      max-height: 70vh;
-    }
-    
-    .data-table {
-      width: max-content;
-      border-collapse: collapse;
-      font-size: var(--text-sm);
-      margin: 0;
-      table-layout: auto;
-    }
-    
-    .data-table th {
-      background: var(--primary-color);
-      color: white;
-      padding: var(--spacing-md);
-      text-align: left;
-      font-weight: var(--font-semibold);
-      border-bottom: 1px solid var(--primary-dark);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      white-space: nowrap;
-      min-width: 120px;
-    }
-    
-    .data-table td {
-      padding: var(--spacing-md);
-      border-bottom: 1px solid var(--gray-200);
-      vertical-align: top;
-      white-space: nowrap;
-      overflow: visible;
-      text-overflow: clip;
-      text-align: left !important;
-      min-width: 120px;
-    }
-    
-    /* Các cột có thể có nội dung dài - cho phép xuống dòng */
-    .data-table td:nth-child(3),  /* Họ và tên */
-    .data-table td:nth-child(7),  /* Quê quán */
-    .data-table td:nth-child(15) { /* Email */
-      white-space: normal;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-    
-    /* Cột Email */
-    .data-table td:nth-child(15) {
-      min-width: 300px;
-      max-width: 400px;
-    }
-    .data-table td:nth-child(16) {
-      min-width: 10px;
-      max-width: 50px;
-    }
-    /* Cột Địa chỉ - hiển thị đầy đủ không xuống dòng */
-    .data-table td:nth-child(17) {
-      min-width: 450px;
-      max-width: 1000px;
-      white-space: nowrap;
-      overflow: visible;
-      text-overflow: clip;
-      position: relative;
-    }
-    
-    /* Tooltip cho cột địa chỉ để hiển thị đầy đủ nội dung khi hover */
-    .data-table td:nth-child(17):hover::after {
-      content: attr(title);
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      white-space: normal;
-      max-width: 500px;
-      z-index: 1000;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      word-wrap: break-word;
-    }
-    
-    .data-table tbody tr:hover {
-      background: var(--gray-50);
-    }
-    
-    .data-table tbody tr:nth-child(even) {
-      background: var(--gray-25, #fafafa);
-    }
-    
-    .data-table tbody tr:nth-child(even):hover {
-      background: var(--gray-50);
-    }
-    
+    /* Inline edit styles */
     .inline-edit {
       border: none;
       background: transparent;
       width: 100%;
-      padding: 0;
-      font-size: inherit;
-      border-radius: var(--border-radius-sm);
-      transition: all var(--transition-fast);
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
     }
     
     .inline-edit:focus {
-      background: var(--bg-primary);
-      border: 1px solid var(--primary-color);
+      background: white;
+      border: 2px solid #14532d;
       outline: none;
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(20, 83, 45, 0.2);
     }
     
-    .action-buttons {
-      display: flex;
-      gap: var(--spacing-xs);
-    }
-    
-    .btn-action {
-      padding: var(--spacing-xs) var(--spacing-sm);
-      font-size: var(--text-xs);
-      border-radius: var(--border-radius-sm);
-      border: none;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-    }
-    
-    .btn-edit {
-      background: var(--warning-color);
-      color: white;
-    }
-    
-    .btn-edit:hover {
-      background: #c2410c;
-    }
-    
-    .btn-delete {
-      background: var(--error-color);
-      color: white;
-    }
-    
-    .btn-delete:hover {
-      background: #b91c1c;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: var(--spacing-2xl);
-      color: var(--text-tertiary);
-    }
-    
-    .empty-state i {
-      font-size: 4rem;
-      margin-bottom: var(--spacing-lg);
-      color: var(--gray-300);
-    }
-    
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-      padding: var(--spacing-xs) var(--spacing-sm);
-      font-size: var(--text-xs);
-      font-weight: var(--font-medium);
-      border-radius: var(--border-radius-sm);
-      line-height: 1;
-    }
-    
-    .badge-department {
-      background: var(--info-color);
-      color: white;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--spacing-lg);
-      margin-bottom: var(--spacing-lg);
-    }
-    
-    .stat-card {
-      background: var(--bg-primary);
-      border-radius: var(--border-radius-lg);
-      padding: var(--spacing-lg);
-      border: 1px solid var(--gray-200);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition-normal);
-    }
-    
-    .stat-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
-    }
-    
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--border-radius-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: var(--text-xl);
-      margin-bottom: var(--spacing-md);
-    }
-    
-    .stat-icon.students {
-      background: #dbeafe;
-      color: var(--primary-color);
-    }
-    
-    .stat-icon.teachers {
-      background: #d1fae5;
-      color: var(--success-color);
-    }
-    
-    .stat-value {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-bold);
-      color: var(--text-primary);
-      margin-bottom: var(--spacing-xs);
-    }
-    
-    .stat-label {
-      font-size: var(--text-sm);
-      color: var(--text-tertiary);
-    }
-    
-    /* Loading States */
-    .loading {
-      position: relative;
-      pointer-events: none;
-      opacity: 0.6;
-    }
-    
-    .loading::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--gray-300);
-      border-top: 2px solid var(--primary-color);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      body {
-        padding: var(--spacing-md);
-      }
-      
-      .page-header {
-        padding: var(--spacing-lg);
-      }
-      
-      .action-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      
-      .controls-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .data-table th,
-      .data-table td {
-        padding: var(--spacing-xs) var(--spacing-sm);
-        font-size: var(--text-xs);
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      /* Giảm độ rộng cột địa chỉ trên mobile */
-      .data-table td:nth-child(17) {
-        min-width: 250px;
-        max-width: 400px;
-      }
-    }
-    
-    /* Hide sections initially */
     .department-section {
       display: none;
     }
@@ -420,253 +127,350 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Tăng độ rộng cho các cột cụ thể */
-    .data-table td:nth-child(3), /* Họ và tên */
-    .data-table td:nth-child(8), /* Họ tên bố */
-    .data-table td:nth-child(10), /* Họ tên mẹ */
-    .data-table td:nth-child(12), /* Hộ khẩu */
-    .data-table td:nth-child(13) { /* CCCD Bố/Mẹ */
-      min-width: 200px;
-      max-width: none;
-      white-space: normal;
-      word-wrap: break-word;
+    
+    /* Mobile-first responsive design - Override styles.css */
+    @media (max-width: 768px) {
+      .p-6 { padding: 1rem !important; }
+      .space-y-6 > * + * { margin-top: 1rem !important; }
+      .p-8 { padding: 1.5rem !important; }
+      .text-4xl { font-size: 1.875rem !important; }
+      .text-lg { font-size: 1rem !important; }
+      .w-16 { width: 3rem !important; }
+      .h-16 { width: 3rem !important; }
+      .text-2xl { font-size: 1.25rem !important; }
+      .rounded-3xl { border-radius: 1rem !important; }
+      .gap-4 { gap: 0.75rem !important; }
+      .gap-6 { gap: 1rem !important; }
+      .px-4 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+      .px-6 { padding-left: 1rem !important; padding-right: 1rem !important; }
+      .py-3 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+      .max-h-\[70vh\] { max-height: 60vh !important; }
+      .min-w-\[200px\] { min-width: 120px !important; }
+      .min-w-\[300px\] { min-width: 150px !important; }
+      .min-w-\[400px\] { min-width: 200px !important; }
     }
-
-    .data-table td:nth-child(14) { /* SĐT */
-      min-width: 120px;
-      max-width: none;
+    
+    /* Tablet responsive */
+    @media (max-width: 1024px) {
+      .grid-cols-1.md\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+      .grid-cols-1.md\:grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .flex-wrap { flex-wrap: wrap !important; }
+    }
+    
+    /* Enhanced table responsiveness */
+    .table-responsive {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .table-responsive table {
+      min-width: 100% !important;
+      font-size: 0.875rem !important;
+    }
+    
+    @media (max-width: 768px) {
+      .table-responsive table {
+        font-size: 0.75rem !important;
+      }
+      
+      .table-responsive th,
+      .table-responsive td {
+        padding: 0.5rem 0.25rem !important;
+        white-space: nowrap !important;
+      }
+      
+      .table-responsive .min-w-\[200px\] {
+        min-width: 120px !important;
+      }
+      
+      .table-responsive .min-w-\[300px\] {
+        min-width: 150px !important;
+      }
+      
+      .table-responsive .min-w-\[400px\] {
+        min-width: 200px !important;
+      }
+    }
+    
+    /* Button improvements for mobile */
+    @media (max-width: 768px) {
+      .flex.items-center.space-x-2 {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        space-x: 0 !important;
+        gap: 0.5rem !important;
+      }
+      
+      .flex.flex-wrap.gap-3 {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+      }
+      
+      .flex.flex-wrap.gap-4 {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+      }
     }
   </style>
 </head>
 
-<body>
-  <!-- Page Header -->
-  <div class="page-header">
-    <div class="page-title">
-      <i class="fas fa-users icon"></i>
-      <div>
-        <h1>Quản Lý Nhân Sự</h1>
-        <p style="margin: 0; color: var(--text-tertiary); font-size: var(--text-sm);">
-          Trường Mầm Non Hoa Hướng Dương
-        </p>
-      </div>
-    </div>
-    
-    <!-- Action Bar -->
-    {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-    <div class="action-bar">
-      <div class="action-group">
-        <a href="/users" class="btn btn-outline-primary">
-          <i class="fas fa-users-cog"></i>
-          Tài Khoản
-        </a>
-        <a href="/data_epa" class="btn btn-outline-success">
-          <i class="fas fa-chart-line"></i>
-          Đánh Giá EPA
-        </a>
-        <a href="/epa_summary" class="btn btn-outline-info">
-          <i class="fas fa-trophy"></i>
-          Xếp Hạng
-        </a>
-        <a href="/export-data" class="btn btn-outline-secondary">
-          <i class="fas fa-download"></i>
-          Xuất Dữ Liệu
-        </a>
+<body class="employee-dashboard bg-gradient-to-br from-kindergarten-pink/20 via-kindergarten-blue/10 to-kindergarten-green/20 min-h-screen font-inter">
+  <div class="p-6 space-y-6">
+    <!-- Page Header -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute-lg p-8 border border-white/60">
+      <div class="flex items-center space-x-4 mb-6">
+        <div class="w-16 h-16 bg-gradient-cute rounded-2xl flex items-center justify-center text-white text-2xl animate-float">
+          👥
+        </div>
+        <div>
+          <h1 class="text-4xl font-cute font-bold bg-gradient-to-r from-cute-primary to-cute-secondary bg-clip-text text-transparent">
+            Quản Lý Nhân Sự
+          </h1>
+          <p class="text-gray-600 font-cute text-lg animate-pulse-slow">
+            🌸 Trường Mầm Non Hoa Hướng Dương 🌸
+          </p>
+        </div>
       </div>
       
-      <div class="action-group">
-        <button class="btn btn-primary" onclick="document.getElementById('excelFileInput').click()">
-          <i class="fas fa-upload"></i>
-          Nhập Excel
-        </button>
-        <input accept=".xlsx" hidden id="excelFileInput" onchange="importExcel()" type="file"/>
+      <!-- Action Bar -->
+      {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+      <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div class="flex flex-wrap gap-3">
+          <a href="/users" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-kindergarten-blue/20 to-kindergarten-purple/20 text-kindergarten-blue hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:bg-kindergarten-blue hover:text-white">
+            <span class="group-hover:animate-wiggle">👤</span>
+            <span class="hidden sm:inline">Tài Khoản</span>
+            <span class="sm:hidden">TK</span>
+          </a>
+          <a href="/data_epa" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-kindergarten-green/20 to-kindergarten-blue/20 text-kindergarten-green hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:bg-kindergarten-green hover:text-white">
+            <span class="group-hover:animate-bounce">📈</span>
+            <span class="hidden sm:inline">Đánh Giá EPA</span>
+            <span class="sm:hidden">EPA</span>
+          </a>
+          <a href="/epa_summary" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-kindergarten-yellow/20 to-kindergarten-orange/20 text-kindergarten-orange hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:bg-kindergarten-orange hover:text-white">
+            <span class="group-hover:animate-bounce">🏆</span>
+            <span class="hidden sm:inline">Xếp Hạng</span>
+            <span class="sm:hidden">XH</span>
+          </a>
+          <a href="/export-data" class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-gray-200/50 to-gray-300/50 text-gray-600 hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:bg-gray-500 hover:text-white">
+            <span class="group-hover:animate-bounce">💾</span>
+            <span class="hidden sm:inline">Xuất Dữ Liệu</span>
+            <span class="sm:hidden">Xuất</span>
+          </a>
+        </div>
         
-        {% if session['role'] == 'admin' %}
-        <button class="btn btn-secondary" onclick="updateDataBase()">
-          <i class="fas fa-sync"></i>
-          Cập Nhật DB
-        </button>
-        <button class="btn btn-danger" onclick="removeDeptData()">
-          <i class="fas fa-trash"></i>
-          Xóa Dữ Liệu
-        </button>
-        {% endif %}
+        <div class="flex flex-wrap gap-3">
+          <button class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-cute text-white hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:scale-105" onclick="document.getElementById('excelFileInput').click()">
+            <span class="group-hover:animate-bounce">📤</span>
+            <span class="hidden sm:inline">Nhập Excel</span>
+            <span class="sm:hidden">Nhập</span>
+          </button>
+          <input accept=".xlsx" hidden id="excelFileInput" onchange="importExcel()" type="file"/>
+          
+          {% if session['role'] == 'admin' %}
+          <button class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-kindergarten-blue/20 to-kindergarten-green/20 text-kindergarten-blue hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:bg-kindergarten-blue hover:text-white hover:scale-105" onclick="updateDataBase()">
+            <span class="group-hover:animate-wiggle">🔄</span>
+            <span class="hidden sm:inline">Cập Nhật DB</span>
+            <span class="sm:hidden">DB</span>
+          </button>
+          <button class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-red-400/20 to-red-500/20 text-red-500 hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:bg-red-500 hover:text-white hover:scale-105" onclick="removeDeptData()">
+            <span class="group-hover:animate-wiggle">🗑️</span>
+            <span class="hidden sm:inline">Xóa Dữ Liệu</span>
+            <span class="sm:hidden">Xóa</span>
+          </button>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute p-6 border border-white/60 hover:shadow-cute-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 gradient-cute-blue rounded-2xl flex items-center justify-center text-white text-2xl animate-bounce-slow">
+            👶
+          </div>
+          <div>
+            <div class="text-3xl font-cute font-bold text-gray-800" id="studentCount">-</div>
+            <div class="text-lg font-cute text-gray-600">Học Sinh Mầm Non</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute p-6 border border-white/60 hover:shadow-cute-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 gradient-cute-pink rounded-2xl flex items-center justify-center text-white text-2xl animate-bounce-slow">
+            👩‍🏫
+          </div>
+          <div>
+            <div class="text-3xl font-cute font-bold text-gray-800" id="teacherCount">-</div>
+            <div class="text-lg font-cute text-gray-600">Cô Giáo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+    <!-- Controls Section -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute p-6 border border-white/60">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="flex items-center space-x-2 text-gray-700 font-cute font-semibold mb-2">
+            <span>🎯</span>
+            <span>Loại Dữ Liệu</span>
+          </label>
+          <select class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute bg-white hover:border-cute-secondary" id="deptSelect" onchange="switchDept()">
+            <option value="">-- Chọn loại dữ liệu --</option>
+            <option value="HS">👶 Học Sinh</option>
+            <option value="GV">👩‍🏫 Giáo Viên</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="flex items-center space-x-2 text-gray-700 font-cute font-semibold mb-2">
+            <span>🔍</span>
+            <span>Tìm Kiếm</span>
+          </label>
+          <input 
+            class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute hover:border-cute-secondary" 
+            id="searchInput" 
+            placeholder="Tìm kiếm theo họ và tên..." 
+            type="text"
+            oninput="performSearch()"
+          />
+        </div>
+        
+        <div>
+          <label class="block text-transparent mb-2">.</label>
+          <button class="w-full px-6 py-3 bg-gradient-cute text-white rounded-xl font-cute font-semibold hover:shadow-cute transition-all duration-300 flex items-center justify-center space-x-2 group hover:scale-105" onclick="showAddForm()">
+            <span class="group-hover:animate-bounce">➕</span>
+            <span>Thêm Mới</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Dynamic Input Row -->
+      <div id="dynamicInputRow" class="mt-6 hidden">
+        <!-- Sẽ được render động bằng JavaScript -->
       </div>
     </div>
     {% endif %}
-  </div>
 
-  <!-- Statistics Cards -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon students">
-        <i class="fas fa-graduation-cap"></i>
+    <!-- Students Section -->
+    <div class="department-section" id="section_hs">
+      <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute-lg border border-white/60 overflow-hidden">
+        <div class="gradient-cute-blue p-6 text-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl animate-bounce">👶</span>
+              <h3 class="text-lg font-medium text-white">Danh Sách Học Sinh</h3>
+            </div>
+            <div class="bg-white/20 backdrop-blur-lg rounded-full px-4 py-2 font-cute font-semibold">
+              <span class="animate-pulse-slow">👥</span>
+              <span id="hsCount">0</span> bé
+            </div>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto max-h-[70vh] table-responsive">
+          <table class="min-w-full text-sm" id="table_hs">
+            <thead class="gradient-cute text-white sticky top-0 z-10">
+              <tr>
+                <th class="px-4 py-3 text-left font-cute font-semibold">#</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã HS</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ và Tên</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Giới Tính</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Dân Tộc</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã Định Danh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ Tên Bố</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Nghề Nghiệp Bố</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ Tên Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Nghề Nghiệp Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Hộ Khẩu</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD Bố/Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">SĐT</th>
+                {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+                <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody id="hsTableBody" class="divide-y divide-gray-200">
+              <tr>
+                <td colspan="15" class="px-6 py-12 text-center text-gray-500">
+                  <div class="flex flex-col items-center space-y-4">
+                    <span class="text-6xl animate-bounce">👶</span>
+                    <div class="font-cute text-lg">Chọn "Học Sinh" để xem dữ liệu</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="stat-value" id="studentCount">-</div>
-      <div class="stat-label">Học Sinh</div>
     </div>
-    
-    <div class="stat-card">
-      <div class="stat-icon teachers">
-        <i class="fas fa-chalkboard-teacher"></i>
-      </div>
-      <div class="stat-value" id="teacherCount">-</div>
-      <div class="stat-label">Giáo Viên</div>
-    </div>
-  </div>
 
-  {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-  <!-- Controls Section -->
-  <div class="controls-section">
-    <div class="controls-grid">
-      <div class="form-group">
-        <label class="form-label" for="deptSelect">
-          <i class="fas fa-filter"></i>
-          Loại Dữ Liệu
-        </label>
-        <select class="form-control" id="deptSelect" onchange="switchDept()">
-          <option value="">-- Chọn loại dữ liệu --</option>
-          <option value="HS">👧 Học Sinh</option>
-          <option value="GV">👩‍🏫 Giáo Viên</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label" for="searchInput">
-          <i class="fas fa-search"></i>
-          Tìm Kiếm
-        </label>
-        <input 
-          class="form-control" 
-          id="searchInput" 
-          placeholder="Tìm kiếm theo họ và tên..." 
-          type="text"
-          oninput="performSearch()"
-        />
-      </div>
-      
-      <div class="form-group">
-        <label class="form-label">&nbsp;</label>
-        <button class="btn btn-success w-full" onclick="showAddForm()">
-          <i class="fas fa-plus"></i>
-          Thêm Mới
-        </button>
+    <!-- Teachers Section -->
+    <div class="department-section" id="section_gv">
+      <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-cute-lg border border-white/60 overflow-hidden">
+        <div class="gradient-cute-pink p-6 text-white">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="text-2xl animate-wiggle">👩‍🏫</span>
+              <h3 class="text-xl font-cute font-bold text-white ">Danh Sách Giáo Viên</h3>
+            </div>
+            <div class="bg-white/20 backdrop-blur-lg rounded-full px-4 py-2 font-cute font-semibold">
+              <span class="animate-pulse-slow">👥</span>
+              <span id="gvCount">0</span> cô
+            </div>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto max-h-[70vh] table-responsive">
+          <table class="min-w-full text-sm" id="table_gv">
+            <thead class="gradient-cute text-white sticky top-0 z-10">
+              <tr>
+                <th class="px-4 py-3 text-left font-cute font-semibold">#</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã GV</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ và Tên</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Tên TK</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Chức Vụ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Quê Quán</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Cấp</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">MST</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">CMND</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Số BH</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">SĐT</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">TK NH</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[300px]">Email</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Nhóm Máu</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[400px]">Địa Chỉ</th>
+                {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
+                <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody id="gvTableBody" class="divide-y divide-gray-200">
+              <tr>
+                <td colspan="18" class="px-6 py-12 text-center text-gray-500">
+                  <div class="flex flex-col items-center space-y-4">
+                    <span class="text-6xl animate-wiggle">👩‍🏫</span>
+                    <div class="font-cute text-lg">Chọn "Giáo Viên" để xem dữ liệu</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    
-    <!-- Dynamic Input Row -->
-    <div id="dynamicInputRow" style="margin-top: var(--spacing-lg); display: none;">
-      <!-- Sẽ được render động bằng JavaScript -->
-    </div>
-  </div>
-  {% endif %}
 
-  <!-- Students Section -->
-  <div class="department-section" id="section_hs">
-    <div class="data-section">
-      <div class="section-header">
-        <h3 class="section-title">
-          <i class="fas fa-graduation-cap"></i>
-          Danh Sách Học Sinh
-        </h3>
-        <span class="badge badge-department">
-          <i class="fas fa-users"></i>
-          <span id="hsCount">0</span> học sinh
-        </span>
-      </div>
-      
-      <div class="table-wrapper">
-        <table class="data-table" id="table_hs">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Mã HS</th>
-              <th>Họ và Tên</th>
-              <th>Ngày Sinh</th>
-              <th>Giới Tính</th>
-              <th>Dân Tộc</th>
-              <th>Mã Định Danh</th>
-              <th>Họ Tên Bố</th>
-              <th>Nghề Nghiệp Bố</th>
-              <th>Họ Tên Mẹ</th>
-              <th>Nghề Nghiệp Mẹ</th>
-              <th>Hộ Khẩu</th>
-              <th>CCCD Bố/Mẹ</th>
-              <th>SĐT</th>
-              {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-              <th>Hành Động</th>
-              {% endif %}
-            </tr>
-          </thead>
-          <tbody id="hsTableBody">
-            <tr>
-              <td colspan="15" class="empty-state">
-                <i class="fas fa-search"></i>
-                <div>Chọn "Học Sinh" để xem dữ liệu</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <!-- Database Structure Result -->
+    <div id="dbStructureResult" class="mt-6"></div>
   </div>
-
-  <!-- Teachers Section -->
-  <div class="department-section" id="section_gv">
-    <div class="data-section">
-      <div class="section-header">
-        <h3 class="section-title">
-          <i class="fas fa-chalkboard-teacher"></i>
-          Danh Sách Giáo Viên
-        </h3>
-        <span class="badge badge-department">
-          <i class="fas fa-users"></i>
-          <span id="gvCount">0</span> giáo viên
-        </span>
-      </div>
-      
-      <div class="table-wrapper">
-        <table class="data-table" id="table_gv">
-          <thead>
-            <tr>
-              <th>STT</th>
-              <th>Mã GV</th>
-              <th>Họ và Tên</th>
-              <th>Tên TK</th>
-              <th>Chức Vụ</th>
-              <th>Ngày Sinh</th>
-              <th>Quê Quán</th>
-              <th>CCCD</th>
-              <th>Ngày Cấp</th>
-              <th>MST</th>
-              <th>CMND</th>
-              <th>Số BH</th>
-              <th>SĐT</th>
-              <th>TK NH</th>
-              <th>Email</th>
-              <th>Nhóm Máu</th>
-              <th>Địa Chỉ</th>
-              {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
-              <th>Hành Động</th>
-              {% endif %}
-            </tr>
-          </thead>
-          <tbody id="gvTableBody">
-            <tr>
-              <td colspan="18" class="empty-state">
-                <i class="fas fa-search"></i>
-                <div>Chọn "Giáo Viên" để xem dữ liệu</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Database Structure Result -->
-  <div id="dbStructureResult" style="margin-top: var(--spacing-lg);"></div>
 
   <script>
     // Global variables
@@ -770,11 +574,15 @@
       };
       
       if (!data || data.length === 0) {
+        const emojicon = dept === 'HS' ? '👶' : '👩‍🏫';
+        const text = dept === 'HS' ? 'học sinh' : 'giáo viên';
         tableBody.innerHTML = `
           <tr>
-            <td colspan="20" class="empty-state">
-              <i class="fas fa-search"></i>
-              <div>Không tìm thấy kết quả</div>
+            <td colspan="20" class="px-6 py-12 text-center text-gray-500">
+              <div class="flex flex-col items-center space-y-4">
+                <span class="text-6xl animate-bounce">${emojicon}</span>
+                <div class="font-cute text-lg">Không tìm thấy ${text}</div>
+              </div>
             </td>
           </tr>
         `;
@@ -783,50 +591,52 @@
       
       let html = '';
       data.forEach((row, index) => {
-        html += '<tr>';
-        html += `<td>${index + 1}</td>`;
+        html += '<tr class="hover:bg-gray-50 transition-colors duration-200">';
+        html += `<td class="px-4 py-3 font-cute font-semibold text-gray-600">${index + 1}</td>`;
         
         if (dept === 'HS') {
-          html += `<td>${row.ma_hs || ''}</td>`;
-          html += `<td title="${row.ho_va_ten || ''}">${canEdit ? `<input class="inline-edit" value="${row.ho_va_ten || ''}" onkeypress="saveEdit(event, this, 'Ho Va Ten', '${row.ma_hs}', 'HS')" />` : (row.ho_va_ten || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_sinh)}" onkeypress="saveEdit(event, this, 'Ngay Sinh', '${row.ma_hs}', 'HS')" />` : formatDate(row.ngay_sinh)}</td>`;
-          html += `<td>${canEdit ? `<select class="inline-edit" onchange="saveEdit(null, this, 'Gioi Tinh', '${row.ma_hs}', 'HS')"><option value="Nam" ${row.gioi_tinh === 'Nam' ? 'selected' : ''}>Nam</option><option value="Nu" ${row.gioi_tinh === 'Nu' ? 'selected' : ''}>Nữ</option></select>` : (row.gioi_tinh === 'Nu' ? 'Nữ' : row.gioi_tinh || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.dan_toc || ''}" onkeypress="saveEdit(event, this, 'Dan Toc', '${row.ma_hs}', 'HS')" />` : (row.dan_toc || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ma_dinh_danh || ''}" onkeypress="saveEdit(event, this, 'Ma Dinh Danh', '${row.ma_hs}', 'HS')" />` : (row.ma_dinh_danh || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ho_ten_bo || ''}" onkeypress="saveEdit(event, this, 'Ho Ten Bo', '${row.ma_hs}', 'HS')" />` : (row.ho_ten_bo || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.nghe_nghiep_bo || ''}" onkeypress="saveEdit(event, this, 'Nghe Nghiep Bo', '${row.ma_hs}', 'HS')" />` : (row.nghe_nghiep_bo || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ho_ten_me || ''}" onkeypress="saveEdit(event, this, 'Ho Ten Me', '${row.ma_hs}', 'HS')" />` : (row.ho_ten_me || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.nghe_nghiep_me || ''}" onkeypress="saveEdit(event, this, 'Nghe Nghiep Me', '${row.ma_hs}', 'HS')" />` : (row.nghe_nghiep_me || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.ho_khau || ''}" onkeypress="saveEdit(event, this, 'Ho Khau', '${row.ma_hs}', 'HS')" />` : (row.ho_khau || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.cccd_bo_me || ''}" onkeypress="saveEdit(event, this, 'Cccd Bo Me', '${row.ma_hs}', 'HS')" />` : (row.cccd_bo_me || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.sdt || ''}" onkeypress="saveEdit(event, this, 'Sdt', '${row.ma_hs}', 'HS')" />` : (row.sdt || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${row.ma_hs || ''}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700" title="${row.ho_va_ten || ''}">${canEdit ? `<input class="inline-edit" value="${row.ho_va_ten || ''}" onkeypress="saveEdit(event, this, 'Ho Va Ten', '${row.ma_hs}', 'HS')" />` : (row.ho_va_ten || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_sinh)}" onkeypress="saveEdit(event, this, 'Ngay Sinh', '${row.ma_hs}', 'HS')" />` : formatDate(row.ngay_sinh)}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<select class="inline-edit" onchange="saveEdit(null, this, 'Gioi Tinh', '${row.ma_hs}', 'HS')"><option value="Nam" ${row.gioi_tinh === 'Nam' ? 'selected' : ''}>👦 Nam</option><option value="Nữ" ${row.gioi_tinh === 'Nữ' ? 'selected' : ''}>👧 Nữ</option></select>` : (row.gioi_tinh === 'Nữ' ? '👧 Nữ' : '👦 ' + (row.gioi_tinh || ''))}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.dan_toc || ''}" onkeypress="saveEdit(event, this, 'Dan Toc', '${row.ma_hs}', 'HS')" />` : (row.dan_toc || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.ma_dinh_danh || ''}" onkeypress="saveEdit(event, this, 'Ma Dinh Danh', '${row.ma_hs}', 'HS')" />` : (row.ma_dinh_danh || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.ho_ten_bo || ''}" onkeypress="saveEdit(event, this, 'Ho Ten Bo', '${row.ma_hs}', 'HS')" />` : (row.ho_ten_bo || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.nghe_nghiep_bo || ''}" onkeypress="saveEdit(event, this, 'Nghe Nghiep Bo', '${row.ma_hs}', 'HS')" />` : (row.nghe_nghiep_bo || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.ho_ten_me || ''}" onkeypress="saveEdit(event, this, 'Ho Ten Me', '${row.ma_hs}', 'HS')" />` : (row.ho_ten_me || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.nghe_nghiep_me || ''}" onkeypress="saveEdit(event, this, 'Nghe Nghiep Me', '${row.ma_hs}', 'HS')" />` : (row.nghe_nghiep_me || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.ho_khau || ''}" onkeypress="saveEdit(event, this, 'Ho Khau', '${row.ma_hs}', 'HS')" />` : (row.ho_khau || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.cccd_bo_me || ''}" onkeypress="saveEdit(event, this, 'Cccd Bo Me', '${row.ma_hs}', 'HS')" />` : (row.cccd_bo_me || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.sdt || ''}" onkeypress="saveEdit(event, this, 'Sdt', '${row.ma_hs}', 'HS')" />` : (row.sdt || '')}</td>`;
         } else {
           // Teacher data
-          html += `<td>${row.ma_gv || ''}</td>`;
-          html += `<td title="${row.ho_va_ten || ''}">${canEdit ? `<input class="inline-edit" value="${row.ho_va_ten || ''}" onkeypress="saveEdit(event, this, 'Ho Va Ten', '${row.ma_gv}', 'GV')" />` : (row.ho_va_ten || '')}</td>`;
-          html += `<td>${row.ten_tk || ''}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.chuc_vu || ''}" onkeypress="saveEdit(event, this, 'Chuc Vu', '${row.ma_gv}', 'GV')" />` : (row.chuc_vu || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_sinh)}" onkeypress="saveEdit(event, this, 'Ngay Sinh', '${row.ma_gv}', 'GV')" />` : formatDate(row.ngay_sinh)}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.que_quan || ''}" onkeypress="saveEdit(event, this, 'Que Quan', '${row.ma_gv}', 'GV')" />` : (row.que_quan || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.cccd || ''}" onkeypress="saveEdit(event, this, 'Cccd', '${row.ma_gv}', 'GV')" />` : (row.cccd || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_cap)}" onkeypress="saveEdit(event, this, 'Ngay Cap', '${row.ma_gv}', 'GV')" />` : formatDate(row.ngay_cap)}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.mst || ''}" onkeypress="saveEdit(event, this, 'Mst', '${row.ma_gv}', 'GV')" />` : (row.mst || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.cmnd || ''}" onkeypress="saveEdit(event, this, 'Cmnd', '${row.ma_gv}', 'GV')" />` : (row.cmnd || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.so_bh || ''}" onkeypress="saveEdit(event, this, 'So Bh', '${row.ma_gv}', 'GV')" />` : (row.so_bh || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.sdt || ''}" onkeypress="saveEdit(event, this, 'Sdt', '${row.ma_gv}', 'GV')" />` : (row.sdt || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.tk_nh || ''}" onkeypress="saveEdit(event, this, 'Tk Nh', '${row.ma_gv}', 'GV')" />` : (row.tk_nh || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.email || ''}" onkeypress="saveEdit(event, this, 'Email', '${row.ma_gv}', 'GV')" />` : (row.email || '')}</td>`;
-          html += `<td>${canEdit ? `<input class="inline-edit" value="${row.nhom_mau || ''}" onkeypress="saveEdit(event, this, 'Nhom Mau', '${row.ma_gv}', 'GV')" />` : (row.nhom_mau || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${row.ma_gv || ''}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700" title="${row.ho_va_ten || ''}">${canEdit ? `<input class="inline-edit" value="${row.ho_va_ten || ''}" onkeypress="saveEdit(event, this, 'Ho Va Ten', '${row.ma_gv}', 'GV')" />` : (row.ho_va_ten || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${row.ten_tk || ''}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.chuc_vu || ''}" onkeypress="saveEdit(event, this, 'Chuc Vu', '${row.ma_gv}', 'GV')" />` : (row.chuc_vu || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_sinh)}" onkeypress="saveEdit(event, this, 'Ngay Sinh', '${row.ma_gv}', 'GV')" />` : formatDate(row.ngay_sinh)}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.que_quan || ''}" onkeypress="saveEdit(event, this, 'Que Quan', '${row.ma_gv}', 'GV')" />` : (row.que_quan || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.cccd || ''}" onkeypress="saveEdit(event, this, 'Cccd', '${row.ma_gv}', 'GV')" />` : (row.cccd || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${formatDate(row.ngay_cap)}" onkeypress="saveEdit(event, this, 'Ngay Cap', '${row.ma_gv}', 'GV')" />` : formatDate(row.ngay_cap)}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.mst || ''}" onkeypress="saveEdit(event, this, 'Mst', '${row.ma_gv}', 'GV')" />` : (row.mst || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.cmnd || ''}" onkeypress="saveEdit(event, this, 'Cmnd', '${row.ma_gv}', 'GV')" />` : (row.cmnd || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.so_bh || ''}" onkeypress="saveEdit(event, this, 'So Bh', '${row.ma_gv}', 'GV')" />` : (row.so_bh || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.sdt || ''}" onkeypress="saveEdit(event, this, 'Sdt', '${row.ma_gv}', 'GV')" />` : (row.sdt || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.tk_nh || ''}" onkeypress="saveEdit(event, this, 'Tk Nh', '${row.ma_gv}', 'GV')" />` : (row.tk_nh || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.email || ''}" onkeypress="saveEdit(event, this, 'Email', '${row.ma_gv}', 'GV')" />` : (row.email || '')}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700">${canEdit ? `<input class="inline-edit" value="${row.nhom_mau || ''}" onkeypress="saveEdit(event, this, 'Nhom Mau', '${row.ma_gv}', 'GV')" />` : (row.nhom_mau || '')}</td>`;
           // Cột địa chỉ với title để hiển thị tooltip
           const addressValue = row.dia_chi || '';
-          html += `<td title="${addressValue}">${canEdit ? `<input class="inline-edit" value="${addressValue}" onkeypress="saveEdit(event, this, 'Dia Chi', '${row.ma_gv}', 'GV')" />` : addressValue}</td>`;
+          html += `<td class="px-4 py-3 font-cute text-gray-700" title="${addressValue}">${canEdit ? `<input class="inline-edit" value="${addressValue}" onkeypress="saveEdit(event, this, 'Dia Chi', '${row.ma_gv}', 'GV')" />` : addressValue}</td>`;
         }
         
         if (canEdit) {
-          html += `<td>
-            <div class="action-buttons">
-              <button class="btn-action btn-delete" onclick="deleteRecord('${dept === 'HS' ? row.ma_hs : row.ma_gv}', '${dept}')">
-                <i class="fas fa-trash"></i>
+          html += `<td class="px-4 py-3">
+            <div class="flex space-x-2">
+              <button class="px-3 py-2 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-lg hover:shadow-cute hover:from-red-500 hover:to-red-600 transition-all duration-300 group" 
+                      onclick="deleteRecord('${dept === 'HS' ? row.ma_hs : row.ma_gv}', '${dept}')"
+                      title="Xóa ${dept === 'HS' ? 'học sinh' : 'giáo viên'}">
+                <i class="fas fa-trash group-hover:animate-wiggle"></i>
               </button>
             </div>
           </td>`;
@@ -1004,54 +814,53 @@
     function showDynamicInputs(dept) {
       const dynamicRow = document.getElementById('dynamicInputRow');
       
-      let html = '<div style="border-top: 1px solid var(--gray-200); padding-top: var(--spacing-lg);"><h5 style="margin-bottom: var(--spacing-md); color: var(--text-primary);">Thêm mới ' + (dept === 'HS' ? 'học sinh' : 'giáo viên') + '</h5>';
-      html += '<div class="row g-2">';
+      let html = '<div class="border-t border-gray-200 pt-8"><h3 class="text-xl md:text-2xl font-cute font-bold text-gray-700 mb-6 flex items-center"><span class="mr-2">✨</span>Thêm mới ' + (dept === 'HS' ? 'học sinh' : 'giáo viên') + '</h3>';
+      html += '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">';
       
       if (dept === 'HS') {
         html += `
-          <div class="col-md-3"><input class="form-control" id="new_ma_hs" placeholder="Mã HS" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ho_va_ten" placeholder="Họ và tên" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ngay_sinh" placeholder="Ngày sinh (DD/MM/YYYY)" /></div>
-          <div class="col-md-3">
-            <select class="form-control" id="new_gioi_tinh">
-              <option value="">Giới tính</option>
-              <option value="Nam">Nam</option>
-              <option value="Nu">Nữ</option>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ma_hs" placeholder="🏷️ Mã HS" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ho_va_ten" placeholder="👶 Họ và tên" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ngay_sinh" placeholder="🎂 Ngày sinh (DD/MM/YYYY)" /></div>
+          <div>
+            <select class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute bg-white" id="new_gioi_tinh">
+              <option value="">⚤ Giới tính</option>
+              <option value="Nam">👦 Nam</option>
+              <option value="Nu">👧 Nữ</option>
             </select>
           </div>
-          <div class="col-md-3"><input class="form-control" id="new_dan_toc" placeholder="Dân tộc" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ma_dinh_danh" placeholder="Mã định danh" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ho_ten_bo" placeholder="Họ tên bố" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_nghe_nghiep_bo" placeholder="Nghề nghiệp bố" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ho_ten_me" placeholder="Họ tên mẹ" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_nghe_nghiep_me" placeholder="Nghề nghiệp mẹ" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ho_khau" placeholder="Hộ khẩu" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_cccd_bo_me" placeholder="CCCD bố/mẹ" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_sdt" placeholder="SĐT" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_dan_toc" placeholder="🌍 Dân tộc" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ma_dinh_danh" placeholder="🆔 Mã định danh" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ho_ten_bo" placeholder="👨 Họ tên bố" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_nghe_nghiep_bo" placeholder="💼 Nghề nghiệp bố" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ho_ten_me" placeholder="👩 Họ tên mẹ" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_nghe_nghiep_me" placeholder="💼 Nghề nghiệp mẹ" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ho_khau" placeholder="🏡 Hộ khẩu" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_cccd_bo_me" placeholder="🆔 CCCD bố/mẹ" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_sdt" placeholder="📞 SĐT" /></div>
         `;
       } else {
         html += `
-          <div class="col-md-3"><input class="form-control" id="new_ma_gv" placeholder="Mã GV" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ho_va_ten" placeholder="Họ và tên" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ten_tk" placeholder="Tên TK" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_chuc_vu" placeholder="Chức vụ" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ngay_sinh" placeholder="Ngày sinh (DD/MM/YYYY)" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_que_quan" placeholder="Quê quán" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_cccd" placeholder="CCCD" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_ngay_cap" placeholder="Ngày cấp (DD/MM/YYYY)" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_mst" placeholder="MST" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_cmnd" placeholder="CMND" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_so_bh" placeholder="Số BH" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_sdt" placeholder="SĐT" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_tk_nh" placeholder="TK NH" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_email" placeholder="Email" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_nhom_mau" placeholder="Nhóm máu" /></div>
-          <div class="col-md-3"><input class="form-control" id="new_dia_chi" placeholder="Địa chỉ" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ma_gv" placeholder="🏷️ Mã GV" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ho_va_ten" placeholder="👩‍🏫 Họ và tên" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ten_tk" placeholder="👤 Tên TK" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_chuc_vu" placeholder="💼 Chức vụ" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ngay_sinh" placeholder="🎂 Ngày sinh (DD/MM/YYYY)" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_que_quan" placeholder="🏠 Quê quán" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_cccd" placeholder="🆔 CCCD" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_ngay_cap" placeholder="📅 Ngày cấp (DD/MM/YYYY)" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_mst" placeholder="💼 MST" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_cmnd" placeholder="🆔 CMND" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_so_bh" placeholder="🏥 Số BH" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_sdt" placeholder="📞 SĐT" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_tk_nh" placeholder="🏦 TK NH" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_email" placeholder="📧 Email" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_nhom_mau" placeholder="🩸 Nhóm máu" /></div>
+          <div><input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-cute-primary focus:outline-none transition-colors duration-200 font-cute" id="new_dia_chi" placeholder="🏡 Địa chỉ" /></div>
         `;
       }
       
-      html += '<div class="col-12" style="margin-top: var(--spacing-md);"><button class="btn btn-success" onclick="addNewRecord(\'' + dept + '\')"><i class="fas fa-plus"></i> Thêm mới</button></div>';
-      html += '</div></div>';
+      html += '</div><div class="mt-6 text-center"><button class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-cute-success to-kindergarten-green text-white rounded-2xl font-cute font-bold hover:shadow-cute-lg transition-all duration-300 group transform hover:scale-105" onclick="addNewRecord(\'' + dept + '\')"><i class="fas fa-plus group-hover:animate-bounce mr-3"></i> Thêm mới</button></div></div>';
       
       dynamicRow.innerHTML = html;
       dynamicRow.style.display = 'block';

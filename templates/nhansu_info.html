@@ -1,169 +1,271 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Thông Tin Nhân Sự</title>
-<!-- Bootstrap CSS -->
+<title>Thông Tin Nhân Sự - Trường Mầm Non Hoa Hướng Dương</title>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'dark-green': {
+            'primary': '#14532d',
+            'secondary': '#166534',
+            'tertiary': '#15803d',
+            'accent': '#16a34a',
+            'light': '#22c55e',
+            'bg': '#dcfce7',
+            'bg-light': '#f0fdf4'
+          }
+        },
+        fontFamily: {
+          'cute': ['Inter', 'system-ui', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Bootstrap CSS (for compatibility) -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="{{ url_for('static_files', filename='css/styles.css') }}?v=20250719" rel="stylesheet"/>
+<link href="{{ url_for('static_files', filename='css/scrollbar.css') }}" rel="stylesheet"/>
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+  .shadow-dark-green { box-shadow: 0 10px 25px -5px rgba(20, 83, 45, 0.15), 0 4px 6px -2px rgba(20, 83, 45, 0.05); }
+  .gradient-dark-green { background: linear-gradient(135deg, #14532d 0%, #166534 50%, #15803d 100%); }
+  .animate-float { animation: float 3s ease-in-out infinite; }
+  .animate-wiggle { animation: wiggle 2s ease-in-out infinite; }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+  
+  /* Override table header color */
+  th, .table-sm th {
+    background-color: #278f49 !important; /* Custom green */
+    color: white !important;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #dcfce7; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb { background: #14532d; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #166534; }
+</style>
 </head>
-<body><div class="container-fluid mt-4"><div class="card"><div class="card-body">
-<div class="container-fluid no-padding"> <!-- container-fluid để full width, no-padding để canh trái -->
-<div class="row no-gutters"> <!-- no-gutters để bỏ padding trái/phải -->
-<div class="col-12">
-<div class="card">
-
-<div class="admin-panel">
-  <div class="d-flex justify-content-center align-items-center mb-4">
-    <h3 class="mt-4 d-flex align-items-center gap-2" style="font-weight:700; color:#ebca13;">
-      <i class="fas fa-users"></i> - THÔNG TIN NHÂN SỰ -
-    </h3>
-  </div>
-
-  <div class="card-body">
-    <div class="row justify-content-center">
-      <div class="col-auto">
-        <a class="btn btn-primary btn-sm mt-0 shadow-sm" href="/user-epa-score">📝 Đánh giá EPA </a>
-        <a class="btn btn-info btn-sm mt-0 shadow-sm" onclick="loadHistory()">📜 Xem Lịch Sử Đánh Giá</a>
+<body class="bg-gradient-to-br from-dark-green-bg/20 via-dark-green-bg-light/30 to-dark-green-bg/20 min-h-screen font-cute">
+  <div class="p-6 space-y-6">
+    <!-- Page Header -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-dark-green p-8 border border-white/60">
+      <div class="flex items-center justify-center space-x-4 mb-6">
+        <div class="w-16 h-16 gradient-dark-green rounded-2xl flex items-center justify-center text-white text-2xl animate-float">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="text-center">
+          <h1 class="text-4xl font-cute font-bold bg-gradient-to-r from-dark-green-primary to-dark-green-secondary bg-clip-text text-transparent">
+            THÔNG TIN NHÂN SỰ
+          </h1>
+          <p class="text-gray-600 font-cute text-lg animate-wiggle">
+            🌸 Trường Mầm Non Hoa Hướng Dương 🌸
+          </p>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4 items-center justify-center">
+        <a href="/user-epa-score" class="flex items-center space-x-2 px-6 py-3 gradient-dark-green text-white rounded-xl hover:shadow-dark-green transition-all duration-300 font-cute font-semibold group hover:scale-105">
+          <span class="group-hover:animate-bounce">📝</span>
+          <span>Đánh giá EPA</span>
+        </a>
+        <button onclick="loadHistory()" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-dark-green-accent/20 to-dark-green-light/20 text-dark-green-primary border-2 border-dark-green-accent rounded-xl hover:bg-dark-green-accent hover:text-white transition-all duration-300 font-cute font-semibold group hover:scale-105">
+          <span class="group-hover:animate-wiggle">📜</span>
+          <span>Xem Lịch Sử Đánh Giá</span>
+        </button>
         {% if role == "supervisor" %}
-        <a class="btn btn-primary btn-sm shadow-sm" href="/sup-epa-score">
-          📝 Đánh giá EPA tổ viên
+        <a href="/sup-epa-score" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-dark-green-secondary to-dark-green-tertiary text-white rounded-xl hover:shadow-dark-green transition-all duration-300 font-cute font-semibold group hover:scale-105">
+          <span class="group-hover:animate-bounce">👥</span>
+          <span>Đánh giá EPA tổ viên</span>
         </a>
         {% endif %}
       </div>
     </div>
-  </div>
-</div>
 
 
-<div class="modal fade" id="historyModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Lịch Sử Đánh Giá</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tên TK</th>
-              <th>Điểm GV</th>
-              <th>Điểm TGV</th>
-              <th>Điểm HT/PHT </th>
-              <th>Ý Kiến của HT/PHT </th>
-              <th>Tháng</th>
-              <th>Năm</th>
-              <th>Ngày Tạo</th>
-              <th>Hành Động</th>
-            </tr>
-          </thead>
-          <tbody id="historyBody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Chi Tiết Bảng Đánh Giá</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body" id="detailBody">
-        <!-- nội dung chi tiết sẽ được load ở đây -->
+    <!-- History Modal -->
+    <div class="modal fade" id="historyModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content rounded-3xl border-0 shadow-dark-green">
+          <div class="modal-header gradient-dark-green text-white rounded-t-3xl">
+            <h5 class="modal-title font-cute font-bold flex items-center">
+              <span class="mr-2 text-2xl animate-wiggle">📜</span>
+              Lịch Sử Đánh Giá
+            </h5>
+            <button type="button" class="close text-white hover:text-gray-200 transition-colors duration-200" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-6">
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-sm">
+                <thead class="bg-dark-green-bg text-dark-green-primary">
+                  <tr>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">ID</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Tên TK</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Điểm GV</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Điểm TGV</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Điểm HT/PHT</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Ý Kiến HT/PHT</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Tháng</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Năm</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Tạo</th>
+                    <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody id="historyBody" class="divide-y divide-gray-200"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-</div>
-</div>
-</div>
-<div class="row no-gutters">
-<div class="col-12">
-<div class="form-group d-flex align-items-end">
-<div class="mr-3">
-<label for="deptSelect">Bộ Phận</label>
-<select class="form-control form-control-sm" id="deptSelect" name="deptSelect" onchange="switchDept()">
-<option value="">-- Chọn Bộ Phận --</option>
-<option value="HS">HỌC SINH</option>
-<option value="GV">GIÁO VIÊN</option>
-</select>
-</div>
-  <div>
-    <label class="sr-only" for="searchInput">Tìm kiếm</label>
-    <input class="form-control form-control-sm" id="searchInput" placeholder="🔍 Tìm kiếm..." style="width: 250px;" type="text"/>
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content rounded-3xl border-0 shadow-dark-green">
+          <div class="modal-header gradient-dark-green text-white rounded-t-3xl">
+            <h5 class="modal-title font-cute font-bold flex items-center">
+              <span class="mr-2 text-2xl animate-bounce">📋</span>
+              Chi Tiết Bảng Đánh Giá
+            </h5>
+            <button type="button" class="close text-white hover:text-gray-200 transition-colors duration-200" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-6" id="detailBody">
+            <!-- nội dung chi tiết sẽ được load ở đây -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Department Selection -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-dark-green p-6 border border-white/60">
+      <div class="flex flex-wrap gap-4 items-end justify-between">
+        <div class="flex-1 min-w-[200px]">
+          <label for="deptSelect" class="block text-dark-green-primary font-cute font-semibold mb-2">
+            <span class="mr-2">🏢</span>Bộ Phận
+          </label>
+          <select class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-dark-green-primary focus:outline-none transition-colors duration-200 font-cute" id="deptSelect" name="deptSelect" onchange="switchDept()">
+            <option value="">-- Chọn Bộ Phận --</option>
+            <option value="HS">👶 HỌC SINH</option>
+            <option value="GV">👩‍🏫 GIÁO VIÊN</option>
+          </select>
+        </div>
+        <div class="flex-1 min-w-[250px]">
+          <label class="block text-dark-green-primary font-cute font-semibold mb-2" for="searchInput">
+            <span class="mr-2">🔍</span>Tìm kiếm
+          </label>
+          <input class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-dark-green-primary focus:outline-none transition-colors duration-200 font-cute" id="searchInput" placeholder="Nhập từ khóa tìm kiếm..." type="text"/>
+        </div>
+      </div>
+      <div id="dynamicInputRow" class="mt-4"></div>
+    </div>
+    <!-- Data Tables -->
+    <div class="bg-white/90 backdrop-blur-lg rounded-3xl shadow-dark-green border border-white/60 overflow-hidden">
+      <!-- Students Table -->
+      <div id="table_hs" style="display: none;">
+        <div class="gradient-dark-green p-6 text-white">
+          <div class="flex items-center space-x-3">
+            <span class="text-2xl animate-bounce">👶</span>
+            <h3 class="text-xl font-cute font-bold text-white" style="text-shadow: none;">Danh Sách Học Sinh</h3>
+          </div>
+        </div>
+        <div class="overflow-x-auto max-h-[70vh]">
+          <table class="min-w-full text-sm">
+            <thead class="text-white sticky top-0 z-10" style="background-color: #166534 !important;">
+              <tr>
+                <th class="px-4 py-3 text-left font-cute font-semibold">#</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã HS</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã GV</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã Lớp</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ và Tên</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Giới Tính</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Dân Tộc</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã Định Danh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[150px]">Tên Bố</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Nghề Bố</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[150px]">Tên Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Nghề Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Hộ Khẩu</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD Bố/Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">SĐT Bố/Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Teachers Table -->
+      <div id="table_gv" style="display: none;">
+        <div class="gradient-dark-green p-6 text-white">
+          <div class="flex items-center space-x-3">
+            <span class="text-2xl animate-wiggle">👩‍🏫</span>
+            <h3 class="text-xl font-cute font-bold text-white" style="text-shadow: none;">Danh Sách Giáo Viên</h3>
+          </div>
+        </div>
+        <div class="overflow-x-auto max-h-[70vh]">
+          <table class="min-w-full text-sm">
+            <thead class="text-white sticky top-0 z-10" style="background-color: #166534b2 !important;">
+              <tr>
+                <th class="px-4 py-3 text-left font-cute font-semibold">#</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã GV</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ và Tên</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Tên TK</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Chức Vụ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Quê Quán</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Cấp CCCD</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Mã Số Thuế</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">CMND</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Số Bảo Hiểm</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Số Điện Thoại</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Tài Khoản NH</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[300px]">Email</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Nhóm Máu</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[400px]">Địa Chỉ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200"></tbody>
+          </table>
+        </div>
+      </div>
   </div>
-</div>
-<div id="dynamicInputRow"></div>
-<div class="table-responsive">
-<div id="table_hs" style="display: none;">
-<table class="table table-bordered">
-<thead>
-<tr>
-<th>#</th>
-<th>Mã HS</th>
-<th>Mã GV</th>
-<th>Mã Lớp</th>
-<th>Họ và Tên</th>
-<th>Ngày Sinh</th>
-<th>Giới Tính</th>
-<th>Dân Tộc</th>
-<th>Mã Định Danh</th>
-<th>Tên Bố</th>
-<th>Nghề Bố</th>
-<th>Tên Mẹ</th>
-<th>Nghề Mẹ</th>
-<th>Hộ Khẩu</th>
-<th>CCCD Bố/Mẹ</th>
-<th>SĐT Bố/Mẹ</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
-<div id="table_gv" style="display: none;">
-<table class="table table-bordered">
-<thead>
-<tr>
-<th>#</th>
-<th>Mã GV</th>
-<th>Họ và Tên</th>
-<th>Tên TK</th>
-<th>Chức Vụ</th>
-<th>Ngày Sinh</th>
-<th>Quê Quán</th>
-<th>CCCD</th>
-<th>Ngày Cấp CCCD</th>
-<th>Mã Số Thuế</th>
-<th>CMND</th>
-<th>Số Bảo Hiểm</th>
-<th>Số Điện Thoại</th>
-<th>Tài Khoản NH</th>
-<th>Email</th>
-<th>Nhóm Máu</th>
-<th>Địa Chỉ</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</div></div></div></body>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
 <script>
   let maGVList = [];
@@ -543,19 +645,20 @@ function loadHistory() {
       }
       data.forEach(row => {
         const tr = document.createElement('tr');
+        tr.className = 'hover:bg-dark-green-bg/20 transition-colors duration-200';
         tr.innerHTML = `
-          <td>${row.id}</td>
-          <td>${row.ten_tk || ''}</td>
-          <td>${row.user_total_score || ''}</td>
-          <td>${row.sup_total_score || ''}</td>
-          <td>${row.pri_total_score || ''}</td>
-          <td>${row.pri_comment || ''}</td>
-          <td>${row.month}</td>
-          <td>${row.year}</td>
-          <td>${row.created_at}</td>
-          <td>
-            <button class="btn btn-sm btn-primary" onclick="loadDetail(${row.id})">
-              Chi tiết
+          <td class="px-4 py-3 font-cute">${row.id}</td>
+          <td class="px-4 py-3 font-cute font-semibold text-dark-green-primary">${row.ten_tk || ''}</td>
+          <td class="px-4 py-3 font-cute text-center">${row.user_total_score || ''}</td>
+          <td class="px-4 py-3 font-cute text-center">${row.sup_total_score || ''}</td>
+          <td class="px-4 py-3 font-cute text-center">${row.pri_total_score || ''}</td>
+          <td class="px-4 py-3 font-cute">${row.pri_comment || ''}</td>
+          <td class="px-4 py-3 font-cute text-center">${row.month}</td>
+          <td class="px-4 py-3 font-cute text-center">${row.year}</td>
+          <td class="px-4 py-3 font-cute text-sm text-gray-600">${row.created_at}</td>
+          <td class="px-4 py-3">
+            <button class="px-3 py-1 gradient-dark-green text-white rounded-lg hover:shadow-dark-green transition-all duration-300 font-cute font-semibold text-sm hover:scale-105" onclick="loadDetail(${row.id})">
+              📋 Chi tiết
             </button>
           </td>
         `;
@@ -575,34 +678,47 @@ function loadDetail(id) {
         return;
       }
       // Render câu hỏi + sup_score + sup_comment
-      const questionsHTML = data.questions.map(q => `
-        <tr>
-          <td>${q.text}</td>
-          <td><strong>${q.score}</strong></td>
-          <td>${q.comment || ''}</td>
-          <td>${q.sup_score || ''}</td>
-          <td>${q.sup_comment || ''}</td>
+      const questionsHTML = data.questions.map((q, index) => `
+        <tr class="hover:bg-dark-green-bg/20 transition-colors duration-200">
+          <td class="px-4 py-3 font-cute">${q.text}</td>
+          <td class="px-4 py-3 font-cute font-bold text-center text-dark-green-primary">${q.score}</td>
+          <td class="px-4 py-3 font-cute text-gray-700">${q.comment || '-'}</td>
+          <td class="px-4 py-3 font-cute font-bold text-center text-dark-green-secondary">${q.sup_score || '-'}</td>
+          <td class="px-4 py-3 font-cute text-gray-700">${q.sup_comment || '-'}</td>
         </tr>
       `).join('');
       body.innerHTML = `
-        <h6>Chi Tiết Đánh Giá</h6>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Câu hỏi</th>
-              <th>Điểm GV</th>
-              <th>Ý kiến GV</th>
-              <th>Điểm Tổ Trưởng</th>
-              <th>Ý kiến Tổ Trưởng</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${questionsHTML}
-          </tbody>
-        </table>
-        <p><strong>Điểm & Ý kiến đánh giá của Hiệu Trưởng:</strong> 
-          ${data.pri_total_score || '-'} - ${data.pri_comment || ''}
-        </p>
+        <div class="space-y-6">
+          <h6 class="text-xl font-cute font-bold text-dark-green-primary flex items-center">
+            <span class="mr-2 text-2xl">📊</span>
+            Chi Tiết Đánh Giá
+          </h6>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-dark-green-bg text-dark-green-primary">
+                <tr>
+                  <th class="px-4 py-3 text-left font-cute font-semibold">Câu hỏi</th>
+                  <th class="px-4 py-3 text-center font-cute font-semibold">Điểm GV</th>
+                  <th class="px-4 py-3 text-left font-cute font-semibold">Ý kiến GV</th>
+                  <th class="px-4 py-3 text-center font-cute font-semibold">Điểm Tổ Trưởng</th>
+                  <th class="px-4 py-3 text-left font-cute font-semibold">Ý kiến Tổ Trưởng</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                ${questionsHTML}
+              </tbody>
+            </table>
+          </div>
+          <div class="bg-dark-green-bg/30 rounded-xl p-4 border-l-4 border-dark-green-primary">
+            <p class="font-cute font-semibold text-dark-green-primary flex items-center">
+              <span class="mr-2 text-xl">🏆</span>
+              <strong>Điểm & Ý kiến đánh giá của Hiệu Trưởng:</strong>
+            </p>
+            <p class="mt-2 font-cute text-gray-700">
+              <span class="font-bold text-dark-green-primary">${data.pri_total_score || '-'}</span> - ${data.pri_comment || 'Chưa có ý kiến'}
+            </p>
+          </div>
+        </div>
       `;
       $('#detailModal').modal('show');
     });

@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f4f4f9;
+    background-color: #f9fafb;
     color: #333;
 }
 
@@ -193,7 +193,7 @@ body {
 
 /* Hiệu ứng xen kẽ màu nền cho hàng */
 .table tr:nth-child(even) {
-    background-color: #f8f9fa;
+    background-color: #fafbfc;
 }
 
 /* Hiệu ứng hover cho hàng */

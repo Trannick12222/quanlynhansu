@@ -1,0 +1,228 @@
+/* Employee Dashboard Custom Styles - Dark Green Theme */
+/* This file overrides styles.css with higher specificity */
+
+/* Color Variables */
+:root {
+  --dark-green-primary: #14532d;
+  --dark-green-secondary: #166534;
+  --dark-green-tertiary: #15803d;
+  --dark-green-accent: #16a34a;
+  --dark-green-light: #22c55e79;
+  --dark-green-bg: #dcfce7;
+  --dark-green-bg-light: #f0fdf4;
+}
+
+/* Override existing styles with higher specificity */
+body.employee-dashboard {
+  background: linear-gradient(135deg, var(--dark-green-bg) 0%, var(--dark-green-bg-light) 50%, var(--dark-green-bg) 100%) !important;
+  min-height: 100vh !important;
+}
+
+/* Button overrides */
+.btn-primary,
+.btn-success,
+.btn-info {
+  background: linear-gradient(135deg, var(--dark-green-primary) 0%, var(--dark-green-secondary) 50%, var(--dark-green-tertiary) 100%) !important;
+  border-color: var(--dark-green-primary) !important;
+  color: white !important;
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover {
+  background: linear-gradient(135deg, var(--dark-green-secondary) 0%, var(--dark-green-tertiary) 50%, var(--dark-green-accent) 100%) !important;
+  border-color: var(--dark-green-secondary) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 10px 25px -5px rgba(20, 83, 45, 0.3) !important;
+}
+
+/* Table overrides */
+.table thead th {
+  background: linear-gradient(135deg, var(--dark-green-primary) 0%, var(--dark-green-secondary) 50%, var(--dark-green-tertiary) 100%) !important;
+  color: white !important;
+  border-color: var(--dark-green-primary) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(20, 83, 45, 0.05) !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(20, 83, 45, 0.1) !important;
+}
+
+/* Form control overrides */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--dark-green-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(20, 83, 45, 0.25) !important;
+}
+
+/* Card overrides */
+.card {
+  border: 1px solid rgba(20, 83, 45, 0.1) !important;
+  box-shadow: 0 4px 6px -1px rgba(20, 83, 45, 0.1), 0 2px 4px -1px rgba(20, 83, 45, 0.06) !important;
+}
+
+.card-header {
+  background: linear-gradient(135deg, var(--dark-green-bg) 0%, var(--dark-green-bg-light) 100%) !important;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.2) !important;
+}
+
+/* Alert overrides */
+.alert-primary {
+  background-color: var(--dark-green-bg) !important;
+  border-color: var(--dark-green-primary) !important;
+  color: var(--dark-green-primary) !important;
+}
+
+.alert-info {
+  background-color: var(--dark-green-bg-light) !important;
+  border-color: var(--dark-green-accent) !important;
+  color: var(--dark-green-secondary) !important;
+}
+
+/* Badge overrides */
+.badge-primary,
+.badge-info {
+  background-color: var(--dark-green-primary) !important;
+}
+
+.badge-success {
+  background-color: var(--dark-green-accent) !important;
+}
+
+/* Navigation overrides */
+.navbar-brand,
+.nav-link {
+  color: var(--dark-green-primary) !important;
+}
+
+.nav-link:hover {
+  color: var(--dark-green-secondary) !important;
+}
+
+/* Pagination overrides */
+.page-link {
+  color: var(--dark-green-primary) !important;
+  border-color: rgba(20, 83, 45, 0.2) !important;
+}
+
+.page-link:hover {
+  color: var(--dark-green-secondary) !important;
+  background-color: var(--dark-green-bg) !important;
+  border-color: var(--dark-green-primary) !important;
+}
+
+.page-item.active .page-link {
+  background-color: var(--dark-green-primary) !important;
+  border-color: var(--dark-green-primary) !important;
+}
+
+/* Mobile responsive overrides */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  
+  .card {
+    margin-bottom: 1rem !important;
+  }
+  
+  .btn {
+    font-size: 0.875rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+  
+  .table-responsive {
+    font-size: 0.75rem !important;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem !important;
+  }
+  
+  .form-control,
+  .form-select {
+    font-size: 0.875rem !important;
+  }
+  
+  .card-header h1,
+  .card-header h2,
+  .card-header h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  .navbar-brand {
+    font-size: 1rem !important;
+  }
+}
+
+/* Tablet responsive overrides */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .btn {
+    font-size: 0.9rem !important;
+  }
+  
+  .table-responsive {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* Loading spinner override */
+.spinner-border-primary {
+  color: var(--dark-green-primary) !important;
+}
+
+/* Custom scrollbar for navy theme */
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-green-bg) !important;
+  border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dark-green-primary) !important;
+  border-radius: 10px !important;
+  border: 2px solid var(--dark-green-bg) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-green-secondary) !important;
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  outline: 2px solid var(--dark-green-accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* Animation enhancements */
+.btn,
+.card,
+.form-control,
+.form-select {
+  transition: all 0.3s ease !important;
+}
+
+.btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+.card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 25px -5px rgba(20, 83, 45, 0.2), 0 4px 6px -2px rgba(20, 83, 45, 0.1) !important;
+}

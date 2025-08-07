@@ -42,6 +42,21 @@ def check_epa_period_for_user(ten_tk):
         
         if not record:
             logging.warning(f'❌ No record found in thoigianmoepa for user: {ten_tk}')
+            
+            # Special case: Principal always has access even without record
+            is_principal = ten_tk in ['kimnhung', 'ngocquy']
+            if is_principal:
+                logging.info(f'🔑 Principal {ten_tk} granted access despite no record')
+                return {
+                    'is_open': True,
+                    'start_day': 1,
+                    'close_day': 31,
+                    'year': year,
+                    'month': month,
+                    'current_phase': 'Principal - Luon co quyen danh gia',
+                    'message': f'HT/PHT {ten_tk} co quyen danh gia khong gioi han thoi gian'
+                }
+            
             return {
                 'is_open': False,
                 'start_day': 0,
@@ -55,11 +70,12 @@ def check_epa_period_for_user(ten_tk):
         # Determine user type and appropriate phase
         is_tgv = record.get('make_epa_tgv') == 'yes'
         is_gv = record.get('make_epa_gv') == 'yes'
+        is_principal = ten_tk in ['kimnhung', 'ngocquy']  # HT và PHT
         
-        logging.info(f'🏷️ User permissions for {ten_tk}: is_tgv={is_tgv}, is_gv={is_gv}')
+        logging.info(f'🏷️ User permissions for {ten_tk}: is_tgv={is_tgv}, is_gv={is_gv}, is_principal={is_principal}')
         
-        # For teachers (GV): only Phase 1 matters
-        # For supervisors (TGV): Phase 1 (self) + Phase 2 (supervise others) 
+        # For teachers (GV): only Phase 1 for self-assessment
+        # For supervisors (TGV): Phase 1 for self-assessment, Phase 2 for assessing team members only 
         phase1_open = record['phase1_start'] <= day <= record['phase1_end'] if record['phase1_start'] and record['phase1_end'] else False
         phase2_open = record['phase2_start'] <= day <= record['phase2_end'] if record['phase2_start'] and record['phase2_end'] else False
         phase3_open = record['phase3_start'] <= day <= record['phase3_end'] if record['phase3_start'] and record['phase3_end'] else False
@@ -68,21 +84,46 @@ def check_epa_period_for_user(ten_tk):
         logging.info(f'🕐 Phase 1: {record["phase1_start"]} - {record["phase1_end"]}, current day: {day}')
         
         # Determine if user can assess themselves
-        if is_tgv:
-            # TGV can self-assess in Phase 1 or Phase 2
-            is_open = phase1_open or phase2_open
+        if is_principal:
+            # Principal (HT/PHT) can always access the system to assess others
+            # They don't self-assess, but need access to view and assess staff
+            is_open = True
+            if phase1_open:
+                current_phase = 'Phase 1 (Tu danh gia) - HT/PHT co the xem'
+                start_day = record['phase1_start']
+                close_day = record['phase1_end']
+            elif phase2_open:
+                current_phase = 'Phase 2 (TGV danh gia) - HT/PHT co the xem'
+                start_day = record['phase2_start']
+                close_day = record['phase2_end']
+            elif phase3_open:
+                current_phase = 'Phase 3 (HT/PHT danh gia) - Dang mo'
+                start_day = record['phase3_start'] or 0
+                close_day = record['phase3_end'] or 0
+            else:
+                current_phase = 'Ngoai thoi gian - HT/PHT van co the danh gia'
+                start_day = record['phase1_start'] or 0
+                close_day = record['phase1_end'] or 0
+        elif is_tgv:
+            # TGV can only self-assess in Phase 1 (like regular teachers)
+            # In Phase 2, TGV can only assess their team members, not themselves
+            is_open = phase1_open
             if phase1_open:
                 current_phase = 'Phase 1 (Tu danh gia)'
                 start_day = record['phase1_start']
                 close_day = record['phase1_end']
             elif phase2_open:
-                current_phase = 'Phase 2 (Tu danh gia TGV)'
+                current_phase = 'Phase 2 (TGV cham to vien - khong tu cham)'
                 start_day = record['phase2_start'] 
                 close_day = record['phase2_end']
-            else:
+            elif phase3_open:
                 current_phase = 'Phase 3 (Chi HT/PHT danh gia)'
                 start_day = record['phase3_start'] or 0
                 close_day = record['phase3_end'] or 0
+            else:
+                current_phase = 'Ngoai thoi gian danh gia'
+                start_day = record['phase1_start'] or 0
+                close_day = record['phase1_end'] or 0
         elif is_gv:
             # Regular teachers: only Phase 1
             is_open = phase1_open
@@ -240,6 +281,7 @@ def update_tongdiem_epa(ten_tk, year, month):
         existing = cursor.fetchone()
 
         if existing:
+            logging.debug(f'Cập nhật bản ghi tồn tại ID={existing["id"]} cho {ten_tk}')
             cursor.execute(
                 """
                 UPDATE tongdiem_epa
@@ -249,13 +291,29 @@ def update_tongdiem_epa(ten_tk, year, month):
                 (user_total_score, sup_total_score, ten_tk, year, month)
             )
         else:
-            cursor.execute(
-                """
-                INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
-                VALUES (%s, %s, %s, %s, %s)
-                """,
-                (ten_tk, year, month, user_total_score, sup_total_score)
-            )
+            logging.debug(f'Tạo bản ghi mới cho {ten_tk}')
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (ten_tk, year, month, user_total_score, sup_total_score)
+                )
+            except pymysql.IntegrityError as ie:
+                if "Duplicate entry" in str(ie):
+                    # Nếu bản ghi đã tồn tại (race condition), thử UPDATE
+                    logging.warning(f'Bản ghi đã tồn tại cho {ten_tk}, chuyển sang UPDATE')
+                    cursor.execute(
+                        """
+                        UPDATE tongdiem_epa
+                        SET user_total_score = %s, sup_total_score = %s
+                        WHERE ten_tk = %s AND year = %s AND month = %s
+                        """,
+                        (user_total_score, sup_total_score, ten_tk, year, month)
+                    )
+                else:
+                    raise ie
         conn.commit()
         logging.debug(f'Đã cập nhật tongdiem_epa: user_total_score={user_total_score}, sup_total_score={sup_total_score}')
     except Exception as e:
@@ -562,25 +620,38 @@ def submit_assessment():
             existing_record = cursor.fetchone()
             
             if existing_record:
-                # Cập nhật record đã có, chỉ cập nhật các field không null/empty
-                update_fields = ["user_score = %s", "user_comment = %s", "created_at = NOW()"]
-                update_values = [user_score, user_comment]
-                
-                if sup_score is not None:
-                    update_fields.append("sup_score = %s")
-                    update_values.append(sup_score)
-                
-                if sup_comment:
-                    update_fields.append("sup_comment = %s") 
-                    update_values.append(sup_comment)
-                
-                update_values.append(existing_record['id'])
-                
-                cursor.execute(
-                    f"UPDATE bangdanhgia SET {', '.join(update_fields)} WHERE id = %s",
-                    update_values
-                )
-                logging.debug(f'Cập nhật câu hỏi ID {question_id} cho ten_tk={ten_tk}')
+                # Cập nhật record đã có - logic khác nhau cho user và supervisor
+                if role == 'supervisor':
+                    # Supervisor chỉ cập nhật sup_score và sup_comment, giữ nguyên user_score
+                    cursor.execute(
+                        """
+                        UPDATE bangdanhgia 
+                        SET sup_score = %s, sup_comment = %s, created_at = NOW()
+                        WHERE id = %s
+                        """,
+                        (sup_score, sup_comment, existing_record['id'])
+                    )
+                    logging.debug(f'Supervisor cập nhật sup_score={sup_score} cho câu hỏi ID {question_id}, ten_tk={ten_tk}')
+                else:
+                    # User hoặc admin cập nhật user_score và user_comment
+                    update_fields = ["user_score = %s", "user_comment = %s", "created_at = NOW()"]
+                    update_values = [user_score, user_comment]
+                    
+                    if sup_score is not None:
+                        update_fields.append("sup_score = %s")
+                        update_values.append(sup_score)
+                    
+                    if sup_comment:
+                        update_fields.append("sup_comment = %s") 
+                        update_values.append(sup_comment)
+                    
+                    update_values.append(existing_record['id'])
+                    
+                    cursor.execute(
+                        f"UPDATE bangdanhgia SET {', '.join(update_fields)} WHERE id = %s",
+                        update_values
+                    )
+                    logging.debug(f'User/Admin cập nhật câu hỏi ID {question_id} cho ten_tk={ten_tk}')
             else:
                 # Tạo record mới
                 cursor.execute(
