@@ -145,21 +145,29 @@
 </div>
 
 <!-- Modal đổi mật khẩu -->
-<div class="modal fade" id="changePassModal" tabindex="-1" aria-labelledby="changePassModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">🔐 Change Password</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div id="changePassModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" onclick="closeChangePassModal()">
+  <div class="flex items-center justify-center min-h-screen p-4" onclick="event.stopPropagation()">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md">
+      <div class="bg-primary text-white p-4 rounded-t-lg">
+        <div class="flex items-center justify-between">
+          <h5 class="modal-title mb-0">🔐 Đổi Mật Khẩu</h5>
+          <button type="button" class="text-white hover:text-gray-200 text-2xl font-bold" onclick="closeChangePassModal()">&times;</button>
+        </div>
       </div>
-      <div class="modal-body">
+      <div class="p-4">
         <input type="hidden" id="changePassUsername">
         <div class="mb-3">
-          <label class="form-label">New Password</label>
-          <input type="password" class="form-control" id="newPassInput">
+          <label class="form-label">Mật Khẩu Mới</label>
+          <div class="relative">
+            <input type="password" class="form-control pr-12" id="newPassInput" placeholder="Nhập mật khẩu mới">
+            <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted hover:text-primary" onclick="togglePasswordVisibility()">
+              <i class="fas fa-eye" id="passwordEyeIcon"></i>
+            </button>
+          </div>
         </div>
-        <div class="text-end">
-          <button class="btn btn-sm btn-primary" onclick="submitChangePass()">💾 Save</button>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary flex-fill" onclick="submitChangePass()">💾 Lưu</button>
+          <button class="btn btn-secondary flex-fill" onclick="closeChangePassModal()">Hủy</button>
         </div>
       </div>
     </div>
@@ -376,8 +384,27 @@ async function resetPassword(username) {
 function openChangePassModal(username) {
   document.getElementById("changePassUsername").value = username;
   document.getElementById("newPassInput").value = '';
-  const modal = new bootstrap.Modal(document.getElementById('changePassModal'));
-  modal.show();
+  document.getElementById('passwordEyeIcon').classList.remove('fa-eye', 'fa-eye-slash');
+  document.getElementById('newPassInput').type = 'password';
+  document.getElementById('changePassModal').classList.remove('hidden');
+}
+
+function closeChangePassModal() {
+  document.getElementById('changePassModal').classList.add('hidden');
+}
+
+function togglePasswordVisibility() {
+  const input = document.getElementById('newPassInput');
+  const icon = document.getElementById('passwordEyeIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
 }
 
 async function submitChangePass() {
@@ -399,7 +426,7 @@ async function submitChangePass() {
   const result = await res.json();
   if (res.ok) {
     alert(`Password for "${username}" changed successfully!`);  // ✅ Đúng biến
-    bootstrap.Modal.getInstance(document.getElementById('changePassModal')).hide();
+    closeChangePassModal();
   } else {
     alert(`Failed to change password: ${result.error || 'Unknown error'}`);
   }

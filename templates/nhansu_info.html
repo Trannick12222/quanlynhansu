@@ -174,7 +174,9 @@
           <select class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-dark-green-primary focus:outline-none transition-colors duration-200 font-cute" id="deptSelect" name="deptSelect" onchange="switchDept()">
             <option value="">-- Chọn Bộ Phận --</option>
             <option value="HS">👶 HỌC SINH</option>
+            {% if user|lower in ['admin', 'kimnhung', 'ngocquy'] or role in ['admin', 'administrator'] %}
             <option value="GV">👩‍🏫 GIÁO VIÊN</option>
+            {% endif %}
           </select>
         </div>
         <div class="flex-1 min-w-[250px]">
@@ -232,6 +234,20 @@
             <h3 class="text-xl font-cute font-bold text-white" style="text-shadow: none;">Danh Sách Giáo Viên</h3>
           </div>
         </div>
+        
+        <!-- Thông báo quyền truy cập -->
+        <div id="access-notice" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" style="display: none;">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-cute">
+                <strong>Lưu ý:</strong> Bạn chỉ có quyền xem thông tin cơ bản. Các thông tin nhạy cảm như CCCD, số bảo hiểm, số điện thoại đã được ẩn để bảo vệ quyền riêng tư.
+              </p>
+            </div>
+          </div>
+        </div>
         <div class="overflow-x-auto max-h-[70vh]">
           <table class="min-w-full text-sm">
             <thead class="text-white sticky top-0 z-10" style="background-color: #166534b2 !important;">
@@ -243,13 +259,13 @@
                 <th class="px-4 py-3 text-left font-cute font-semibold">Chức Vụ</th>
                 <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
                 <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Quê Quán</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Cấp CCCD</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Mã Số Thuế</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">CMND</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Số Bảo Hiểm</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Số Điện Thoại</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Tài Khoản NH</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">CCCD</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">Ngày Cấp CCCD</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">Mã Số Thuế</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">CMND</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">Số Bảo Hiểm</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">Số Điện Thoại</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold sensitive-column" style="display: none;">Tài Khoản NH</th>
                 <th class="px-4 py-3 text-left font-cute font-semibold min-w-[300px]">Email</th>
                 <th class="px-4 py-3 text-left font-cute font-semibold">Nhóm Máu</th>
                 <th class="px-4 py-3 text-left font-cute font-semibold min-w-[400px]">Địa Chỉ</th>
@@ -285,6 +301,7 @@
 let schemaByDept = {};
 const currentUser = "{{ user|lower }}";
 const userRole = "{{ role }}";
+window.canViewSensitive = false; // Mặc định không có quyền xem thông tin nhạy cảm
 
 async function fetchSchema() {
   try {
@@ -357,6 +374,16 @@ async function switchDept() {
 
   const dept = deptSelect.value;
   console.log(`DEBUG: Bộ phận được chọn: ${dept}`);
+  
+  // Kiểm tra quyền truy cập GV
+  const canViewGV = ["admin", "kimnhung", "ngocquy"].includes(currentUser) || ["admin", "administrator"].includes(userRole);
+  if (dept === "GV" && !canViewGV) {
+    console.log("DEBUG: User không có quyền xem GV, chuyển về HS");
+    deptSelect.value = "HS";
+    alert("Bạn không có quyền truy cập thông tin giáo viên.");
+    return;
+  }
+  
   // Hiển thị spinner
   container.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Đang tải...</span></div></div>';
   // Ẩn/hiện bảng
@@ -378,13 +405,23 @@ async function switchDept() {
   }
   // Tạo trường nhập liệu động và nút Thêm chỉ khi "kimnhung", role là Supervisor hoặc Administrator
   container.innerHTML = "";
-  if (["kimnhung", "ngocquy", "admin"].includes(currentUser)) {
+  if (["kimnhung", "ngocquy", "admin"].includes(currentUser) || userRole === "administrator") {
     let rowDiv = document.createElement("div");
     rowDiv.className = "row g-2 mb-2 w-100 d-flex";
 
     schemaByDept[dept].forEach((field, index) => {
       const label = field.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
       console.log(`DEBUG: Tạo input cho field: ${field}, label: ${label}`);
+      
+      // Kiểm tra xem field có phải là thông tin nhạy cảm không
+      const sensitiveFields = ['cccd', 'cccd_issued_date', 'tax_code', 'cmnd', 'insurance_number', 'phone_number', 'bank_account'];
+      const isSensitiveField = sensitiveFields.includes(field);
+      
+      // Chỉ hiển thị trường nhạy cảm nếu có quyền
+      if (isSensitiveField && !window.canViewSensitive) {
+        return; // Bỏ qua trường này
+      }
+      
       let inputType = "text";
       if (field.includes("date")) inputType = "date";
       else if (field.includes("phone")) inputType = "tel";
@@ -446,6 +483,14 @@ async function switchDept() {
     alert(`Không thể tải dữ liệu cho ${dept}. Vui lòng thử lại.`);
     container.innerHTML += '<div class="text-center text-danger mt-2">Lỗi tải dữ liệu.</div>';
   }
+  
+  // Cập nhật thông báo quyền truy cập cho bộ phận khác
+  if (dept === "HS") {
+    const accessNotice = document.getElementById('access-notice');
+    if (accessNotice) {
+      accessNotice.style.display = 'none';
+    }
+  }
 }
 
 async function fetchAndRenderDept(dept) {
@@ -455,6 +500,25 @@ async function fetchAndRenderDept(dept) {
     if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
     const result = await res.json();
     if (result.error) throw new Error(result.error);
+    
+    // Cập nhật quyền xem thông tin nhạy cảm
+    window.canViewSensitive = result.can_view_sensitive || false;
+    
+    // Hiển thị/ẩn các cột nhạy cảm
+    if (dept === "GV") {
+      const sensitiveColumns = document.querySelectorAll('.sensitive-column');
+      const accessNotice = document.getElementById('access-notice');
+      
+      sensitiveColumns.forEach(col => {
+        col.style.display = window.canViewSensitive ? 'table-cell' : 'none';
+      });
+      
+      // Hiển thị thông báo nếu không có quyền xem thông tin nhạy cảm
+      if (accessNotice) {
+        accessNotice.style.display = window.canViewSensitive ? 'none' : 'block';
+      }
+    }
+    
     const rows = result.rows.map(row => ({
       // Map backend columns to frontend fields
       ma_hs: row.ma_hs,
@@ -519,7 +583,7 @@ function generateRowHtml(tableId, row, index) {
   if (tableId === "table_hs") {
     console.log(`DEBUG: Tạo hàng HS với dữ liệu: ${JSON.stringify(row)}`);
 
-    const deleteButton = (currentUser === "kimnhung" || userRole === "administrator")
+    const deleteButton = (currentUser === "kimnhung" || userRole === "administrator" || window.canViewSensitive)
       ? `<td><button class="btn btn-sm btn-danger" onclick="deleteRowHS('${row.ma_hs || index}')">Xóa</button></td>`
       : `<td></td>`;
 
@@ -547,9 +611,28 @@ function generateRowHtml(tableId, row, index) {
   if (tableId === "table_gv") {
     console.log(`DEBUG: Tạo hàng GV với dữ liệu: ${JSON.stringify(row)}`);
 
-    const deleteButton = (currentUser === "kimnhung" || userRole === "administrator")
+    const deleteButton = (currentUser === "kimnhung" || userRole === "administrator" || window.canViewSensitive)
       ? `<td><button class="btn btn-sm btn-danger" onclick="deleteRowGV('${row.staff_id || index}')">Xóa</button></td>`
       : `<td></td>`;
+
+    // Ẩn thông tin nhạy cảm nếu không có quyền
+    const sensitiveData = window.canViewSensitive ? {
+      cccd: row.cccd || "",
+      cccd_issued_date: formatDate(row.cccd_issued_date),
+      tax_code: row.tax_code || "",
+      cmnd: row.cmnd || "",
+      insurance_number: row.insurance_number || "",
+      phone_number: row.phone_number || "",
+      bank_account: row.bank_account || ""
+    } : {
+      cccd: "***",
+      cccd_issued_date: "***",
+      tax_code: "***",
+      cmnd: "***",
+      insurance_number: "***",
+      phone_number: "***",
+      bank_account: "***"
+    };
 
     return `
       <td>${index}</td>
@@ -559,13 +642,13 @@ function generateRowHtml(tableId, row, index) {
       <td>${row.team || ""}</td>
       <td>${formatDate(row.birth_date)}</td>
       <td>${row.hometown || ""}</td>
-      <td>${row.cccd || ""}</td>
-      <td>${formatDate(row.cccd_issued_date)}</td>
-      <td>${row.tax_code || ""}</td>
-      <td>${row.cmnd || ""}</td>
-      <td>${row.insurance_number || ""}</td>
-      <td>${row.phone_number || ""}</td>
-      <td>${row.bank_account || ""}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.cccd}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.cccd_issued_date}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.tax_code}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.cmnd}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.insurance_number}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.phone_number}</td>
+      <td class="sensitive-column" style="display: ${window.canViewSensitive ? 'table-cell' : 'none'};">${sensitiveData.bank_account}</td>
       <td>${row.email || ""}</td>
       <td>${row.blood_type || ""}</td>
       <td>${row.address || ""}</td>
@@ -625,7 +708,20 @@ window.addEventListener("DOMContentLoaded", async () => {
         await switchDept();
         localStorage.removeItem('lastImportedFile');
     } else {
-        document.getElementById("deptSelect").value = "HS"; // Default to HS
+        // Kiểm tra xem user có quyền xem GV không
+        const canViewGV = ["admin", "kimnhung", "ngocquy"].includes(currentUser) || ["admin", "administrator"].includes(userRole);
+        const deptSelect = document.getElementById("deptSelect");
+        
+        // Nếu không có quyền xem GV và GV đang được chọn, chuyển về HS
+        if (!canViewGV && deptSelect.value === "GV") {
+            deptSelect.value = "HS";
+        }
+        
+        // Nếu chưa có giá trị, mặc định là HS
+        if (!deptSelect.value) {
+            deptSelect.value = "HS";
+        }
+        
         await switchDept();
     }
 });

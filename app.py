@@ -439,10 +439,43 @@ def get_table_schema():
 # Example API to get employees
 @app.route("/api/employees")
 def api_employees():
+    # Kiểm tra quyền truy cập
+    if "user" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    current_user = session["user"]
+    current_role = session.get("role", "")
+    
+    # Chỉ admin, kimnhung, ngocquy mới có quyền xem thông tin nhạy cảm
+    can_view_sensitive = current_user in ("admin", "kimnhung", "ngocquy") or current_role in ("admin", "Administrator")
+    
     dept = request.args.get("dept")
     if dept == "GV":
-        table = "giaovien"
-        query = f"SELECT * FROM {table}"
+        if can_view_sensitive:
+            # Hiển thị tất cả thông tin cho admin
+            query = "SELECT * FROM giaovien"
+        else:
+            # Ẩn thông tin nhạy cảm cho user và supervisor
+            query = """
+                SELECT 
+                    ma_gv,
+                    ho_va_ten,
+                    ten_tk,
+                    chuc_vu,
+                    ngay_sinh,
+                    que_quan,
+                    NULL as cccd,
+                    NULL as ngay_cap,
+                    NULL as mst,
+                    NULL as cmnd,
+                    NULL as so_bh,
+                    NULL as sdt,
+                    NULL as tk_nh,
+                    email,
+                    nhom_mau,
+                    dia_chi
+                FROM giaovien
+            """
     elif dept == "HS":
         query = """
             SELECT 
@@ -473,7 +506,7 @@ def api_employees():
         with conn.cursor() as cursor:
             cursor.execute(query)
             rows = cursor.fetchall()
-        return jsonify({"rows": rows})
+        return jsonify({"rows": rows, "can_view_sensitive": can_view_sensitive})
     except Exception as e:
         app.logger.error(f"Error in api_employees: {str(e)}")
         return jsonify({"error": "Đã xảy ra lỗi khi lấy dữ liệu nhân viên"}), 500
