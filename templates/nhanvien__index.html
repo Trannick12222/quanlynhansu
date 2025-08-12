@@ -373,24 +373,24 @@
           </div>
         </div>
         
-        <div class="overflow-x-auto max-h-[70vh] table-responsive">
-          <table class="min-w-full text-sm" id="table_hs">
+        <div class="overflow-x-auto max-h-[70vh] table-responsive" style="overflow-x: auto;">
+          <table class="min-w-full text-sm" id="table_hs" style="min-width: max-content;">
             <thead class="gradient-cute text-white sticky top-0 z-10">
               <tr>
-                <th class="px-4 py-3 text-left font-cute font-semibold">#</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Mã HS</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ và Tên</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Giới Tính</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Dân Tộc</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Mã Định Danh</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ Tên Bố</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Nghề Nghiệp Bố</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ Tên Mẹ</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Nghề Nghiệp Mẹ</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Hộ Khẩu</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD Bố/Mẹ</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">SĐT</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 50px;">#</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 100px;">Mã HS</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 200px;">Họ và Tên</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 120px;">Ngày Sinh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 80px;">Giới Tính</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 100px;">Dân Tộc</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 120px;">Mã Định Danh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 200px;">Họ Tên Bố</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 150px;">Nghề Nghiệp Bố</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 200px;">Họ Tên Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 150px;">Nghề Nghiệp Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 200px;">Hộ Khẩu</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 150px;">CCCD Bố/Mẹ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 120px;">SĐT</th>
                 {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
                 <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
                 {% endif %}
@@ -427,27 +427,27 @@
           </div>
         </div>
         
-        <div class="overflow-x-auto max-h-[70vh] table-responsive">
-          <table class="min-w-full text-sm" id="table_gv">
+        <div class="overflow-x-auto max-h-[70vh] table-responsive" style="overflow-x: auto;">
+          <table class="min-w-full text-sm" id="table_gv" style="min-width: max-content;">
             <thead class="gradient-cute text-white sticky top-0 z-10">
               <tr>
-                <th class="px-4 py-3 text-left font-cute font-semibold">#</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Mã GV</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Họ và Tên</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Tên TK</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Chức Vụ</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Sinh</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[200px]">Quê Quán</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">CCCD</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Ngày Cấp</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">MST</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">CMND</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Số BH</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">SĐT</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">TK NH</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[300px]">Email</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold">Nhóm Máu</th>
-                <th class="px-4 py-3 text-left font-cute font-semibold min-w-[400px]">Địa Chỉ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 50px;">#</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 100px;">Mã GV</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 200px;">Họ và Tên</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 120px;">Tên TK</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 120px;">Chức Vụ</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 140px;">Ngày Sinh</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 180px;">Quê Quán</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 160px;">CCCD</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 160px;">Ngày Cấp</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 140px;">MST</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 140px;">CMND</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 160px;">Số BH</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 150px;">SĐT</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 180px;">TK NH</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 300px;">Email</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 80px;">Nhóm Máu</th>
+                <th class="px-4 py-3 text-left font-cute font-semibold" style="min-width: 400px;">Địa Chỉ</th>
                 {% if session['role'] == 'admin' or session['user'] == 'kimnhung' or session['user'] == 'ngocquy' %}
                 <th class="px-4 py-3 text-left font-cute font-semibold">Hành Động</th>
                 {% endif %}

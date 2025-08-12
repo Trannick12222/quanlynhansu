@@ -12,6 +12,231 @@
   --dark-green-bg-light: #f0fdf4;
 }
 
+/* Table text display fixes - prevent text truncation and wrapping */
+.table td,
+.table th {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  word-wrap: normal !important;
+  word-break: keep-all !important;
+  max-width: none !important;
+  min-width: auto !important;
+}
+
+/* Ensure all table cells show full content */
+.table td *,
+.table th * {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
+/* Specific column width fixes */
+.table th:nth-child(1), /* # column */
+.table td:nth-child(1) {
+  min-width: 50px !important;
+  max-width: 60px !important;
+  width: 50px !important;
+}
+
+.table th:nth-child(2), /* Mã GV column */
+.table td:nth-child(2) {
+  min-width: 100px !important;
+  max-width: 120px !important;
+  width: 100px !important;
+}
+
+.table th:nth-child(3), /* Họ và Tên column */
+.table td:nth-child(3) {
+  min-width: 200px !important;
+  max-width: 250px !important;
+  width: 200px !important;
+}
+
+.table th:nth-child(4), /* Tên TK column */
+.table td:nth-child(4) {
+  min-width: 120px !important;
+  max-width: 150px !important;
+  width: 120px !important;
+}
+
+.table th:nth-child(5), /* Chức Vụ column */
+.table td:nth-child(5) {
+  min-width: 120px !important;
+  max-width: 140px !important;
+  width: 120px !important;
+}
+
+.table th:nth-child(6), /* Ngày Sinh column */
+.table td:nth-child(6) {
+  min-width: 140px !important;
+  max-width: 160px !important;
+  width: 140px !important;
+}
+
+.table th:nth-child(7), /* Quê Quán column */
+.table td:nth-child(7) {
+  min-width: 180px !important;
+  max-width: 220px !important;
+  width: 180px !important;
+}
+
+.table th:nth-child(8), /* CCCD column */
+.table td:nth-child(8) {
+  min-width: 160px !important;
+  max-width: 180px !important;
+  width: 160px !important;
+}
+
+.table th:nth-child(9), /* Ngày Cấp CCCD column */
+.table td:nth-child(9) {
+  min-width: 160px !important;
+  max-width: 180px !important;
+  width: 160px !important;
+}
+
+.table th:nth-child(10), /* Mã Số Thuế column */
+.table td:nth-child(10) {
+  min-width: 140px !important;
+  max-width: 160px !important;
+  width: 140px !important;
+}
+
+.table th:nth-child(11), /* CMND column */
+.table td:nth-child(11) {
+  min-width: 140px !important;
+  max-width: 160px !important;
+  width: 140px !important;
+}
+
+.table th:nth-child(12), /* Số Bảo Hiểm column */
+.table td:nth-child(12) {
+  min-width: 160px !important;
+  max-width: 180px !important;
+  width: 160px !important;
+}
+
+.table th:nth-child(13), /* Số Điện Thoại column */
+.table td:nth-child(13) {
+  min-width: 150px !important;
+  max-width: 170px !important;
+  width: 150px !important;
+}
+
+.table th:nth-child(14), /* Tài Khoản NH column */
+.table td:nth-child(14) {
+  min-width: 180px !important;
+  max-width: 200px !important;
+  width: 180px !important;
+}
+
+.table th:nth-child(15), /* Email column */
+.table td:nth-child(15) {
+  min-width: 300px !important;
+  max-width: 350px !important;
+  width: 300px !important;
+}
+
+.table th:nth-child(16), /* Nhóm Máu column */
+.table td:nth-child(16) {
+  min-width: 80px !important;
+  max-width: 100px !important;
+  width: 80px !important;
+}
+
+.table th:nth-child(17), /* Địa Chỉ column */
+.table td:nth-child(17) {
+  min-width: 400px !important;
+  max-width: 500px !important;
+  width: 400px !important;
+}
+
+.table th:nth-child(18), /* Hành Động column */
+.table td:nth-child(18) {
+  min-width: 100px !important;
+  max-width: 120px !important;
+  width: 100px !important;
+}
+
+/* Force table to show full content without horizontal scrollbar initially */
+.overflow-x-auto {
+  overflow-x: auto !important;
+}
+
+/* Ensure table container allows full width */
+.min-w-full {
+  min-width: max-content !important;
+}
+
+/* Table responsive fixes for all devices */
+.table-responsive {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Ensure table cells don't wrap on any device */
+@media (max-width: 1200px) {
+  .table td,
+  .table th {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .table td,
+  .table th {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.25rem !important;
+  }
+  
+  /* Force horizontal scroll on mobile */
+  .table-responsive {
+    overflow-x: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .table td,
+  .table th {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    font-size: 0.7rem !important;
+    padding: 0.25rem 0.125rem !important;
+  }
+}
+
+/* Additional table fixes for all screen sizes */
+.table {
+  table-layout: auto !important;
+  width: max-content !important;
+  min-width: 100% !important;
+}
+
+.table td,
+.table th {
+  box-sizing: border-box !important;
+  padding: 0.75rem 1rem !important;
+  vertical-align: middle !important;
+}
+
+/* Ensure inline edit inputs don't break layout */
+.inline-edit {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
 /* Override existing styles with higher specificity */
 body.employee-dashboard {
   background: linear-gradient(135deg, var(--dark-green-bg) 0%, var(--dark-green-bg-light) 50%, var(--dark-green-bg) 100%) !important;
