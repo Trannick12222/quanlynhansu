@@ -604,8 +604,10 @@ def submit_assessment():
             question_id = score_entry.get('questionId')
             user_score = score_entry.get('score')
             user_comment = score_entry.get('user_comment', '')
+            logging.info(f'🔍 Processing score_entry: questionId={question_id}, score={user_score}, user_comment="{user_comment}", sup_score={score_entry.get("sup_score")}, sup_comment="{score_entry.get("sup_comment")}"')
             # For supervisor, set sup_score = user_score and sup_comment = user_comment
             if role == 'supervisor':
+                # Đảm bảo luôn cập nhật cả 2 trường cho supervisor
                 sup_score = user_score
                 sup_comment = user_comment
                 logging.info(f'🔧 Supervisor {ten_tk}: Setting sup_score={sup_score} from user_score={user_score}')
@@ -651,6 +653,7 @@ def submit_assessment():
                 # Cập nhật record đã có - logic khác nhau cho user và supervisor
                 if role == 'supervisor':
                     # Supervisor cập nhật cả user_score và sup_score, user_comment và sup_comment
+                    logging.info(f'🔧 Supervisor {ten_tk}: BEFORE UPDATE - user_score={user_score}, sup_score={sup_score}, user_comment="{user_comment}", sup_comment="{sup_comment}"')
                     cursor.execute(
                         """
                         UPDATE bangdanhgia 
@@ -659,7 +662,7 @@ def submit_assessment():
                         """,
                         (user_score, sup_score, user_comment, sup_comment, existing_record['id'])
                     )
-                    logging.info(f'🔧 Supervisor {ten_tk}: UPDATE record ID {existing_record["id"]} - user_score={user_score}, sup_score={sup_score} cho câu hỏi ID {question_id}')
+                    logging.info(f'🔧 Supervisor {ten_tk}: AFTER UPDATE record ID {existing_record["id"]} - user_score={user_score}, sup_score={sup_score} cho câu hỏi ID {question_id}')
                 else:
                     # User hoặc admin cập nhật user_score và user_comment
                     update_fields = ["user_score = %s", "user_comment = %s", "created_at = NOW()"]
