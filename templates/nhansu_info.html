@@ -97,10 +97,14 @@
           <span>Xem Lịch Sử Đánh Giá</span>
         </button>
         {% if role == "supervisor" %}
-        <a href="/sup-epa-score" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-dark-green-secondary to-dark-green-tertiary text-white rounded-xl hover:shadow-dark-green transition-all duration-300 font-cute font-semibold group hover:scale-105">
+        <a href="/sup-epa-score" id="supEpaButton" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-dark-green-secondary to-dark-green-tertiary text-white rounded-xl hover:shadow-dark-green transition-all duration-300 font-cute font-semibold group hover:scale-105" style="display: none;">
           <span class="group-hover:animate-bounce">👥</span>
           <span>Đánh giá EPA tổ viên</span>
         </a>
+        <div id="supEpaDisabled" class="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl opacity-60 cursor-not-allowed font-cute font-semibold" style="display: none;">
+          <span>🔒</span>
+          <span id="supEpaMessage">Chưa tới thời gian đánh giá EPA tổ viên</span>
+        </div>
         {% endif %}
       </div>
     </div>
@@ -819,5 +823,72 @@ function loadDetail(id) {
       $('#detailModal').modal('show');
     });
 }
+
+// Kiểm tra thời gian EPA cho supervisor
+async function checkSupEpaTime() {
+  const role = '{{ role }}';
+  const user = '{{ user }}';
+  
+  if (role !== 'supervisor') {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/assessment-period', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Kiểm tra xem có quyền TGV không
+      if (data.make_epa_tgv !== 'yes' && data.make_epa_all !== 'yes') {
+        document.getElementById('supEpaButton').style.display = 'none';
+        document.getElementById('supEpaDisabled').style.display = 'flex';
+        document.getElementById('supEpaMessage').textContent = 'Không có quyền đánh giá EPA tổ viên';
+        return;
+      }
+      
+      // Kiểm tra thời gian Phase 2
+      const currentDay = data.current_day;
+      const phase2Start = data.phase2 ? data.phase2.start : null;
+      const phase2End = data.phase2 ? data.phase2.end : null;
+      
+      if (phase2Start && phase2End) {
+        const phase2Open = currentDay >= phase2Start && currentDay <= phase2End;
+        
+        if (phase2Open || user === 'admin' || user === 'kimnhung' || user === 'ngocquy') {
+          // Trong thời gian Phase 2 hoặc là admin/HT/PHT
+          document.getElementById('supEpaButton').style.display = 'flex';
+          document.getElementById('supEpaDisabled').style.display = 'none';
+        } else {
+          // Chưa tới thời gian Phase 2
+          document.getElementById('supEpaButton').style.display = 'none';
+          document.getElementById('supEpaDisabled').style.display = 'flex';
+          document.getElementById('supEpaMessage').textContent = `Chưa tới thời gian đánh giá EPA tổ viên (ngày ${phase2Start}-${phase2End} hàng tháng)`;
+        }
+      } else {
+        // Chưa cấu hình Phase 2
+        document.getElementById('supEpaButton').style.display = 'none';
+        document.getElementById('supEpaDisabled').style.display = 'flex';
+        document.getElementById('supEpaMessage').textContent = 'Chưa cấu hình thời gian đánh giá EPA tổ viên';
+      }
+    } else {
+      // Lỗi API
+      document.getElementById('supEpaButton').style.display = 'none';
+      document.getElementById('supEpaDisabled').style.display = 'flex';
+      document.getElementById('supEpaMessage').textContent = 'Không thể kiểm tra thời gian EPA';
+    }
+  } catch (error) {
+    console.error('Error checking EPA time:', error);
+    document.getElementById('supEpaButton').style.display = 'none';
+    document.getElementById('supEpaDisabled').style.display = 'flex';
+    document.getElementById('supEpaMessage').textContent = 'Lỗi kiểm tra thời gian EPA';
+  }
+}
+
+// Gọi kiểm tra khi trang load
+document.addEventListener('DOMContentLoaded', checkSupEpaTime);
 
 </script>

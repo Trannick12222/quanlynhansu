@@ -719,9 +719,14 @@ def debug_epa_period():
         import traceback
         return f"<pre>Error: {e}\nTraceback: {traceback.format_exc()}</pre>"
 
+
 @app.route("/test-export")
 def test_export():
     return "Test export route works!"
+
+@app.route("/api/test-epa-time")
+def test_epa_time():
+    return {"status": "ok", "message": "Test endpoint works"}
 
 # Full du lieu bang danh gia cua tat ca giao vien.
 @app.route("/api/epa-full")
@@ -1690,12 +1695,15 @@ def change_password():
 def sup_epa_score():
     from datetime import datetime
     import pymysql
+    import logging
 
     user = session.get('user')
     role = session.get('role', '')
     
     # DEBUG: Log session info
+    print(f"\n{'='*50}")
     print(f"[DEBUG] sup-epa-score accessed by user='{user}', role='{role}'")
+    print(f"{'='*50}")
     
     if not user:
         print(f"[DEBUG] No user in session, redirecting to login")
@@ -1704,13 +1712,15 @@ def sup_epa_score():
     now = datetime.now()
     current_month = now.month
     current_year = now.year
+    current_day = now.day
 
     conn = pymysql.connect(**DB_CONFIG)
     try:
         with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-            # Kiểm tra quyền supervisor EPA thay vì chuc_vu
+            # Kiểm tra quyền supervisor EPA và thời gian đánh giá
             cursor.execute("""
-                SELECT make_epa_tgv, make_epa_all FROM thoigianmoepa WHERE ten_tk = %s
+                SELECT make_epa_tgv, make_epa_all, phase2_start, phase2_end 
+                FROM thoigianmoepa WHERE ten_tk = %s
             """, (user,))
             epa_record = cursor.fetchone()
             
@@ -1721,51 +1731,76 @@ def sup_epa_score():
             if epa_record:
                 if epa_record['make_epa_all'] == 'yes':
                     can_supervise = True
-                    print(f"[DEBUG] Access granted: make_epa_all = yes")
+                    print(f"[DEBUG] ✅ Access granted: make_epa_all = yes")
                 elif role == 'supervisor' and epa_record['make_epa_tgv'] == 'yes':
                     can_supervise = True
-                    print(f"[DEBUG] Access granted: role=supervisor AND make_epa_tgv=yes")
+                    print(f"[DEBUG] ✅ Access granted: role=supervisor AND make_epa_tgv=yes")
                 else:
-                    print(f"[DEBUG] Access check failed: role={role}, make_epa_tgv={epa_record['make_epa_tgv']}")
+                    print(f"[DEBUG] ❌ Access check failed: role={role}, make_epa_tgv={epa_record['make_epa_tgv']}")
             else:
-                print(f"[DEBUG] No EPA record found for user {user}")
+                print(f"[DEBUG] ❌ No EPA record found for user {user}")
             
             # Admin luôn được phép
             if role == 'admin':
                 can_supervise = True
-                print(f"[DEBUG] Access granted: role = admin")
+                print(f"[DEBUG] ✅ Access granted: role = admin")
                 
             if not can_supervise:
-                print(f"[DEBUG] RETURNING 403: can_supervise = {can_supervise}")
+                print(f"[DEBUG] 🚫 RETURNING 403: can_supervise = {can_supervise}")
                 return "Bạn không có quyền xem trang này", 403
+            
+            # Kiểm tra thời gian đánh giá EPA tổ viên (Phase 2)
+            if role != 'admin' and user not in ['kimnhung', 'ngocquy']:  # Admin và HT/PHT luôn được phép
+                if epa_record and epa_record['phase2_start'] and epa_record['phase2_end']:
+                    phase2_open = epa_record['phase2_start'] <= current_day <= epa_record['phase2_end']
+                    print(f"[DEBUG] Phase 2 check: day {current_day} in range {epa_record['phase2_start']}-{epa_record['phase2_end']} = {phase2_open}")
+                    
+                    if not phase2_open:
+                        print(f"[DEBUG] RETURNING 403: Phase 2 closed (day {current_day} not in {epa_record['phase2_start']}-{epa_record['phase2_end']})")
+                        return f"Chưa tới thời gian đánh giá EPA tổ viên (ngày {epa_record['phase2_start']}-{epa_record['phase2_end']} hàng tháng)", 403
+                else:
+                    print(f"[DEBUG] RETURNING 403: No Phase 2 time configured")
+                    return "Chưa cấu hình thời gian đánh giá EPA tổ viên", 403
                 
-            print(f"[DEBUG] Permission check passed for {user}")
+            print(f"[DEBUG] ✅ Permission and time check passed for {user}")
 
             # Lấy chuc_vu để xác định nhóm cần đánh giá  
+            print(f"[DEBUG] 🔍 Querying chuc_vu for user {user}")
             cursor.execute("""
                 SELECT chuc_vu FROM giaovien WHERE ten_tk=%s
             """, (user,))
             row = cursor.fetchone()
+            print(f"[DEBUG] Chuc_vu result: {row}")
+            
             if not row:
+                print(f"[DEBUG] ❌ No giaovien record found for {user}")
                 return "Không tìm thấy thông tin giáo viên", 404
 
             chuc_vu = row['chuc_vu']
+            print(f"[DEBUG] ✅ User {user} has chuc_vu: {chuc_vu}")
             
             # Xác định target_chuc_vu dựa trên chuc_vu hiện tại
+            print(f"[DEBUG] 🔍 Determining target_chuc_vu from chuc_vu='{chuc_vu}'")
+            
             if chuc_vu.startswith("TGV"):
                 # TGV -> quản lý GV cùng tổ (cùng số)
                 suffix = chuc_vu[3:]  # ví dụ: '2' từ 'TGV2'
                 target_chuc_vu = f"GV{suffix}"
+                print(f"[DEBUG] ✅ TGV detected: {chuc_vu} -> target_chuc_vu={target_chuc_vu}")
             elif chuc_vu.startswith("GV"):
                 # GV -> có thể được phép chấm điểm cho GV cùng tổ
                 suffix = chuc_vu[2:]  # ví dụ: '1' từ 'GV1'
                 target_chuc_vu = f"GV{suffix}"
+                print(f"[DEBUG] ✅ GV detected: {chuc_vu} -> target_chuc_vu={target_chuc_vu}")
             else:
                 # Chức vụ khác -> không xác định được tổ, từ chối
+                print(f"[DEBUG] ❌ Unknown chuc_vu format: {chuc_vu}")
                 return f"Không xác định được tổ cho chức vụ '{chuc_vu}'", 403
 
             #  Lay danh sach thanh vien cung to va trang thai danh gia tu tongdiem_epa
-            cursor.execute("""
+            print(f"[DEBUG] 🔍 Querying members with chuc_vu='{target_chuc_vu}', year={current_year}, month={current_month}")
+            
+            query = """
                 SELECT g.ten_tk, g.ho_va_ten, g.chuc_vu,
                        t.user_total_score,
                        t.sup_total_score AS sup_score,
@@ -1776,10 +1811,24 @@ def sup_epa_score():
                  AND t.year = %s
                  AND t.month = %s
                 WHERE g.chuc_vu = %s
-            """, (current_year, current_month, target_chuc_vu))
+            """
+            print(f"[DEBUG] SQL Query: {query}")
+            print(f"[DEBUG] Query params: year={current_year}, month={current_month}, chuc_vu={target_chuc_vu}")
+            
+            cursor.execute(query, (current_year, current_month, target_chuc_vu))
 
             members = cursor.fetchall()
+            print(f"[DEBUG] ✅ Found {len(members)} members: {[m['ten_tk'] for m in members]}")
+            
+            # Debug từng member
+            for i, member in enumerate(members):
+                print(f"[DEBUG] Member {i+1}: {member}")
 
+        print(f"[DEBUG] 🎯 Rendering template with {len(members)} members")
+        print(f"[DEBUG] Template variables: target_chuc_vu='{target_chuc_vu}', month={current_month}, year={current_year}")
+        print(f"[DEBUG] Template file: sup_epa_score.html")
+        print(f"{'='*50}")
+        
         return render_template(
             "sup_epa_score.html",
             members=members,
@@ -1814,14 +1863,26 @@ def sup_epa_detail():
     finally:
         conn.close()
 
+@app.before_request
+def before_request():
+    if request.method == 'POST':
+        print(f"[DEBUG] === POST REQUEST === {request.endpoint} -> {request.url}")
+        print(f"[DEBUG] Form data keys: {list(request.form.keys()) if request.form else 'None'}")
+
 @app.route('/update-sup-epa', methods=['POST'])
 def update_sup_epa():
     from flask import request, redirect, url_for
     import pymysql
     from datetime import datetime
 
+    print(f"[DEBUG] === UPDATE-SUP-EPA ROUTE CALLED ===")
+    
     user = session.get('user')
+    role = session.get('role')
+    print(f"[DEBUG] Session: user={user}, role={role}")
+    
     if not user:
+        print(f"[DEBUG] No user, redirecting to login")
         return redirect('/login')
 
     now = datetime.now()
@@ -1833,22 +1894,61 @@ def update_sup_epa():
         with conn.cursor(pymysql.cursors.DictCursor) as cursor:
             updates = request.form
 
-            #  Cap nhat tung cau hoi trong bangdanhgia
+            #  Cap nhat tung cau hoi trong bangdanhgia (CHỈ supervisor fields)
+            print(f"[DEBUG] Form data received: {dict(updates)}")
+            
             for key, value in updates.items():
                 if key.startswith('sup_comment_') or key.startswith('sup_score_'):
                     col, id_ = key.rsplit('_', 1)
                     
-                    # Nếu là supervisor và đang cập nhật sup_score, cũng cập nhật user_score
+                    # CHỐNG BUG: Chỉ cho phép cập nhật sup_score và sup_comment
+                    if col not in ['sup_score', 'sup_comment']:
+                        print(f"[SECURITY] ❌ Từ chối cập nhật cột không được phép: {col}")
+                        continue
+                    
+                    print(f"[DEBUG] Updating {col} for ID {id_} with value: {value}")
+                    
+                    # KIỂM TRA TRƯỚC KHI UPDATE
+                    cursor.execute("SELECT user_score, sup_score, user_comment, sup_comment FROM bangdanhgia WHERE id = %s", (id_,))
+                    before = cursor.fetchone()
+                    print(f"[DEBUG] BEFORE UPDATE - user_score: {before['user_score']}, sup_score: {before['sup_score']}")
+                    
+                    # CHỐNG BUG: Chỉ cập nhật sup_score hoặc sup_comment, TUYỆT ĐỐI KHÔNG động vào user_score
                     if col == 'sup_score':
                         cursor.execute(
-                            f"UPDATE bangdanhgia SET {col}=%s, user_score=%s WHERE id=%s",
-                            (value, value, id_)
-                        )
-                    else:
-                        cursor.execute(
-                            f"UPDATE bangdanhgia SET {col}=%s WHERE id=%s",
+                            "UPDATE bangdanhgia SET sup_score = %s WHERE id = %s",
                             (value, id_)
                         )
+                    elif col == 'sup_comment':
+                        cursor.execute(
+                            "UPDATE bangdanhgia SET sup_comment = %s WHERE id = %s",
+                            (value, id_)
+                        )
+                    
+                    # KIỂM TRA SAU KHI UPDATE
+                    cursor.execute("SELECT user_score, sup_score, user_comment, sup_comment FROM bangdanhgia WHERE id = %s", (id_,))
+                    after = cursor.fetchone()
+                    print(f"[DEBUG] AFTER UPDATE - user_score: {after['user_score']}, sup_score: {after['sup_score']}")
+                    
+                    if before['user_score'] != after['user_score']:
+                        print(f"[ALERT] ❌ user_score BỊ THAY ĐỔI! {before['user_score']} -> {after['user_score']}")
+                        # Khôi phục user_score về giá trị ban đầu
+                        cursor.execute(
+                            "UPDATE bangdanhgia SET user_score = %s WHERE id = %s",
+                            (before['user_score'], id_)
+                        )
+                        print(f"[RECOVERY] ✅ Đã khôi phục user_score về {before['user_score']}")
+                    
+                    if before['user_comment'] != after['user_comment']:
+                        print(f"[ALERT] ❌ user_comment BỊ THAY ĐỔI! {before['user_comment']} -> {after['user_comment']}")
+                        # Khôi phục user_comment về giá trị ban đầu
+                        cursor.execute(
+                            "UPDATE bangdanhgia SET user_comment = %s WHERE id = %s",
+                            (before['user_comment'], id_)
+                        )
+                        print(f"[RECOVERY] ✅ Đã khôi phục user_comment về '{before['user_comment']}'")
+                    
+                    print(f"[DEBUG] SQL executed: UPDATE bangdanhgia SET {col}='{value}' WHERE id={id_}")
 
             #  Tong hop lai sup_score tu bangdanhgia
             cursor.execute("""
@@ -1860,29 +1960,23 @@ def update_sup_epa():
 
             rows = cursor.fetchall()
 
-            #  Cap nhat hoac chen moi vao tongdiem_epa
+            #  Cap nhat hoac chen moi vao tongdiem_epa (CHỈ supervisor score)
             for row in rows:
-                # Tính toán lại cả user_total_score và sup_total_score từ bangdanhgia
-                cursor.execute("""
-                    SELECT COALESCE(SUM(user_score), 0) as user_total, COALESCE(SUM(sup_score), 0) as sup_total
-                    FROM bangdanhgia
-                    WHERE ten_tk = %s AND year = %s AND month = %s
-                """, (row['ten_tk'], row['year'], row['month']))
+                # Chỉ tính toán lại sup_total_score, KHÔNG động vào user_total_score
+                print(f"[DEBUG] Processing tongdiem_epa for user: {row['ten_tk']}")
                 
-                totals = cursor.fetchone()
-                user_total = totals['user_total']
-                sup_total = totals['sup_total']
+                # 🔧 SỬA LỖI: Commit bangdanhgia TRƯỚC khi gọi update_tongdiem_epa
+                conn.commit()
+                print(f"[DEBUG] 🔧 Đã commit bangdanhgia trước khi gọi update_tongdiem_epa")
                 
-                # Sử dụng INSERT ... ON DUPLICATE KEY UPDATE để tránh race condition
-                cursor.execute("""
-                    INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
-                    VALUES (%s, %s, %s, %s, %s)
-                    ON DUPLICATE KEY UPDATE 
-                        user_total_score = VALUES(user_total_score),
-                        sup_total_score = VALUES(sup_total_score)
-                """, (row['ten_tk'], row['year'], row['month'], user_total, sup_total))
+                # CHỐNG BUG: Gọi function update_tongdiem_epa đã được sửa thay vì logic cũ
+                from apis.giaovien_epa import update_tongdiem_epa
+                print(f"[DEBUG] 🔧 Calling update_tongdiem_epa for {row['ten_tk']} with role=supervisor")
+                update_tongdiem_epa(row['ten_tk'], current_year, current_month, 'supervisor')
+                print(f"[DEBUG] ✅ Đã gọi update_tongdiem_epa cho {row['ten_tk']} với role=supervisor")
 
-            conn.commit()
+            # Xóa conn.commit() ở đây vì đã commit ở trên
+            # conn.commit()  # <- XÓA DÒNG NÀY
 
         return redirect(url_for('sup_epa_score'))
 
@@ -1892,3 +1986,4 @@ def update_sup_epa():
 if __name__ == "__main__":
     threading.Timer(1.0, open_browser).start()
     app.run(debug=True, use_reloader=False)
+

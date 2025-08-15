@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 from utils.db import get_conn
 from datetime import datetime
+import pymysql
+from config import DB_CONFIG
 
 # ✅ Blueprint với tên rõ ràng
 thoigianmoepa_bp = Blueprint('thoigianmoepa', __name__)
@@ -372,5 +374,55 @@ def get_assessment_period():
     except Exception as e:
         print(f"❌ Lỗi API assessment-period: {e}")
         return jsonify({"error": str(e)}), 500
+    finally:
+        conn.close()
+
+@thoigianmoepa_bp.route("/api/epa-check-time")
+def api_epa_check_time():
+    """API để kiểm tra thời gian EPA cho supervisor"""
+    user = session.get('user')
+    role = session.get('role', '')
+    
+    if not user:
+        return "Không có người dùng trong session", 401
+    
+    if role != 'supervisor':
+        return "Chỉ supervisor mới có thể sử dụng API này", 403
+
+    now = datetime.now()
+    current_day = now.day
+
+    conn = pymysql.connect(**DB_CONFIG)
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            # Kiểm tra quyền supervisor EPA và thời gian đánh giá
+            cursor.execute("""
+                SELECT make_epa_tgv, make_epa_all, phase2_start, phase2_end 
+                FROM thoigianmoepa WHERE ten_tk = %s
+            """, (user,))
+            epa_record = cursor.fetchone()
+            
+            if not epa_record:
+                return "Không tìm thấy cài đặt EPA cho user", 403
+            
+            # Kiểm tra quyền supervisor EPA
+            if epa_record['make_epa_all'] != 'yes' and epa_record['make_epa_tgv'] != 'yes':
+                return "Không có quyền đánh giá EPA tổ viên", 403
+            
+            # Admin và HT/PHT luôn được phép
+            if user in ['admin', 'kimnhung', 'ngocquy']:
+                return jsonify({"status": "ok", "message": "Admin/HT/PHT có quyền truy cập"}), 200
+            
+            # Kiểm tra thời gian Phase 2
+            if epa_record['phase2_start'] and epa_record['phase2_end']:
+                phase2_open = epa_record['phase2_start'] <= current_day <= epa_record['phase2_end']
+                
+                if not phase2_open:
+                    return f"Chưa tới thời gian đánh giá EPA tổ viên (ngày {epa_record['phase2_start']}-{epa_record['phase2_end']} hàng tháng)", 403
+            else:
+                return "Chưa cấu hình thời gian đánh giá EPA tổ viên", 403
+            
+            return jsonify({"status": "ok", "message": "Trong thời gian đánh giá EPA tổ viên"}), 200
+            
     finally:
         conn.close()

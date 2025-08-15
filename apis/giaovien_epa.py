@@ -309,38 +309,107 @@ def auto_copy_supervisor_scores(ten_tk, year, month):
         conn.close()
 
 # Cập nhật bảng tongdiem_epa
-def update_tongdiem_epa(ten_tk, year, month):
+def update_tongdiem_epa(ten_tk, year, month, caller_role=None):
+    import traceback
+    stack = traceback.format_stack()
+    logging.info(f'🔄 === UPDATE_TONGDIEM_EPA CALLED ===')
+    logging.info(f'Target: ten_tk={ten_tk}, year={year}, month={month}')
+    logging.info(f'Caller role: {caller_role}')
+    logging.info(f'Called from: {stack[-3].strip()}')
     logging.info(f'Đang cập nhật tongdiem_epa cho ten_tk={ten_tk}, year={year}, month={month}')
     conn = get_conn()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
         cursor.execute(
             """
-            SELECT COALESCE(SUM(user_score), 0) as user_total_score, COALESCE(SUM(sup_score), 0) as sup_total_score
+            SELECT SUM(user_score) as user_total_score, SUM(sup_score) as sup_total_score
             FROM bangdanhgia
             WHERE ten_tk = %s AND year = %s AND month = %s
             """,
             (ten_tk, year, month)
         )
         totals = cursor.fetchone()
-        user_total_score = totals['user_total_score']
-        sup_total_score = totals['sup_total_score']
+        user_total_score = totals['user_total_score']  # Có thể là NULL
+        sup_total_score = totals['sup_total_score']    # Có thể là NULL
+        
+        print(f"[DEBUG] Raw totals from DB: user_total_score={user_total_score}, sup_total_score={sup_total_score}")
 
-        # Loại bỏ auto-copy vì supervisor giờ sẽ luôn cập nhật cả user_score và sup_score
-        # Logic này không còn cần thiết nữa
-
-        # Sử dụng INSERT ... ON DUPLICATE KEY UPDATE để tránh race condition
-        logging.debug(f'Cập nhật/tạo bản ghi cho {ten_tk}')
-        cursor.execute(
-            """
-            INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
-            VALUES (%s, %s, %s, %s, %s)
-            ON DUPLICATE KEY UPDATE 
-                user_total_score = VALUES(user_total_score),
-                sup_total_score = VALUES(sup_total_score)
-            """,
-            (ten_tk, year, month, user_total_score, sup_total_score)
-        )
+        # 🔧 SỬA LỖI: Logic khác nhau cho supervisor và user
+        if caller_role == 'supervisor':
+            # 🔧 SỬA LỖI: Phân biệt 2 trường hợp
+            # 1. Supervisor đánh giá TỔ VIÊN → chỉ cập nhật sup_total_score
+            # 2. Supervisor đánh giá BẢN THÂN → cập nhật cả user_total_score và sup_total_score
+            
+            # Kiểm tra xem supervisor có đang đánh giá chính mình không
+            from flask import session
+            logged_in_supervisor = session.get('user')
+            is_self_assessment = (logged_in_supervisor == ten_tk)
+            
+            if is_self_assessment:
+                # Supervisor đánh giá BẢN THÂN → cập nhật cả user_total_score và sup_total_score
+                logging.info(f'🔧 Supervisor {ten_tk}: TỰ ĐÁNH GIÁ - cập nhật cả user_total_score={user_total_score} và sup_total_score={sup_total_score}')
+                print(f"[DEBUG] 🔧 Supervisor {ten_tk}: TỰ ĐÁNH GIÁ - cập nhật cả user_total_score={user_total_score} và sup_total_score={sup_total_score}")
+                
+                cursor.execute(
+                    """
+                    INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE 
+                        user_total_score = VALUES(user_total_score),
+                        sup_total_score = VALUES(sup_total_score)
+                    """,
+                    (ten_tk, year, month, user_total_score, sup_total_score)
+                )
+                print(f"[DEBUG] 🔧 Supervisor TỰ ĐÁNH GIÁ: SQL executed - user_total_score={user_total_score}, sup_total_score={sup_total_score}")
+            else:
+                # Supervisor đánh giá TỔ VIÊN → chỉ cập nhật sup_total_score
+                logging.info(f'🔧 Supervisor {logged_in_supervisor}: ĐÁNH GIÁ TỔ VIÊN {ten_tk} - chỉ cập nhật sup_total_score={sup_total_score}')
+                print(f"[DEBUG] 🔧 Supervisor {logged_in_supervisor}: ĐÁNH GIÁ TỔ VIÊN {ten_tk} - chỉ cập nhật sup_total_score={sup_total_score}")
+                
+                # Kiểm tra xem đã có record trong tongdiem_epa chưa
+                cursor.execute("SELECT user_total_score FROM tongdiem_epa WHERE ten_tk = %s AND year = %s AND month = %s", (ten_tk, year, month))
+                existing_record = cursor.fetchone()
+                
+                if existing_record:
+                    # UPDATE: chỉ cập nhật sup_total_score, giữ nguyên user_total_score
+                    existing_user_total = existing_record['user_total_score']
+                    print(f"[DEBUG] 🔧 Supervisor: UPDATE - giữ nguyên user_total_score={existing_user_total}")
+                    cursor.execute(
+                        """
+                        UPDATE tongdiem_epa 
+                        SET sup_total_score = %s 
+                        WHERE ten_tk = %s AND year = %s AND month = %s
+                        """,
+                        (sup_total_score, ten_tk, year, month)
+                    )
+                else:
+                    # INSERT: chỉ insert sup_total_score, user_total_score = NULL
+                    print(f"[DEBUG] 🔧 Supervisor: INSERT - user_total_score=NULL, sup_total_score={sup_total_score}")
+                    cursor.execute(
+                        """
+                        INSERT INTO tongdiem_epa (ten_tk, year, month, sup_total_score)
+                        VALUES (%s, %s, %s, %s)
+                        """,
+                        (ten_tk, year, month, sup_total_score)
+                    )
+                
+                print(f"[DEBUG] 🔧 Supervisor ĐÁNH GIÁ TỔ VIÊN: SQL executed - sup_total_score={sup_total_score}")
+        else:
+            # User hoặc admin cập nhật cả user_total_score và sup_total_score
+            logging.info(f'👤 User/Admin mode: Cập nhật cả user_total_score={user_total_score} và sup_total_score={sup_total_score}')
+            print(f"[DEBUG] 👤 User/Admin mode: Cập nhật cả user_total_score={user_total_score} và sup_total_score={sup_total_score}")
+            cursor.execute(
+                """
+                INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
+                VALUES (%s, %s, %s, %s, %s)
+                ON DUPLICATE KEY UPDATE 
+                    user_total_score = VALUES(user_total_score),
+                    sup_total_score = VALUES(sup_total_score)
+                """,
+                (ten_tk, year, month, user_total_score, sup_total_score)
+            )
+            print(f"[DEBUG] 👤 User/Admin: SQL executed - INSERT/UPDATE user_total_score={user_total_score}, sup_total_score={sup_total_score}")
+        
         conn.commit()
         logging.debug(f'Đã cập nhật tongdiem_epa: user_total_score={user_total_score}, sup_total_score={sup_total_score}')
     except Exception as e:
@@ -605,12 +674,31 @@ def submit_assessment():
             user_score = score_entry.get('score')
             user_comment = score_entry.get('user_comment', '')
             logging.info(f'🔍 Processing score_entry: questionId={question_id}, score={user_score}, user_comment="{user_comment}", sup_score={score_entry.get("sup_score")}, sup_comment="{score_entry.get("sup_comment")}"')
-            # For supervisor, set sup_score = user_score and sup_comment = user_comment
+            # Xử lý điểm sup_score dựa trên role và context
             if role == 'supervisor':
-                # Đảm bảo luôn cập nhật cả 2 trường cho supervisor
-                sup_score = user_score
-                sup_comment = user_comment
-                logging.info(f'🔧 Supervisor {ten_tk}: Setting sup_score={sup_score} from user_score={user_score}')
+                # 🔧 SỬA LỖI: Phân biệt 2 trường hợp
+                # 1. Supervisor đánh giá TỔ VIÊN → user_score = None
+                # 2. Supervisor đánh giá BẢN THÂN → user_score = score (tự đánh giá)
+                
+                # Kiểm tra xem supervisor có đang đánh giá chính mình không
+                logged_in_supervisor = session.get('user')
+                is_self_assessment = (logged_in_supervisor == ten_tk)
+                
+                if is_self_assessment:
+                    # Supervisor đánh giá BẢN THÂN → lưu cả user_score và sup_score
+                    sup_score = user_score  # Điểm supervisor nhập
+                    sup_comment = user_comment  # Comment supervisor nhập
+                    # user_score và user_comment giữ nguyên (tự đánh giá)
+                    logging.info(f'🔧 Supervisor {ten_tk}: TỰ ĐÁNH GIÁ - lưu cả user_score={user_score} và sup_score={sup_score}')
+                    print(f"[DEBUG] 🔧 Supervisor {ten_tk}: TỰ ĐÁNH GIÁ - lưu cả user_score={user_score} và sup_score={sup_score}")
+                else:
+                    # Supervisor đánh giá TỔ VIÊN → chỉ lưu sup_score
+                    sup_score = user_score  # Điểm supervisor nhập
+                    sup_comment = user_comment  # Comment supervisor nhập
+                    user_score = None  # Không copy điểm supervisor vào user_score
+                    user_comment = ''   # Không copy comment supervisor vào user_comment
+                    logging.info(f'🔧 Supervisor {logged_in_supervisor}: ĐÁNH GIÁ TỔ VIÊN {ten_tk} - chỉ lưu sup_score={sup_score}')
+                    print(f"[DEBUG] 🔧 Supervisor {logged_in_supervisor}: ĐÁNH GIÁ TỔ VIÊN {ten_tk} - chỉ lưu sup_score={sup_score}")
             else:
                 # For other roles (e.g., user), use provided sup_score and sup_comment
                 sup_score = score_entry.get('sup_score') if role in ['admin'] else None
@@ -642,7 +730,7 @@ def submit_assessment():
             # Kiểm tra xem đã có record chưa, nếu có thì UPDATE, chưa có thì INSERT
             cursor.execute(
                 """
-                SELECT id FROM bangdanhgia 
+                SELECT id, ten_tk FROM bangdanhgia 
                 WHERE ten_tk = %s AND year = %s AND month = %s AND question = %s
                 """,
                 (ten_tk, year, month, question['question'])
@@ -652,17 +740,42 @@ def submit_assessment():
             if existing_record:
                 # Cập nhật record đã có - logic khác nhau cho user và supervisor
                 if role == 'supervisor':
-                    # Supervisor cập nhật cả user_score và sup_score, user_comment và sup_comment
-                    logging.info(f'🔧 Supervisor {ten_tk}: BEFORE UPDATE - user_score={user_score}, sup_score={sup_score}, user_comment="{user_comment}", sup_comment="{sup_comment}"')
-                    cursor.execute(
-                        """
-                        UPDATE bangdanhgia 
-                        SET user_score = %s, sup_score = %s, user_comment = %s, sup_comment = %s, created_at = NOW()
-                        WHERE id = %s
-                        """,
-                        (user_score, sup_score, user_comment, sup_comment, existing_record['id'])
-                    )
-                    logging.info(f'🔧 Supervisor {ten_tk}: AFTER UPDATE record ID {existing_record["id"]} - user_score={user_score}, sup_score={sup_score} cho câu hỏi ID {question_id}')
+                    # 🔧 SỬA LỖI: Phân biệt 2 trường hợp khi UPDATE
+                    # 1. Supervisor đánh giá TỔ VIÊN → chỉ cập nhật sup_score
+                    # 2. Supervisor đánh giá BẢN THÂN → cập nhật cả user_score và sup_score
+                    
+                    logged_in_supervisor = session.get('user')  # Supervisor đang đăng nhập
+                    target_user = existing_record['ten_tk']     # User được đánh giá
+                    is_self_assessment = (logged_in_supervisor == target_user)
+                    
+                    if is_self_assessment:
+                        # Supervisor đánh giá BẢN THÂN → cập nhật cả user_score và sup_score
+                        logging.info(f'🔧 Supervisor {logged_in_supervisor}: TỰ ĐÁNH GIÁ LẠI - UPDATE cả user_score={user_score} và sup_score={sup_score}')
+                        print(f"[DEBUG] 🔧 Supervisor {logged_in_supervisor}: TỰ ĐÁNH GIÁ LẠI - UPDATE cả user_score={user_score} và sup_score={sup_score}")
+                        cursor.execute(
+                            """
+                            UPDATE bangdanhgia 
+                            SET user_score = %s, sup_score = %s, user_comment = %s, sup_comment = %s, created_at = NOW()
+                            WHERE id = %s
+                            """,
+                            (user_score, sup_score, user_comment, sup_comment, existing_record['id'])
+                        )
+                        logging.info(f'🔧 Supervisor {logged_in_supervisor}: AFTER UPDATE record ID {existing_record["id"]} - TỰ ĐÁNH GIÁ LẠI')
+                        print(f"[DEBUG] 🔧 Supervisor {logged_in_supervisor}: AFTER UPDATE record ID {existing_record['id']} - TỰ ĐÁNH GIÁ LẠI")
+                    else:
+                        # Supervisor đánh giá TỔ VIÊN → chỉ cập nhật sup_score
+                        logging.info(f'🔧 Supervisor {logged_in_supervisor}: ĐÁNH GIÁ TỔ VIÊN {target_user} - CHỈ UPDATE sup_score (bảo vệ user_score)')
+                        print(f"[DEBUG] 🔧 Supervisor {logged_in_supervisor}: ĐÁNH GIÁ TỔ VIÊN {target_user} - CHỈ UPDATE sup_score (bảo vệ user_score)")
+                        cursor.execute(
+                            """
+                            UPDATE bangdanhgia 
+                            SET sup_score = %s, sup_comment = %s, created_at = NOW()
+                            WHERE id = %s
+                            """,
+                            (sup_score, sup_comment, existing_record['id'])
+                        )
+                        logging.info(f'🔧 Supervisor {logged_in_supervisor}: AFTER UPDATE record ID {existing_record["id"]} cho target {target_user} - user_score được bảo vệ')
+                        print(f"[DEBUG] 🔧 Supervisor {logged_in_supervisor}: AFTER UPDATE record ID {existing_record['id']} cho target {target_user} - user_score được bảo vệ")
                 else:
                     # User hoặc admin cập nhật user_score và user_comment
                     update_fields = ["user_score = %s", "user_comment = %s", "created_at = NOW()"]
@@ -699,6 +812,8 @@ def submit_assessment():
                         user_score, sup_score, user_comment, sup_comment
                     )
                 )
+                if role == 'supervisor':
+                    print(f"[DEBUG] 🔧 Supervisor {ten_tk}: INSERT record mới - user_score={user_score} (NULL), sup_score={sup_score}")
                 logging.debug(f'Tạo mới câu hỏi ID {question_id} cho ten_tk={ten_tk}')
         conn.commit()
         logging.info(f'✅ DATABASE COMMIT SUCCESSFUL - Đã lưu kết quả đánh giá cho ten_tk={ten_tk}')
@@ -710,7 +825,7 @@ def submit_assessment():
         # Không cần copy nữa
         
         logging.info(f'🔄 Updating tongdiem_epa for {ten_tk}')
-        update_tongdiem_epa(ten_tk, year, month)
+        update_tongdiem_epa(ten_tk, year, month, role)
         
         logging.info(f'📝 Logging action for {ten_tk}')
         cursor.execute(
