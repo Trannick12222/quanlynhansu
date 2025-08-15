@@ -1837,10 +1837,18 @@ def update_sup_epa():
             for key, value in updates.items():
                 if key.startswith('sup_comment_') or key.startswith('sup_score_'):
                     col, id_ = key.rsplit('_', 1)
-                    cursor.execute(
-                        f"UPDATE bangdanhgia SET {col}=%s WHERE id=%s",
-                        (value, id_)
-                    )
+                    
+                    # Nếu là supervisor và đang cập nhật sup_score, cũng cập nhật user_score
+                    if col == 'sup_score':
+                        cursor.execute(
+                            f"UPDATE bangdanhgia SET {col}=%s, user_score=%s WHERE id=%s",
+                            (value, value, id_)
+                        )
+                    else:
+                        cursor.execute(
+                            f"UPDATE bangdanhgia SET {col}=%s WHERE id=%s",
+                            (value, id_)
+                        )
 
             #  Tong hop lai sup_score tu bangdanhgia
             cursor.execute("""
@@ -1854,14 +1862,25 @@ def update_sup_epa():
 
             #  Cap nhat hoac chen moi vao tongdiem_epa
             for row in rows:
+                # Tính toán lại cả user_total_score và sup_total_score từ bangdanhgia
                 cursor.execute("""
-                    INSERT INTO tongdiem_epa (ten_tk, year, month, sup_total_score)
-                    VALUES (%s, %s, %s, %s)
-                    ON DUPLICATE KEY UPDATE sup_total_score=%s
-                """, (
-                    row['ten_tk'], row['year'], row['month'],
-                    row['total_sup'], row['total_sup']
-                ))
+                    SELECT COALESCE(SUM(user_score), 0) as user_total, COALESCE(SUM(sup_score), 0) as sup_total
+                    FROM bangdanhgia
+                    WHERE ten_tk = %s AND year = %s AND month = %s
+                """, (row['ten_tk'], row['year'], row['month']))
+                
+                totals = cursor.fetchone()
+                user_total = totals['user_total']
+                sup_total = totals['sup_total']
+                
+                # Sử dụng INSERT ... ON DUPLICATE KEY UPDATE để tránh race condition
+                cursor.execute("""
+                    INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE 
+                        user_total_score = VALUES(user_total_score),
+                        sup_total_score = VALUES(sup_total_score)
+                """, (row['ten_tk'], row['year'], row['month'], user_total, sup_total))
 
             conn.commit()
 

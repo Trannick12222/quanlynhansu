@@ -253,6 +253,61 @@ def auto_copy_tgv_scores(ten_tk, year, month):
         cursor.close()
         conn.close()
 
+# AUTO-COPY điểm cho Supervisor: Copy điểm tự đánh giá thành điểm supervisor
+def auto_copy_supervisor_scores(ten_tk, year, month):
+    """
+    Khi Supervisor hoàn thành tự đánh giá, tự động copy điểm đó làm điểm supervisor
+    Vì Supervisor cũng là giáo viên và cần tự đánh giá
+    """
+    logging.info(f'🔄 Bắt đầu auto-copy điểm cho Supervisor {ten_tk}')
+    
+    conn = get_conn()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    try:
+        # Lấy tất cả điểm tự đánh giá (user_score) của Supervisor
+        cursor.execute(
+            """
+            SELECT id, question, translate, user_score, user_comment
+            FROM bangdanhgia 
+            WHERE ten_tk = %s AND year = %s AND month = %s 
+              AND user_score IS NOT NULL
+            """,
+            (ten_tk, year, month)
+        )
+        self_assessments = cursor.fetchall()
+        
+        if not self_assessments:
+            logging.warning(f'⚠️ Supervisor {ten_tk} chưa có điểm tự đánh giá để copy')
+            return
+        
+        copy_count = 0
+        for assessment in self_assessments:
+            # Copy user_score -> sup_score và user_comment -> sup_comment
+            # CHỈ copy nếu sup_score chưa có (tránh ghi đè)
+            cursor.execute(
+                """
+                UPDATE bangdanhgia 
+                SET sup_score = %s, sup_comment = %s
+                WHERE id = %s AND (sup_score IS NULL OR sup_score = 0)
+                """,
+                (assessment['user_score'], assessment['user_comment'], assessment['id'])
+            )
+            
+            if cursor.rowcount > 0:  # Có record được update
+                copy_count += 1
+                logging.debug(f'📋 Copy câu hỏi "{assessment["question"][:30]}...": {assessment["user_score"]} điểm')
+        
+        conn.commit()
+        logging.info(f'✅ Auto-copy hoàn thành cho Supervisor {ten_tk}: {copy_count}/{len(self_assessments)} câu hỏi')
+        
+    except Exception as e:
+        logging.error(f'❌ Lỗi auto-copy cho Supervisor {ten_tk}: {e}')
+        conn.rollback()
+        raise e
+    finally:
+        cursor.close()
+        conn.close()
+
 # Cập nhật bảng tongdiem_epa
 def update_tongdiem_epa(ten_tk, year, month):
     logging.info(f'Đang cập nhật tongdiem_epa cho ten_tk={ten_tk}, year={year}, month={month}')
@@ -271,49 +326,21 @@ def update_tongdiem_epa(ten_tk, year, month):
         user_total_score = totals['user_total_score']
         sup_total_score = totals['sup_total_score']
 
+        # Loại bỏ auto-copy vì supervisor giờ sẽ luôn cập nhật cả user_score và sup_score
+        # Logic này không còn cần thiết nữa
+
+        # Sử dụng INSERT ... ON DUPLICATE KEY UPDATE để tránh race condition
+        logging.debug(f'Cập nhật/tạo bản ghi cho {ten_tk}')
         cursor.execute(
             """
-            SELECT id FROM tongdiem_epa
-            WHERE ten_tk = %s AND year = %s AND month = %s
+            INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
+            VALUES (%s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE 
+                user_total_score = VALUES(user_total_score),
+                sup_total_score = VALUES(sup_total_score)
             """,
-            (ten_tk, year, month)
+            (ten_tk, year, month, user_total_score, sup_total_score)
         )
-        existing = cursor.fetchone()
-
-        if existing:
-            logging.debug(f'Cập nhật bản ghi tồn tại ID={existing["id"]} cho {ten_tk}')
-            cursor.execute(
-                """
-                UPDATE tongdiem_epa
-                SET user_total_score = %s, sup_total_score = %s
-                WHERE ten_tk = %s AND year = %s AND month = %s
-                """,
-                (user_total_score, sup_total_score, ten_tk, year, month)
-            )
-        else:
-            logging.debug(f'Tạo bản ghi mới cho {ten_tk}')
-            try:
-                cursor.execute(
-                    """
-                    INSERT INTO tongdiem_epa (ten_tk, year, month, user_total_score, sup_total_score)
-                    VALUES (%s, %s, %s, %s, %s)
-                    """,
-                    (ten_tk, year, month, user_total_score, sup_total_score)
-                )
-            except pymysql.IntegrityError as ie:
-                if "Duplicate entry" in str(ie):
-                    # Nếu bản ghi đã tồn tại (race condition), thử UPDATE
-                    logging.warning(f'Bản ghi đã tồn tại cho {ten_tk}, chuyển sang UPDATE')
-                    cursor.execute(
-                        """
-                        UPDATE tongdiem_epa
-                        SET user_total_score = %s, sup_total_score = %s
-                        WHERE ten_tk = %s AND year = %s AND month = %s
-                        """,
-                        (user_total_score, sup_total_score, ten_tk, year, month)
-                    )
-                else:
-                    raise ie
         conn.commit()
         logging.debug(f'Đã cập nhật tongdiem_epa: user_total_score={user_total_score}, sup_total_score={sup_total_score}')
     except Exception as e:
@@ -581,6 +608,7 @@ def submit_assessment():
             if role == 'supervisor':
                 sup_score = user_score
                 sup_comment = user_comment
+                logging.info(f'🔧 Supervisor {ten_tk}: Setting sup_score={sup_score} from user_score={user_score}')
             else:
                 # For other roles (e.g., user), use provided sup_score and sup_comment
                 sup_score = score_entry.get('sup_score') if role in ['admin'] else None
@@ -622,16 +650,16 @@ def submit_assessment():
             if existing_record:
                 # Cập nhật record đã có - logic khác nhau cho user và supervisor
                 if role == 'supervisor':
-                    # Supervisor chỉ cập nhật sup_score và sup_comment, giữ nguyên user_score
+                    # Supervisor cập nhật cả user_score và sup_score, user_comment và sup_comment
                     cursor.execute(
                         """
                         UPDATE bangdanhgia 
-                        SET sup_score = %s, sup_comment = %s, created_at = NOW()
+                        SET user_score = %s, sup_score = %s, user_comment = %s, sup_comment = %s, created_at = NOW()
                         WHERE id = %s
                         """,
-                        (sup_score, sup_comment, existing_record['id'])
+                        (user_score, sup_score, user_comment, sup_comment, existing_record['id'])
                     )
-                    logging.debug(f'Supervisor cập nhật sup_score={sup_score} cho câu hỏi ID {question_id}, ten_tk={ten_tk}')
+                    logging.info(f'🔧 Supervisor {ten_tk}: UPDATE record ID {existing_record["id"]} - user_score={user_score}, sup_score={sup_score} cho câu hỏi ID {question_id}')
                 else:
                     # User hoặc admin cập nhật user_score và user_comment
                     update_fields = ["user_score = %s", "user_comment = %s", "created_at = NOW()"]
@@ -672,13 +700,11 @@ def submit_assessment():
         conn.commit()
         logging.info(f'✅ DATABASE COMMIT SUCCESSFUL - Đã lưu kết quả đánh giá cho ten_tk={ten_tk}')
         
-        # 🚀 AUTO-COPY cho TGV: Nếu là supervisor và đang trong giai đoạn 1, tự động copy làm điểm giai đoạn 2
-        if role == 'supervisor':
-            try:
-                auto_copy_tgv_scores(ten_tk, year, month)
-                logging.info(f'✅ Đã auto-copy điểm giai đoạn 1 -> 2 cho TGV {ten_tk}')
-            except Exception as auto_copy_error:
-                logging.error(f'❌ Lỗi auto-copy cho TGV {ten_tk}: {auto_copy_error}')
+        # Loại bỏ auto-copy cho TGV khi là supervisor vì supervisor giờ sẽ luôn cập nhật cả user_score và sup_score
+        # Chỉ giữ lại cho các role khác nếu cần
+        
+        # Loại bỏ auto-copy cho supervisor vì giờ supervisor sẽ luôn cập nhật cả user_score và sup_score
+        # Không cần copy nữa
         
         logging.info(f'🔄 Updating tongdiem_epa for {ten_tk}')
         update_tongdiem_epa(ten_tk, year, month)

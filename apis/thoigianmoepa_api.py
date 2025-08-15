@@ -293,15 +293,16 @@ def get_assessment_period():
             if phase1_start <= current_day <= phase1_end:
                 current_phase = 1
                 phase_name = "Tự Đánh Giá"
-                if make_epa_all == "yes" or (role == "user" and make_epa_gv == "yes") or role == "admin":
+                # Cho phép tất cả user (bao gồm supervisor) tự đánh giá trong giai đoạn 1
+                if make_epa_all == "yes" or make_epa_gv == "yes" or role == "admin" or role == "supervisor":
                     can_assess = True
                     is_open = True
             
-            # Kiểm tra giai đoạn 2: TGV chấm điểm tổ viên (KHÔNG thể tự chấm)
+            # Kiểm tra giai đoạn 2: TGV chấm điểm tổ viên
             elif current_day > phase1_end and phase2_start <= current_day <= phase2_end:
                 current_phase = 2
                 phase_name = "TGV Chấm Tổ Viên"
-                # TGV KHÔNG thể tự đánh giá trong giai đoạn 2, chỉ admin mới có thể
+                # Trong giai đoạn 2, chỉ cho phép TGV chấm điểm tổ viên, không tự đánh giá
                 if make_epa_all == "yes" or role == "admin":
                     can_assess = True
                     is_open = True
@@ -336,6 +337,18 @@ def get_assessment_period():
                     display_start, display_end = phase3_start, phase3_end
                     phase_name = "Đã Kết Thúc"
                 
+            # Debug logging
+            print(f"🔍 DEBUG API Response for {user}:")
+            print(f"  Current Day: {current_day}")
+            print(f"  Current Phase: {current_phase}")
+            print(f"  Phase Name: {phase_name}")
+            print(f"  Is Open: {is_open}")
+            print(f"  Can Assess: {can_assess}")
+            print(f"  Role: {role}")
+            print(f"  make_epa_gv: {make_epa_gv}")
+            print(f"  make_epa_tgv: {make_epa_tgv}")
+            print(f"  make_epa_all: {make_epa_all}")
+            
             return jsonify({
                 "year": current_year,
                 "month": current_month,

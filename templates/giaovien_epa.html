@@ -376,16 +376,21 @@
                 console.log('🔍 DEBUG: isOpen value:', data.isOpen, 'Type:', typeof data.isOpen);
 
                 // Simplified logic based on actual API response
-                if (data.isOpen === true || data.isOpen === 'true') {
+                const phaseNum = data.current_phase;
+                const phaseName = data.phase_name || '';
+                
+                // Cho phép submit trong giai đoạn 1 (tự đánh giá) ngay cả khi isOpen=false
+                if (data.isOpen === true || data.isOpen === 'true' || 
+                    (phaseNum === 1 && (phaseName && phaseName.includes('Tự Đánh Giá')))) {
                     msg += `<div class="status-message success">✅ Thời gian đánh giá đang mở - ${currentPhase}</div>`;
                     document.getElementById('submit-btn').disabled = false;
                 } else {
                     // Check specific phases for better error messages
-                    if (currentPhase && currentPhase.includes('Phase 3')) {
+                    if (phaseNum === 3 || (phaseName && phaseName.includes('HT/PHT'))) {
                         msg += `<div class="status-message error">⛔ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn HT/PHT đánh giá.</div>`;
-                    } else if (currentPhase && currentPhase.includes('Phase 2')) {
+                    } else if (phaseNum === 2 || (phaseName && phaseName.includes('TGV'))) {
                         msg += `<div class="status-message warning">⏳ Đã kết thúc thời gian tự đánh giá. Hiện tại là giai đoạn TGV chấm điểm tổ viên (không thể tự chấm).</div>`;
-                    } else if (currentPhase && currentPhase.includes('Phase 1')) {
+                    } else if (phaseNum === 1 || (phaseName && phaseName.includes('Tự Đánh Giá'))) {
                         msg += `<div class="status-message success">⌚ Đang trong giai đoạn tự đánh giá - kiểm tra quyền truy cập...</div>`;
                         console.log('⚠️ WARNING: Phase 1 detected but isOpen=false. Checking user permissions...');
                     } else {
@@ -420,6 +425,7 @@
                 }
                 const formDiv = document.getElementById('assessment-form');
                 const isSupervisorOrAdmin = userRole === 'supervisor' || userRole === 'admin';
+                console.log('🔍 DEBUG: userRole =', userRole, 'isSupervisorOrAdmin =', isSupervisorOrAdmin);
                 formDiv.innerHTML = data.questions.slice(0, 10).map((q, index) => `
                     <div class="question">
                         <p><strong>${index + 1}. ${q.question}</strong></p>
@@ -429,30 +435,47 @@
                         <!-- nếu bạn vẫn muốn hiển thị English, có thể thêm dòng sau: -->
                         <!-- <p class="text-muted"><em>(${q.translate || ''})</em></p> -->
                         <div class="score-inputs">
-                            <div>
-                                <label>Điểm tự chấm:</label>
-                                <input type="number" min="0" max="${q.max_score || 20}" id="score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})">
-                            </div>
-                            <div>
-                                <label>Điểm từ Supervisor:</label>
-                                <input type="number" min="0" max="${q.max_score || 20}" id="sup-score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})" ${isSupervisorOrAdmin ? '' : 'disabled'}>
-                            </div>
+                            ${userRole === 'supervisor' ? `
+                                <div>
+                                    <label>Điểm đánh giá:</label>
+                                    <input type="number" min="0" max="${q.max_score || 20}" id="score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})">
+                                </div>
+                            ` : `
+                                <div>
+                                    <label>Điểm tự chấm:</label>
+                                    <input type="number" min="0" max="${q.max_score || 20}" id="score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})">
+                                </div>
+                                <div>
+                                    <label>Điểm từ Supervisor:</label>
+                                    <input type="number" min="0" max="${q.max_score || 20}" id="sup-score-${q.id}" placeholder="Nhập điểm (0-${q.max_score || 20})" ${isSupervisorOrAdmin ? '' : 'disabled'}>
+                                </div>
+                            `}
                         </div>
                         <div class="comment-inputs">
-                            <div>
-                                <label>Ý kiến tự đánh giá:</label>
-                                <textarea id="user-comment-${q.id}" placeholder="Nhập ý kiến của bạn cho câu hỏi này..." maxlength="1000" oninput="updateCharCount(this, 'user-count-${q.id}')"></textarea>
-                                <small class="text-muted">
-                                    <span id="user-count-${q.id}">0</span>/1000 ký tự
-                                </small>
-                            </div>
-                            <div>
-                                <label>Ý kiến từ Supervisor:</label>
-                                <textarea id="sup-comment-${q.id}" placeholder="Nhập ý kiến đánh giá (Supervisor)" maxlength="1000" ${isSupervisorOrAdmin ? '' : 'disabled'} oninput="updateCharCount(this, 'sup-count-${q.id}')"></textarea>
-                                <small class="text-muted">
-                                    <span id="sup-count-${q.id}">0</span>/1000 ký tự
-                                </small>
-                            </div>
+                            ${userRole === 'supervisor' ? `
+                                <div>
+                                    <label>Ý kiến đánh giá:</label>
+                                    <textarea id="user-comment-${q.id}" placeholder="Nhập ý kiến đánh giá cho câu hỏi này..." maxlength="1000" oninput="updateCharCount(this, 'user-count-${q.id}')"></textarea>
+                                    <small class="text-muted">
+                                        <span id="user-count-${q.id}">0</span>/1000 ký tự
+                                    </small>
+                                </div>
+                            ` : `
+                                <div>
+                                    <label>Ý kiến tự đánh giá:</label>
+                                    <textarea id="user-comment-${q.id}" placeholder="Nhập ý kiến của bạn cho câu hỏi này..." maxlength="1000" oninput="updateCharCount(this, 'user-count-${q.id}')"></textarea>
+                                    <small class="text-muted">
+                                        <span id="user-count-${q.id}">0</span>/1000 ký tự
+                                    </small>
+                                </div>
+                                <div>
+                                    <label>Ý kiến từ Supervisor:</label>
+                                    <textarea id="sup-comment-${q.id}" placeholder="Nhập ý kiến đánh giá (Supervisor)" maxlength="1000" ${isSupervisorOrAdmin ? '' : 'disabled'} oninput="updateCharCount(this, 'sup-count-${q.id}')"></textarea>
+                                    <small class="text-muted">
+                                        <span id="sup-count-${q.id}">0</span>/1000 ký tự
+                                    </small>
+                                </div>
+                            `}
                         </div>
                     </div>
                 `).join('');
@@ -460,13 +483,24 @@
                 // Add event listeners for real-time total score update
                 const scoreInputs = document.querySelectorAll('input[type="number"][id^="score-"]');
                 const supScoreInputs = document.querySelectorAll('input[type="number"][id^="sup-score-"]');
-                scoreInputs.forEach(input => input.addEventListener('input', updateTotalScore));
-                supScoreInputs.forEach(input => input.addEventListener('input', updateTotalScore));
+                
+                console.log('🔍 DEBUG: Found score inputs:', scoreInputs.length, 'sup score inputs:', supScoreInputs.length);
+                
+                scoreInputs.forEach(input => {
+                    console.log('🔍 DEBUG: Score input', input.id, 'disabled:', input.disabled);
+                    input.addEventListener('input', updateTotalScore);
+                });
+                supScoreInputs.forEach(input => {
+                    console.log('🔍 DEBUG: Sup score input', input.id, 'disabled:', input.disabled);
+                    input.addEventListener('input', updateTotalScore);
+                });
                 updateTotalScore();
                 
                 // Initialize character counters for all textareas
                 const textareas = document.querySelectorAll('textarea[maxlength]');
+                console.log('🔍 DEBUG: Found textareas:', textareas.length);
                 textareas.forEach(textarea => {
+                    console.log('🔍 DEBUG: Textarea', textarea.id, 'disabled:', textarea.disabled, 'readonly:', textarea.readOnly);
                     const counterId = textarea.getAttribute('oninput').match(/'([^']+)'/)[1];
                     updateCharCount(textarea, counterId);
                     
@@ -511,12 +545,20 @@
                 const maxScore = parseInt(input.getAttribute('max')) || 20;
                 if (value >= 0 && value <= maxScore) userTotal += value;
             });
-            supScoreInputs.forEach(input => {
-                const value = parseInt(input.value) || 0;
-                const maxScore = parseInt(input.getAttribute('max')) || 20;
-                if (value >= 0 && value <= maxScore) supTotal += value;
-            });
-            document.getElementById('total-score-display').textContent = `Tổng điểm tự đánh giá: ${userTotal} | Tổng điểm giám sát: ${supTotal}`;
+            // Nếu là supervisor, chỉ tính userTotal
+            if (userRole !== 'supervisor') {
+                supScoreInputs.forEach(input => {
+                    const value = parseInt(input.value) || 0;
+                    const maxScore = parseInt(input.getAttribute('max')) || 20;
+                    if (value >= 0 && value <= maxScore) supTotal += value;
+                });
+            }
+            
+            if (userRole === 'supervisor') {
+                document.getElementById('total-score-display').textContent = `Tổng điểm đánh giá: ${userTotal}`;
+            } else {
+                document.getElementById('total-score-display').textContent = `Tổng điểm tự đánh giá: ${userTotal} | Tổng điểm giám sát: ${supTotal}`;
+            }
         }
 
         function updateCharCount(textarea, counterId) {
@@ -614,24 +656,26 @@
                                     userCommentTextarea.dispatchEvent(new Event('input'));
                                 }
                                 
-                                // Populate supervisor score and comment if user has permission
-                                if (matchedAssessment.sup_score !== null && matchedAssessment.sup_score !== undefined) {
-                                    const supScoreInput = document.getElementById(`sup-score-${questionId}`);
-                                    if (supScoreInput && !supScoreInput.disabled) {
-                                        supScoreInput.value = matchedAssessment.sup_score;
-                                        console.log(`✅ Set sup score ${questionId}: ${matchedAssessment.sup_score}`);
-                                    } else if (supScoreInput && supScoreInput.disabled) {
-                                        console.log(`⚠️ Sup score input ${questionId} is disabled`);
-                                    } else {
-                                        console.error(`❌ Element sup-score-${questionId} not found`);
+                                // Populate supervisor score and comment if user has permission (chỉ cho non-supervisor)
+                                if (userRole !== 'supervisor') {
+                                    if (matchedAssessment.sup_score !== null && matchedAssessment.sup_score !== undefined) {
+                                        const supScoreInput = document.getElementById(`sup-score-${questionId}`);
+                                        if (supScoreInput && !supScoreInput.disabled) {
+                                            supScoreInput.value = matchedAssessment.sup_score;
+                                            console.log(`✅ Set sup score ${questionId}: ${matchedAssessment.sup_score}`);
+                                        } else if (supScoreInput && supScoreInput.disabled) {
+                                            console.log(`⚠️ Sup score input ${questionId} is disabled`);
+                                        } else {
+                                            console.error(`❌ Element sup-score-${questionId} not found`);
+                                        }
                                     }
-                                }
-                                
-                                if (matchedAssessment.sup_comment) {
-                                    const supCommentTextarea = document.getElementById(`sup-comment-${questionId}`);
-                                    if (!supCommentTextarea.disabled) {
-                                        supCommentTextarea.value = matchedAssessment.sup_comment;
-                                        supCommentTextarea.dispatchEvent(new Event('input'));
+                                    
+                                    if (matchedAssessment.sup_comment) {
+                                        const supCommentTextarea = document.getElementById(`sup-comment-${questionId}`);
+                                        if (!supCommentTextarea.disabled) {
+                                            supCommentTextarea.value = matchedAssessment.sup_comment;
+                                            supCommentTextarea.dispatchEvent(new Event('input'));
+                                        }
                                     }
                                 }
                             }
@@ -667,10 +711,15 @@
                         <div class="assessment-entry">
                             <p class="highlight">Năm: ${a.year}, Tháng: ${a.month}</p>
                             <p><strong>Câu hỏi:</strong> ${a.question}</p>
-                            <p><strong>Điểm tự chấm:</strong> ${a.user_score || 'N/A'}</p>
-                            <p><strong>Điểm từ Supervisor:</strong> ${a.sup_score || 'Chưa chấm'}</p>
-                            <p><strong>Ý kiến tự đánh giá:</strong> ${a.user_comment || 'Không có ý kiến'}</p>
-                            <p><strong>Ý kiến từ Supervisor:</strong> ${a.sup_comment || 'Không có ý kiến'}</p>
+                            ${userRole === 'supervisor' ? `
+                                <p><strong>Điểm đánh giá:</strong> ${a.user_score || 'N/A'}</p>
+                                <p><strong>Ý kiến đánh giá:</strong> ${a.user_comment || 'Không có ý kiến'}</p>
+                            ` : `
+                                <p><strong>Điểm tự chấm:</strong> ${a.user_score || 'N/A'}</p>
+                                <p><strong>Điểm từ Supervisor:</strong> ${a.sup_score || 'Chưa chấm'}</p>
+                                <p><strong>Ý kiến tự đánh giá:</strong> ${a.user_comment || 'Không có ý kiến'}</p>
+                                <p><strong>Ý kiến từ Supervisor:</strong> ${a.sup_comment || 'Không có ý kiến'}</p>
+                            `}
                         </div>
                     `).join('<hr>');
                 }
@@ -709,11 +758,18 @@
             questionInputs.forEach(inputGroup => {
                 const questionId = inputGroup.querySelector('input[type="number"]').id.split('-')[1];
                 const user_score = parseInt(inputGroup.querySelector(`#score-${questionId}`).value);
-                const supScoreInput = inputGroup.querySelector(`#sup-score-${questionId}`);
-                const sup_score = supScoreInput.disabled ? null : parseInt(supScoreInput.value);
+                
+                // Nếu là supervisor, chỉ sử dụng user_score và user_comment
+                let sup_score = null;
+                let sup_comment = '';
+                if (userRole !== 'supervisor') {
+                    const supScoreInput = inputGroup.querySelector(`#sup-score-${questionId}`);
+                    sup_score = supScoreInput && !supScoreInput.disabled ? parseInt(supScoreInput.value) : null;
+                    const supCommentInput = inputGroup.querySelector(`#sup-comment-${questionId}`);
+                    sup_comment = supCommentInput && !supCommentInput.disabled ? supCommentInput.value.trim() : '';
+                }
+                
                 const user_comment = inputGroup.querySelector(`#user-comment-${questionId}`).value.trim();
-                const supCommentInput = inputGroup.querySelector(`#sup-comment-${questionId}`);
-                const sup_comment = supCommentInput.disabled ? '' : supCommentInput.value.trim();
                 if (!isNaN(user_score)) {
                     scores.push({ 
                         questionId, 
@@ -733,11 +789,14 @@
                         return;
                     }
                     
-                    if (!isNaN(sup_score) && sup_score >= 0 && sup_score <= maxScore) {
-                        supTotalScore += sup_score;
-                    } else if (!isNaN(sup_score) && sup_score > maxScore) {
-                        document.getElementById('form-message').innerHTML = `<div class="status-message error">Câu ${questionId}: Điểm TGV tối đa chỉ được ${maxScore}, không thể nhập ${sup_score}</div>`;
-                        return;
+                    // Nếu là supervisor, không tính sup_score riêng biệt
+                    if (userRole !== 'supervisor') {
+                        if (!isNaN(sup_score) && sup_score >= 0 && sup_score <= maxScore) {
+                            supTotalScore += sup_score;
+                        } else if (!isNaN(sup_score) && sup_score > maxScore) {
+                            document.getElementById('form-message').innerHTML = `<div class="status-message error">Câu ${questionId}: Điểm TGV tối đa chỉ được ${maxScore}, không thể nhập ${sup_score}</div>`;
+                            return;
+                        }
                     }
                 }
             });
@@ -801,19 +860,25 @@
                 await loadExistingDataIntoForm();
             }, 100);
             
-            // Only enable form submission if assessment period is open
+            // Only disable input fields if assessment period is closed AND not in phase 1
             if (!isOpen) {
-                // Disable all input fields if assessment period is closed
-                setTimeout(() => {
-                    const inputs = document.querySelectorAll('#assessment-form input, #assessment-form textarea');
-                    inputs.forEach(input => {
-                        if (!input.disabled) {
-                            input.disabled = true;
-                            input.style.backgroundColor = '#f8f9fa';
-                            input.style.color = '#6c757d';
-                        }
-                    });
-                }, 200);
+                // Check if we're in phase 1 (self-assessment phase)
+                const periodMessage = document.getElementById('period-message');
+                const isPhase1 = periodMessage && periodMessage.innerHTML.includes('Tự Đánh Giá');
+                
+                if (!isPhase1) {
+                    // Disable all input fields only if not in phase 1
+                    setTimeout(() => {
+                        const inputs = document.querySelectorAll('#assessment-form input, #assessment-form textarea');
+                        inputs.forEach(input => {
+                            if (!input.disabled) {
+                                input.disabled = true;
+                                input.style.backgroundColor = '#f8f9fa';
+                                input.style.color = '#6c757d';
+                            }
+                        });
+                    }, 200);
+                }
             }
             
             await loadLastAssessment();
