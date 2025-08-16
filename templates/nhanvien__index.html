@@ -75,6 +75,15 @@
     .gradient-cute-pink { background: linear-gradient(135deg, #14532d 0%, #166534 100%); }
     .gradient-cute-yellow { background: linear-gradient(135deg, #166534 0%, #15803d 100%); }
     
+    /* Force text visibility for import button */
+    .import-text {
+      display: inline !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      color: white !important;
+      font-weight: 600 !important;
+    }
+    
     /* Custom scrollbar */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #dcfce7; border-radius: 10px; }
@@ -260,11 +269,11 @@
         </div>
         
         <div class="flex flex-wrap gap-3">
-          <button class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-cute text-white hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:scale-105" onclick="document.getElementById('excelFileInput').click()">
+          <button class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-cute transition-all duration-300 font-cute font-semibold group hover:from-blue-600 hover:to-blue-700 hover:scale-105" onclick="document.getElementById('excelFileInput').click()">
             <span class="group-hover:animate-bounce">📤</span>
-            <span class="hidden sm:inline">Nhập Excel</span>
-            <span class="sm:hidden">Nhập</span>
+            <span class="import-text">Nhập Excel</span>
           </button>
+          
           <input accept=".xlsx" hidden id="excelFileInput" onchange="importExcel()" type="file"/>
           
           {% if session['role'] == 'admin' %}
